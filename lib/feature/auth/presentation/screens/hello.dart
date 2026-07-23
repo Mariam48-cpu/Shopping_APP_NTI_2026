@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/common/widgets/customButton.dart';
+import 'package:shopping_app/core/common/widgets/custom_button.dart';
 import 'package:shopping_app/core/routes/routes.dart';
 
 class HelloScreen extends StatefulWidget {
