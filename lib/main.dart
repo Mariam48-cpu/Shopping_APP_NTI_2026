@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: HelloScreen(),
-      // initialRoute: RouteLayers.registerRoute,
+      initialRoute: RouteLayers.registerRoute,
       onGenerateRoute: AppRouters.createRoute,
     );
   }
