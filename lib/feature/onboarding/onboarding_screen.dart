@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/feature/onboarding/widget/custom_animated_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-
 import '../../core/theme/app_colors.dart';
 import 'onboarding_data.dart';
 
@@ -21,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:AppColors.scaffoldBg,
+      backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -85,7 +84,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(16),
-                        child: Image.network(
+                        child: Image.asset(
                           onboardingList[index].image,
                           fit: BoxFit.cover,
                           width: 343,
@@ -178,4 +177,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     );
   }
 }
-

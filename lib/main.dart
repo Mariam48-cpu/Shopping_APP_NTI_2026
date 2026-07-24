@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-
 import 'feature/onboarding/onboarding_screen.dart';
 
 void main() async {
-
   runApp(const MyApp());
 }
 
