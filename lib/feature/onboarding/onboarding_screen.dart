@@ -1,7 +1,8 @@
-import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:shopping_app/feature/onboarding/widget/custom_animated_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../../core/theme/app_colors.dart';
 import 'onboarding_data.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -20,7 +21,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xffEBEBEB),
+      backgroundColor:AppColors.scaffoldBg,
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -166,7 +167,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   style: TextStyle(
                     fontSize: 16,
                     fontWeight: .w600,
-                    color: Color(0xffffffff),
+                    color: AppColors.white,
                   ),
                 ),
               ),
@@ -178,28 +179,3 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   }
 }
 
-class CustomAnimatedWidget extends StatelessWidget {
-  const CustomAnimatedWidget({
-    super.key,
-    required this.index,
-    required this.delay,
-    required this.child,
-  });
-  final int index;
-  final int delay;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    if (index == 1) {
-      return FadeInDown(
-        delay: Duration(milliseconds: delay),
-        child: child,
-      );
-    }
-    return FadeInUp(
-      delay: Duration(milliseconds: delay),
-      child: child,
-    );
-  }
-}
