@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/routes/app_routers.dart';
-import 'package:shopping_app/core/routes/routes.dart';
+
+import 'core/routes/app_routes.dart';
 
 void main() {
   runApp(MyApp());
@@ -12,7 +13,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: RouteLayers.helloRoute,
+      initialRoute: Routes.helloScreen ,
       onGenerateRoute: AppRouters.createRoute,
     );
   }

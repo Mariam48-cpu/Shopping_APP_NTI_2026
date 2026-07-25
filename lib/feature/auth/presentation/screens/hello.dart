@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/common/widgets/custom_button.dart';
-import 'package:shopping_app/core/routes/routes.dart';
+import 'package:shopping_app/core/routes/app_routes.dart';
 
 class HelloScreen extends StatefulWidget {
   const HelloScreen({super.key});
@@ -36,7 +36,7 @@ class _HelloScreenState extends State<HelloScreen> {
                   height: 48,
                   color: Color(0xffFF9900),
                   fun: () =>
-                      Navigator.pushNamed(context, RouteLayers.registerRoute),
+                      Navigator.pushNamed(context, Routes.signUpScreen),
                   borderColor: Color(0xffFFB700),
                   txtColor: Color(0xffFFFFFF),
                 ),
@@ -46,7 +46,7 @@ class _HelloScreenState extends State<HelloScreen> {
                   height: 48,
                   color: Color(0xffffffff),
                   fun: () =>
-                      Navigator.pushNamed(context, RouteLayers.loginRoute),
+                      Navigator.pushNamed(context, Routes.logInScreen),
                   borderColor: Color(0xffFF9900),
                   txtColor: Color(0xffFF9900),
                 ),
