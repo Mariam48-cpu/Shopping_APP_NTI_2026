@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/routes/app_routers.dart';
+import 'core/routes/app_routers.dart';
 import 'core/routes/app_routes.dart';
+import 'core/theme/app_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      theme: AppTheme.lightTheme,
       initialRoute: Routes.firstOnBoardingScreen,
       onGenerateRoute: AppRouters.createRoute,
     );
