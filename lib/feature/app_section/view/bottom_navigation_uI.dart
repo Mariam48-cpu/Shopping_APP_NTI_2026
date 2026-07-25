@@ -28,9 +28,8 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
           final currentIndex = context
               .read<BottomNavigationCubit>()
               .currentIndex;
-          return
-            Scaffold(
-            body:  _tabs[currentIndex],
+          return Scaffold(
+            body: _tabs[currentIndex],
 
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: context.read<BottomNavigationCubit>().currentIndex,
@@ -39,9 +38,6 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
                   ChangeTabIntent(index),
                 );
               },
-
-
-
 
               showSelectedLabels: true,
               showUnselectedLabels: true,
@@ -52,7 +48,7 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
                     assetPath: 'assets/icon/home.svg',
                     index: 0,
                     currentIndex: currentIndex,
-                  ) ,
+                  ),
                   label: "Home",
                 ),
                 BottomNavigationBarItem(
