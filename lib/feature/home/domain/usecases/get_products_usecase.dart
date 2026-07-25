@@ -6,7 +6,7 @@ class GetProductsUseCase {
 
   GetProductsUseCase(this.repository);
 
-  Future<ResultApi<List<ProductEntity>>> call() {
+  Future<ResultApi<ProductEntity>> call() {
     return repository.getProducts();
   }
 }

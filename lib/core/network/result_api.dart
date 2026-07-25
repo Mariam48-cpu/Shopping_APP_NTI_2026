@@ -1,13 +1,13 @@
 sealed class ResultApi<T> {}
 
-class Success<T> extends ResultApi<T> {
-  final T data;
+class Loading extends ResultApi {}
 
-  Success({required this.data});
+class Success<T> extends ResultApi<T> {
+  T? data;
+  Success({this.data});
 }
 
 class Error<T> extends ResultApi<T> {
-  final String messageError;
-
-  Error({required this.messageError});
+  String? messageError;
+  Error({this.messageError});
 }

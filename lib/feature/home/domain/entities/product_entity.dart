@@ -1,47 +1,105 @@
-import 'package:shopping_app/feature/home/data/dto/product_dto.dart';
-import 'package:shopping_app/feature/home/domain/entities/category_entity.dart';
+class ProductItemEntity {
+  final List<ProductEntity> products;
+  final int total;
+  final int skip;
+  final int limit;
+
+  const ProductItemEntity({
+    this.products = const [],
+    this.total = 0,
+    this.skip = 0,
+    this.limit = 0,
+  });
+}
 
 class ProductEntity {
-  final int? id;
-  final String? title;
-  final String? slug;
-  final int? price;
-  final String? description;
-  final CategoryEntity? category;
-  final List<String>? images;
+  final int id;
+  final String title;
+  final String description;
+  final String category;
+  final double price;
+  final double discountPercentage;
+  final double rating;
+  final int stock;
+  final List<String> tags;
+  final String brand;
+  final String sku;
+  final int weight;
+  final DimensionsEntity dimensions;
+  final String warrantyInformation;
+  final String shippingInformation;
+  final String availabilityStatus;
+  final List<ReviewsEntity> reviews;
+  final String returnPolicy;
+  final int minimumOrderQuantity;
+  final MetaEntity  meta;
+  final List<String> images;
+  final String thumbnail;
 
   const ProductEntity({
-    this.id,
-    this.title,
-    this.slug,
-    this.price,
-    this.description,
-    this.category,
-    this.images,
+    this.id = 0,
+    this.title = '',
+    this.description = '',
+    this.category = '',
+    this.price = 0.0,
+    this.discountPercentage = 0.0,
+    this.rating = 0.0,
+    this.stock = 0,
+    this.tags = const [],
+    this.brand = '',
+    this.sku = '',
+    this.weight = 0,
+    this.dimensions = const DimensionsEntity(),
+    this.warrantyInformation = '',
+    this.shippingInformation = '',
+    this.availabilityStatus = '',
+    this.reviews = const [],
+    this.returnPolicy = '',
+    this.minimumOrderQuantity = 0,
+    this.meta = const MetaEntity (),
+    this.images = const [],
+    this.thumbnail = '',
   });
+}
 
-  factory ProductEntity.fromDto(ProductDto dto) {
-    return ProductEntity(
-      id: dto.id,
-      title: dto.title,
-      slug: dto.slug,
-      price: dto.price,
-      description: dto.description,
-      category:
-          dto.category != null ? CategoryEntity.fromDto(dto.category!) : null,
-      images: dto.images,
-    );
-  }
+class DimensionsEntity  {
+  final double width;
+  final double height;
+  final double depth;
 
-  ProductDto toDto() {
-    return ProductDto(
-      id: id,
-      title: title,
-      slug: slug,
-      price: price,
-      description: description,
-      category: category?.toDto(),
-      images: images,
-    );
-  }
+  const DimensionsEntity ({
+    this.width = 0.0,
+    this.height = 0.0,
+    this.depth = 0.0,
+  });
+}
+
+class ReviewsEntity  {
+  final int rating;
+  final String comment;
+  final String date;
+  final String reviewerName;
+  final String reviewerEmail;
+
+  const   ReviewsEntity({
+    this.rating = 0,
+    this.comment = '',
+    this.date = '',
+    this.reviewerName = '',
+    this.reviewerEmail = '',
+  });
+}
+
+class MetaEntity  {
+  final String createdAt;
+  final String updatedAt;
+  final String barcode;
+  final String qrCode;
+
+  const MetaEntity ({
+    this.createdAt = '',
+    this.updatedAt = '',
+    this.barcode = '',
+    this.qrCode = '',
+  });
 }
