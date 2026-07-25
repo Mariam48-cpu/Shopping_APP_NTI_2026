@@ -1,0 +1,12 @@
+import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
+import 'package:shopping_app/feature/home/domain/repositories/home_repository_interface.dart';
+class GetProductsUseCase {
+  final HomeRepository repository;
+
+  GetProductsUseCase(this.repository);
+
+  Future<ResultApi<List<ProductEntity>>> call() {
+    return repository.getProducts();
+  }
+}
