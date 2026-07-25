@@ -8,6 +8,7 @@ class AppTheme {
     canvasColor: AppColors.charcoal,
     focusColor: AppColors.primaryOrange,
 
+
     scaffoldBackgroundColor: AppColors.scaffoldBg,
     cardColor: AppColors.white,
     hintColor: AppColors.grayText,

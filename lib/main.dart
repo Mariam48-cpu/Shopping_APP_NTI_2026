@@ -2,17 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/feature/home/presentation/view/screens/home_screen.dart';
 
 import 'core/theme/app_theme.dart';
+import 'feature/onboarding/onboarding_screen.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    return MaterialApp(home: OnboardingScreen());
     return MaterialApp(
       title: 'Flutter Demo',
       theme: AppTheme.lightTheme,
