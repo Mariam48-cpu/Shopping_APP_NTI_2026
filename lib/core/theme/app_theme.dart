@@ -5,6 +5,11 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Inter',
+<<<<<<< HEAD
+=======
+    canvasColor: AppColors.charcoal,
+    focusColor: AppColors.primaryOrange,
+>>>>>>> origin/feature/shared-product-item-scrum-10
 
     scaffoldBackgroundColor: AppColors.scaffoldBg,
     cardColor: AppColors.white,
