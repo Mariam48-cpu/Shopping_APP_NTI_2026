@@ -13,8 +13,5 @@ abstract class Routes{
   static const String firstOnBoardingScreen="/onBoardingScreen";
   static const String secondOnBoardingScreen="/secondOnBoardingScreen";
   static const String accountScreen="/accountScreen";
-
-
-
-
+  static const String helloScreen="/helloScreen";
 }
