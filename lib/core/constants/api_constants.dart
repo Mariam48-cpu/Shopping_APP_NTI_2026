@@ -3,6 +3,8 @@ import '../domain/entities/product_item_entity.dart';
 class ApiConstants {
   static const baseUrl = "https://supermarket-dan1.onrender.com/api/v1";
   static String productsByCategory(String slug)=>"/home/products/category/{$slug}?skip=0&limit=5";
+  static const String token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjUwMDg4NWNjYzdlODkwMzMzNjUzNSIsImlhdCI6MTc4NTAyMzIxOSwiZXhwIjoxNzg3NjE1MjE5fQ.BwPUqDvzIvht2Kf-Ym1iQhpPQcZeBTfKJAGes3PLDG0";
   static final List<ProductEntity> productList = [
     ProductEntity(
       id: 1,

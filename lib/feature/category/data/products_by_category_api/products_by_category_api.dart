@@ -9,7 +9,12 @@ class ProductsByCategoryApi {
   Future<ResultApi<List<ProductDto>>> getAllProductsByCategory(String slug)async{
     try{
       Uri url = Uri.parse(ApiConstants.baseUrl+ApiConstants.productsByCategory(slug));
-      var response = await http.get(url);
+      var response = await http.get(url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${ApiConstants.token}',
+        },);
       var json = jsonDecode(response.body);
       var productsList = json['products'] ?? json;
       List<ProductDto> products = productsList
