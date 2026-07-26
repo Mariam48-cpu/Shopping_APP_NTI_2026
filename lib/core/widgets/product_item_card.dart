@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
-import '../model/item/product_item_entity.dart';
+import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
 
 class ProductItemCard extends StatelessWidget {
   const ProductItemCard({super.key, required this.product, this.onTap});
 
-  final ProductEntity product;
+  final ProductItemEntity product;
   final void Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -21,7 +20,9 @@ class ProductItemCard extends StatelessWidget {
               children: [
                 ClipRRect(
                   child: Image.network(
-                    product.images[0],
+                    product.images.isNotEmpty
+                        ? product.images.first
+                        : dummyImage,
                     width: double.infinity,
 
                     height: 238,
@@ -84,4 +85,4 @@ class ProductItemCard extends StatelessWidget {
 }
 
 String dummyImage =
-    'https://cdn.dummyjson.com/product-images/beauty/essence-mascara-lash-princess/1.webp';
+    'https://picsum.photos/200';
