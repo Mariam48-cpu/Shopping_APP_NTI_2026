@@ -4,7 +4,7 @@ import 'bottom_navigation_state.dart';
 class BottomNavigationCubit extends Cubit<BottomNavigationState> {
   BottomNavigationCubit() : super(BottomNavigationStateInitial());
   int currentIndex = 0;
-  Future<void> intent(BottomNavigationIntent intent) async {
+  void intent(BottomNavigationIntent intent) {
     switch (intent) {
       case ChangeTabIntent():
         _changeTab(intent.index);

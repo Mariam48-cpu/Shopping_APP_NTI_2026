@@ -4,14 +4,14 @@ import 'package:shopping_app/feature/app_section/view_model/bottom_navigation_st
 import 'package:flutter/material.dart';
 import '../view_model/bottom_navigation_cubit.dart';
 
-class BottomNavigationUi extends StatefulWidget {
-  const BottomNavigationUi({super.key});
+class BottomNavigationScreen extends StatefulWidget {
+  const BottomNavigationScreen({super.key});
 
   @override
-  State<BottomNavigationUi> createState() => _BottomNavigationUiState();
+  State<BottomNavigationScreen> createState() => _BottomNavigationScreenState();
 }
 
-class _BottomNavigationUiState extends State<BottomNavigationUi> {
+class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   final List<Widget> _tabs = const [
     Center(child: Text('Home ')),
     Center(child: Text('Cart ')),
@@ -44,7 +44,6 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
               items: [
                 BottomNavigationBarItem(
                   icon: CustomSvgIcon(
-                    context: context,
                     assetPath: 'assets/icon/home.svg',
                     index: 0,
                     currentIndex: currentIndex,
@@ -53,7 +52,6 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
                 ),
                 BottomNavigationBarItem(
                   icon: CustomSvgIcon(
-                    context: context,
                     assetPath: "assets/icon/cart.svg",
                     index: 1,
                     currentIndex: currentIndex,
@@ -62,7 +60,6 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
                 ),
                 BottomNavigationBarItem(
                   icon: CustomSvgIcon(
-                    context: context,
                     assetPath: "assets/icon/favourite.svg",
                     index: 2,
                     currentIndex: currentIndex,
@@ -71,7 +68,6 @@ class _BottomNavigationUiState extends State<BottomNavigationUi> {
                 ),
                 BottomNavigationBarItem(
                   icon: CustomSvgIcon(
-                    context: context,
                     assetPath: "assets/icon/profile.svg",
                     index: 3,
                     currentIndex: currentIndex,
