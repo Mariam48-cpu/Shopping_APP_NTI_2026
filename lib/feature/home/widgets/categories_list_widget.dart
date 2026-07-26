@@ -1,20 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/feature/home/domain/entities/category_entity.dart';
 
 class CategoriesListWidget extends StatefulWidget {
-  const CategoriesListWidget({super.key});
+  const CategoriesListWidget({super.key, required this.categories});
+
+  final List<CategoryItemEntity> categories;
 
   @override
   State<CategoriesListWidget> createState() => _CategoriesListWidgetState();
 }
 
 class _CategoriesListWidgetState extends State<CategoriesListWidget> {
-  List<String> categories = [
-    'Miscellaneous',
-    'Shoes',
-    'Furniture',
-    'Electronics',
-    'T-shirts',
-  ];
   int selectedIndex = 0;
   @override
   Widget build(BuildContext context) {
@@ -41,14 +37,14 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
               ),
               padding: EdgeInsets.symmetric(vertical: 8, horizontal: 8),
               child: Text(
-                categories[index],
+               widget.categories[index].name,
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           );
         },
         separatorBuilder: (context, index) => SizedBox(width: 10),
-        itemCount: categories.length,
+        itemCount: widget.categories.length,
       ),
     );
   }

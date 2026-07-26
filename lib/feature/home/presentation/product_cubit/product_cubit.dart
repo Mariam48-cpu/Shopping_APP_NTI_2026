@@ -1,9 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
 import 'package:shopping_app/feature/home/domain/usecases/get_products_usecase.dart';
 import 'package:shopping_app/feature/home/presentation/product_cubit/product_state.dart';
-
+@injectable
 class ProductCubit extends Cubit<ProductState> {
   final GetProductsUseCase getProductsUseCase;
 

@@ -1,8 +1,10 @@
 import 'package:bloc/bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/home/domain/entities/category_entity.dart';
 import 'package:shopping_app/feature/home/domain/usecases/get_categories_usecase.dart';
 import 'package:shopping_app/feature/home/presentation/category_cubit/category_state.dart';
+@injectable
 class CategoryCubit extends Cubit<CategoryState> {
   final GetCategoriesUseCase getCategoriesUseCase;
 

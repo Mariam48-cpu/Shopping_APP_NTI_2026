@@ -1,10 +1,10 @@
-class ProductItemEntity {
-  final List<ProductEntity> products;
+class ProductEntity {
+  final List<ProductItemEntity> products;
   final int total;
   final int skip;
   final int limit;
 
-  const ProductItemEntity({
+  const ProductEntity({
     this.products = const [],
     this.total = 0,
     this.skip = 0,
@@ -12,7 +12,7 @@ class ProductItemEntity {
   });
 }
 
-class ProductEntity {
+class ProductItemEntity {
   final int id;
   final String title;
   final String description;
@@ -36,7 +36,7 @@ class ProductEntity {
   final List<String> images;
   final String thumbnail;
 
-  const ProductEntity({
+  const ProductItemEntity({
     this.id = 0,
     this.title = '',
     this.description = '',
