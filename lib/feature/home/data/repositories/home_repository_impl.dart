@@ -6,7 +6,7 @@ import 'package:shopping_app/feature/home/data/dto/product_dto.dart';
 import 'package:shopping_app/feature/home/domain/entities/category_entity.dart';
 import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
 import 'package:shopping_app/feature/home/domain/repositories/home_repository_interface.dart';
-@LazySingleton(as: HomeRepository)
+@injectable
 class HomeRepositoryImpl implements HomeRepository {
   final HomeRemoteDataSourceInterface remoteDataSource;
 

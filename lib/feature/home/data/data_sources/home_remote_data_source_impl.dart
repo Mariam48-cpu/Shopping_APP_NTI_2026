@@ -6,8 +6,8 @@ import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_source_interface.dart';
 import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
 import 'package:shopping_app/feature/home/data/dto/product_dto.dart';
+@injectable
 
-@LazySingleton(as: HomeRemoteDataSourceInterface)
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   @override
   Future<ResultApi<CategoryDto>> getCategories() async {
