@@ -5,7 +5,8 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Inter',
-
+    canvasColor: AppColors.charcoal,
+    focusColor: AppColors.primaryOrange,
 
 
     scaffoldBackgroundColor: AppColors.scaffoldBg,
@@ -26,13 +27,11 @@ class AppTheme {
       ),
     ),
     textTheme: const TextTheme(
-
       headlineMedium: TextStyle(
         fontSize: 24,
         fontWeight: FontWeight.w600,
         color: AppColors.charcoal,
       ),
-
 
       headlineSmall: TextStyle(
         fontSize: 18,
@@ -40,13 +39,11 @@ class AppTheme {
         color: AppColors.charcoal,
       ),
 
-
       bodyLarge: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w400,
         color: AppColors.charcoal,
       ),
-
 
       bodyMedium: TextStyle(
         fontSize: 14,
@@ -54,13 +51,11 @@ class AppTheme {
         color: AppColors.charcoal,
       ),
 
-
       bodySmall: TextStyle(
         fontSize: 12,
         fontWeight: FontWeight.w400,
         color: AppColors.grayText,
       ),
-
 
       labelLarge: TextStyle(
         fontSize: 14,
@@ -68,14 +63,12 @@ class AppTheme {
         color: AppColors.white,
       ),
 
-
       labelSmall: TextStyle(
         fontSize: 10,
         fontWeight: FontWeight.w500,
         color: AppColors.grayText,
       ),
     ),
-
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.scaffoldBg,

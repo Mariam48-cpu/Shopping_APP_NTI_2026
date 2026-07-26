@@ -14,5 +14,7 @@ abstract class AppColors {
   static const Color errorBg = Color(0xFFFFF5F5);
   static const Color scaffoldBg = Color(0xFFEBEBEB);
 
-  static const LinearGradient primaryGradient = LinearGradient(colors: [primaryOrange, orangeLight]);
+  static const LinearGradient primaryGradient = LinearGradient(
+    colors: [primaryOrange, orangeLight],
+  );
 }
