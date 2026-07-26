@@ -1,13 +1,9 @@
 class ApiConstants {
-  static final String baseUrl = "https://api.escuelajs.co/api/v1/";
-  static final String products = "products/";
-  static final String categories = "categories/";
-  static final String users = "users/";
-  static final String avaliableUsers = "users/is-available";
-  static final String login = "auth/login";
-  static final String userProfile = "auth/profile";
-  static final String refreshToken = "auth/refresh-token";
-  static final String locations = "locations";
-  static final String uploadFile = "files/upload";
-  static final String files = "files/";
+  static final String baseUrl = "https://supermarket-dan1.onrender.com/api/v1";
+  static const String products = '/home/products';
+  static final String categories = "/home/categories";
+  static final String signin = "auth/signIn";
+  static final String signup = "auth/signUp";
+  static const String token =
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjUwMDg4NWNjYzdlODkwMzMzNjUzNSIsImlhdCI6MTc4NTAyMzIxOSwiZXhwIjoxNzg3NjE1MjE5fQ.BwPUqDvzIvht2Kf-Ym1iQhpPQcZeBTfKJAGes3PLDG0";
 }

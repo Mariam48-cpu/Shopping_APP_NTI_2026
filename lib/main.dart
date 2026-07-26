@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'core/di/service_locator.dart';
 import 'core/theme/app_theme.dart';
 import 'feature/onboarding/onboarding_screen.dart';
-
-void main() async {
+void main()  {
   WidgetsFlutterBinding.ensureInitialized();
-   configureDependencies();
+  configureDependencies();
   runApp(const MyApp());
 }
 

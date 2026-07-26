@@ -15,7 +15,7 @@ class CategoryRepoImp implements CategoryRepoInterface {
 
       case Success<List<ProductDto>>():
         final data = result.data;
-        final listOfProducts = data.map((e) => e.toEntity()).toList();
+        final listOfProducts = data!.map((e) => e.toEntity()).toList();
         final newList = listOfProducts.where((e) => e.images.isNotEmpty).toList();
         return Success <List<ProductEntity>>(data: newList);
       case Error<List<ProductDto>>():

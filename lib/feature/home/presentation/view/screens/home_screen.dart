@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/constants/api_constants.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/domain/entities/product_item_entity.dart';
-
+import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../../widgets/categories_list_widget.dart';
+import '../../category_cubit/category_cubit.dart';
+import '../../category_cubit/category_state.dart';
+import '../../product_cubit/product_cubit.dart';
+import '../../product_cubit/product_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,41 +19,92 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   ProductItemEntity productItemEntity = ProductItemEntity();
   int selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text("Hi!,", style: Theme.of(context).textTheme.bodyLarge),
-              Text(
-                "Let’s start your day",
-                style: Theme.of(context).textTheme.headlineSmall,
-              ),
-              SizedBox(height: 20),
-              CategoriesListWidget(),
-              SizedBox(height: 20),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => serviceLocator<CategoryCubit>()..getCategories(),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<ProductCubit>()..getProducts(),
+        ),
+      ],
+      child: Scaffold(
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text("Hi!,", style: Theme.of(context).textTheme.bodyLarge),
+                Text(
+                  "Let's start your day",
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+                const SizedBox(height: 20),
 
-              Expanded(
-                child: GridView.builder(
-                  padding: EdgeInsets.only(top: 5, left: 8, right: 8),
-                  itemCount: ApiConstants.productList.length,
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    childAspectRatio: 0.62,
-                    crossAxisSpacing: 0,
-                    mainAxisSpacing: 10,
-                  ),
-                  itemBuilder: (context, index) {
-                    var product = ApiConstants.productList[index];
-                    return ProductItemCard(product: product);
+                /// Categories
+                BlocBuilder<CategoryCubit, CategoryState>(
+                  builder: (context, state) {
+                    if (state is CategoryLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (state is CategoryError) {
+                      return Center(child: Text(state.message));
+                    }
+
+                    if (state is CategorySuccess) {
+                      return CategoriesListWidget(
+                        categories: state.categories.list,
+                      );
+                    }
+
+                    return const SizedBox.shrink();
                   },
                 ),
-              ),
-            ],
+
+                const SizedBox(height: 20),
+
+                /// Products
+                Expanded(
+                  child: BlocBuilder<ProductCubit, ProductState>(
+                    builder: (context, state) {
+                      if (state is ProductLoading) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+
+                      if (state is ProductError) {
+                        return Center(child: Text(state.messageError));
+                      }
+
+                      if (state is ProductSuccess) {
+                        return GridView.builder(
+                          itemCount: state.products.products.length,
+                          gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.62,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemBuilder: (context, index) {
+                            final product = state.products.products[index];
+
+                            return ProductItemCard(
+                                productItemEntity:product
+                            );
+                          },
+                        );
+                      }
+
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

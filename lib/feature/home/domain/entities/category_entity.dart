@@ -1,32 +1,21 @@
-
-import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
-
 class CategoryEntity {
-  final int? id;
-  final String? name;
-  final String? slug;
-  final String? image;
+  final List<CategoryItemEntity> list;
 
   const CategoryEntity({
-    this.id,
-    this.name,
-    this.slug,
-    this.image,
+    this.list = const [], String? slug,
   });
-    CategoryDto toDto() {
-    return CategoryDto(
-      id: id,
-      name: name,
-      slug: slug,
-      image: image,
-    );
-  }
-    factory CategoryEntity.fromDto(CategoryDto dto) {
-    return CategoryEntity(
-      id: dto.id,
-      name: dto.name,
-      slug: dto.slug,
-      image: dto.image,
-    );
-  }
+}
+
+class CategoryItemEntity {
+  final String slug;
+  final String name;
+  final String url;
+  final String image;
+
+  const CategoryItemEntity({
+    this.slug = '',
+    this.name = '',
+    this.url = '',
+    this.image = '',
+  });
 }

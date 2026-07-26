@@ -1,27 +1,30 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/api_constants.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/feature/home/data/data_sources/home_remote_data_source.dart';
+import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_source_interface.dart';
 import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
 import 'package:shopping_app/feature/home/data/dto/product_dto.dart';
 
-class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
+@LazySingleton(as: HomeRemoteDataSourceInterface)
+class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   @override
-  Future<ResultApi<List<CategoryDto>>> getCategories() async {
+  Future<ResultApi<CategoryDto>> getCategories() async {
     try {
       final response = await http.get(
         Uri.parse(ApiConstants.baseUrl + ApiConstants.categories),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${ApiConstants.token}',
+        },
       );
 
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
 
-        final categories = (json as List)
-            .map((e) => CategoryDto.fromJson(e))
-            .toList();
-
-        return Success(data: categories);
+        return Success(data: CategoryDto.fromJson(json));
       }
 
       return Error(messageError: "Failed to load categories");
@@ -31,25 +34,25 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
   }
 
   @override
-  Future<ResultApi<List<ProductDto>>> getProducts() async {
+  Future<ResultApi<ProductDto>> getProducts() async {
     try {
+      
       final response = await http.get(
         Uri.parse(ApiConstants.baseUrl + ApiConstants.products),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${ApiConstants.token}',
+        },
       );
-
       if (response.statusCode == 200) {
         final json = jsonDecode(response.body);
-
-        final products = (json as List)
-            .map((e) => ProductDto.fromJson(e))
-            .toList();
-
-        return Success(data: products);
+        return Success(data: ProductDto.fromJson(json));
       }
 
-      return Error( messageError: '');
+      return Error(messageError: 'Failed to load products');
     } catch (e) {
-      return Error( messageError: '');
+      return Error(messageError: e.toString());
     }
   }
 }
