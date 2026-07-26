@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/item/product_item_entity.dart';
+import '../domain/entities/product_item_entity.dart';
 
 class ProductItemCard extends StatelessWidget {
   const ProductItemCard({super.key, required this.product, this.onTap});

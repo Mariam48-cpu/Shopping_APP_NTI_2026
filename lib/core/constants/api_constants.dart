@@ -1,7 +1,8 @@
-import '../model/item/product_item_entity.dart';
+import '../domain/entities/product_item_entity.dart';
 
 class ApiConstants {
   static const baseUrl = "https://supermarket-dan1.onrender.com/api/v1";
+  static String productsByCategory(String slug)=>"/home/products/category/{$slug}?skip=0&limit=5";
   static final List<ProductEntity> productList = [
     ProductEntity(
       id: 1,
