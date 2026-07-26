@@ -5,6 +5,9 @@ class AppTheme {
   static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Inter',
+    canvasColor: AppColors.charcoal,
+    focusColor: AppColors.primaryOrange,
+
 
     scaffoldBackgroundColor: AppColors.scaffoldBg,
     cardColor: AppColors.white,
