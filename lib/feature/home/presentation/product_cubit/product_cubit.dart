@@ -1,16 +1,16 @@
-import 'package:bloc/bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
 import 'package:shopping_app/feature/home/domain/usecases/get_products_usecase.dart';
 import 'package:shopping_app/feature/home/presentation/product_cubit/product_state.dart';
+import '../../domain/entities/product_entity.dart';
 @injectable
 class ProductCubit extends Cubit<ProductState> {
   final GetProductsUseCase getProductsUseCase;
 
   ProductCubit(this.getProductsUseCase) : super(ProductInitial());
 
-  ProductEntity products = const ProductEntity();
+  ProductEntity products =  ProductEntity();
 
   Future<void> getProducts() async {
     emit(ProductLoading());

@@ -1,33 +1,44 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shopping_app/core/domain/entities/product_item_entity.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_state.dart';
-import '../data/repo/repo/category_repo_interface.dart';
-@injectable
-class ProductsByCategoryCubit extends Cubit<CategoryProductsState<List<ProductEntity>>> {
-  ProductsByCategoryCubit(this._repo) : super(CategoryInitialState());
-  final CategoryRepoInterface _repo;
+import '../../home/domain/entities/product_entity.dart';
+import '../domain/use_case/get_all_products_by_category_use_case.dart';
 
+@injectable
+class ProductsByCategoryCubit
+    extends Cubit<CategoryProductsState<List<ProductItemEntity>>> {
+  ProductsByCategoryCubit(this._useCase) : super(CategoryInitialState());
+  final GetAllProductsByCategoryUseCase _useCase;
   Future<void> intent(CategoryProductsIntent intent) async {
-    switch (intent) {
-      case GetAllProductsByCategoryIntent(:final slug):
-        await _getProductsByCategory(slug);
+    if (intent case GetAllProductsByCategoryIntent(:final slug)) {
+      await _getProductsByCategory(slug);
     }
   }
 
   Future<void> _getProductsByCategory(String slug) async {
     emit(CategoryLoadingState());
+
     try {
-      var result = await _repo.getAllProductsByCategory(slug);
+      var result = await _useCase(slug);
       switch (result) {
-        case Success<List<ProductEntity>>():
-          emit(CategorySuccessState(products: result.data));
-        case Error<List<ProductEntity>>():
-          emit(CategoryErrorState(messageError: result.messageError));
+        case Success<List<ProductItemEntity>>():
+          emit(
+            CategorySuccessState<List<ProductItemEntity>>(
+              products: result.data!,
+            ),
+          );
+        case Error<List<ProductItemEntity>>():
+          emit(
+            CategoryErrorState<List<ProductItemEntity>>(
+              messageError: result.messageError,
+            ),
+          );
       }
     } catch (e) {
-      emit(CategoryErrorState(messageError: e.toString()));
+      emit(
+        CategoryErrorState<List<ProductItemEntity>>(messageError: e.toString()),
+      );
     }
   }
 }

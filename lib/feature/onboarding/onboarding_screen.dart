@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/feature/onboarding/widget/custom_animated_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import '../../core/routes/app_routes.dart';
 import '../../core/theme/app_colors.dart';
 import 'onboarding_data.dart';
 
@@ -153,8 +154,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     controller.nextPage(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.easeIn,
+
                     );
-                  } else {}
+
+                  } else {
+                    if (!mounted) return;
+                    Navigator.pushNamedAndRemoveUntil(
+                      context,
+                      Routes.homeScreen,
+                          (route) => false,
+                    );
+                  }
                 },
                 color: Color(0xFFFF9900),
                 shape: RoundedRectangleBorder(

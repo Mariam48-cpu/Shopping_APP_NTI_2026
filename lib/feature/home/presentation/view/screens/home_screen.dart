@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_app/core/domain/entities/product_item_entity.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../../widgets/categories_list_widget.dart';
+
 import '../../category_cubit/category_cubit.dart';
 import '../../category_cubit/category_state.dart';
 import '../../product_cubit/product_cubit.dart';
@@ -17,7 +17,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  ProductItemEntity productItemEntity = ProductItemEntity();
   int selectedIndex = 0;
 
   @override
@@ -93,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             final product = state.products.products[index];
 
                             return ProductItemCard(
-                                productItemEntity:product
+                              product: product,
                             );
                           },
                         );
@@ -111,4 +110,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

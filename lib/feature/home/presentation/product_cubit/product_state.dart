@@ -1,4 +1,4 @@
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
+import '../../domain/entities/product_entity.dart';
 
 sealed class ProductState {}
 

@@ -6,6 +6,8 @@ import 'package:shopping_app/feature/auth/presentation/screens/sign_up_screen.da
 
 import '../../feature/category/view/screens/product_details_screen.dart';
 import '../../feature/category/view/screens/products_by_category_screen.dart';
+import '../../feature/home/presentation/view/screens/home_screen.dart';
+import '../../feature/onboarding/onboarding_screen.dart';
 
 class AppRouters {
   static Route? createRoute(RouteSettings settings) {
@@ -27,6 +29,14 @@ class AppRouters {
       case Routes.productDetailsScreen:
         return MaterialPageRoute(
           builder: (_) => ProductDetailsScreen(),
+        );
+      case Routes.homeScreen:
+        return MaterialPageRoute(
+          builder: (_) => const HomeScreen(),
+        );
+      case Routes.firstOnBoardingScreen:
+        return MaterialPageRoute(
+          builder: (_) => const OnboardingScreen(),
         );
 
       default:

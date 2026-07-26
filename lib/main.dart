@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'core/di/service_locator.dart';
+import 'core/routes/app_routers.dart';
+import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
-import 'feature/onboarding/onboarding_screen.dart';
+import 'feature/home/presentation/view/screens/home_screen.dart';
 void main()  {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();
@@ -13,7 +15,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(home: OnboardingScreen(),
+    return MaterialApp(
+      initialRoute: Routes.firstOnBoardingScreen,
+      onGenerateRoute: AppRouters.createRoute,
       debugShowCheckedModeBanner: false,
       title: 'Shopping App',
       theme: AppTheme.lightTheme,
