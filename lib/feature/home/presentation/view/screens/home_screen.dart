@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
 import 'package:shopping_app/feature/home/presentation/category_cubit/category_cubit.dart';
 import 'package:shopping_app/feature/home/presentation/category_cubit/category_state.dart';
 import 'package:shopping_app/feature/home/presentation/product_cubit/product_cubit.dart';
