@@ -36,7 +36,6 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   @override
   Future<ResultApi<ProductDto>> getProducts() async {
     try {
-      
       final response = await http.get(
         Uri.parse(ApiConstant.baseUrl + ApiConstant.products),
         headers: {
