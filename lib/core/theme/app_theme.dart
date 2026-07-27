@@ -74,7 +74,7 @@ class AppTheme {
       backgroundColor: AppColors.scaffoldBg,
       selectedItemColor: AppColors.primaryOrange,
       unselectedItemColor: AppColors.grayText,
-      unselectedLabelStyle: TextStyle(color: AppColors.errorRed),
+      unselectedLabelStyle: TextStyle(color: AppColors.grayText),
       selectedLabelStyle: TextStyle(color: AppColors.primaryOrange) ,
       unselectedIconTheme: IconThemeData(color: Colors.black),
 
