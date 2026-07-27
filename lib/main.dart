@@ -3,7 +3,6 @@ import 'core/di/service_locator.dart';
 import 'core/routes/app_routers.dart';
 import 'core/routes/app_routes.dart';
 import 'core/theme/app_theme.dart';
-import 'feature/home/presentation/view/screens/home_screen.dart';
 void main()  {
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies();

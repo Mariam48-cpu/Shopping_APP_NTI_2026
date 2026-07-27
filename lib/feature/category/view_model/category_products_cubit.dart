@@ -20,7 +20,7 @@ class ProductsByCategoryCubit
     emit(CategoryLoadingState());
 
     try {
-      var result = await _useCase(slug);
+      var result = await _useCase.call(slug);
       switch (result) {
         case Success<List<ProductItemEntity>>():
           emit(

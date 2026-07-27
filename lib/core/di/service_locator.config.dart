@@ -31,9 +31,9 @@ import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_s
     as _i394;
 import 'package:shopping_app/feature/home/domain/repositories/home_repository_interface.dart'
     as _i863;
-import 'package:shopping_app/feature/home/domain/usecases/get_categories_usecase.dart'
+import 'package:shopping_app/feature/home/domain/use_cases/get_categories_use_case.dart'
     as _i10;
-import 'package:shopping_app/feature/home/domain/usecases/get_products_usecase.dart'
+import 'package:shopping_app/feature/home/domain/use_cases/get_products_use_case.dart'
     as _i153;
 import 'package:shopping_app/feature/home/presentation/category_cubit/category_cubit.dart'
     as _i513;
