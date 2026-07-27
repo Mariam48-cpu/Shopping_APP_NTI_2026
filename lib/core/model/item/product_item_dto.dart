@@ -1,4 +1,4 @@
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
 
 class ProductDto {
   List<ProductItemDto>? products;
