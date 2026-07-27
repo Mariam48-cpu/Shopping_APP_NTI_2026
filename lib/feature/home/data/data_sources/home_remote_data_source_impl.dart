@@ -4,8 +4,8 @@ import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_source_interface.dart';
 import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
-import 'package:shopping_app/feature/home/data/dto/product_dto.dart';
-import '../../../../core/constants/api_constant.dart';
+import 'package:shopping_app/core/model/item/product_item_dto.dart';
+import '../../../../core/constants/api_constants.dart';
 
 @Injectable(as: HomeRemoteDataSourceInterface)
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {

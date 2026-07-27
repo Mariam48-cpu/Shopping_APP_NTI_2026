@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   const ProductDetailsScreen({super.key});

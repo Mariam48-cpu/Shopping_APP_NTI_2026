@@ -3,8 +3,8 @@ import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_interface.dart';
 import 'package:shopping_app/feature/category/domain/repo/category_repo_interface.dart';
 
-import '../../../home/data/dto/product_dto.dart';
-import '../../../home/domain/entities/product_entity.dart';
+import '../../../../core/model/item/product_item_dto.dart';
+import '../../../../core/model/item/product_item_entity.dart';
 
 @Injectable(as: CategoryRepoInterface)
 class CategoryRepoImp implements CategoryRepoInterface {

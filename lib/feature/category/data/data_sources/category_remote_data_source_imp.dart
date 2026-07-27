@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import '../../../../core/constants/api_constant.dart';
-import '../../../home/data/dto/product_dto.dart';
+import '../../../../core/constants/api_constants.dart';
+import '../../../../core/model/item/product_item_dto.dart';
 import 'category_remote_data_source_interface.dart';
 import 'package:http/http.dart' as http;
 

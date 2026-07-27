@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
 import '../repo/category_repo_interface.dart';
 
 @injectable

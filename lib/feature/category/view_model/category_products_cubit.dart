@@ -2,7 +2,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_state.dart';
-import '../../home/domain/entities/product_entity.dart';
+import '../../../core/model/item/product_item_entity.dart';
 import '../domain/use_case/get_all_products_by_category_use_case.dart';
 
 @injectable

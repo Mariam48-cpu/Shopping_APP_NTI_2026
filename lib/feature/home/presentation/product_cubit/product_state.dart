@@ -1,4 +1,4 @@
-import '../../domain/entities/product_entity.dart';
+import '../../../../core/model/item/product_item_entity.dart';
 
 sealed class ProductState {}
 

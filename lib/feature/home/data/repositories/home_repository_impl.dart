@@ -2,9 +2,9 @@ import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_source_interface.dart';
 import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
-import 'package:shopping_app/feature/home/data/dto/product_dto.dart';
+import 'package:shopping_app/core/model/item/product_item_dto.dart';
 import 'package:shopping_app/feature/home/domain/entities/category_entity.dart';
-import 'package:shopping_app/feature/home/domain/entities/product_entity.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
 import 'package:shopping_app/feature/home/domain/repositories/home_repository_interface.dart';
 @LazySingleton(as: HomeRepository)
 class HomeRepositoryImpl implements HomeRepository {
