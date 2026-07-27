@@ -1,23 +1,23 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
-import 'package:shopping_app/core/constants/api_constants.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_source_interface.dart';
 import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
 import 'package:shopping_app/core/model/item/product_item_dto.dart';
+import '../../../../core/constants/api_constants.dart';
 
-@injectable
+@Injectable(as: HomeRemoteDataSourceInterface)
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   @override
   Future<ResultApi<CategoryDto>> getCategories() async {
     try {
       final response = await http.get(
-        Uri.parse(ApiConstants.baseUrl + ApiConstants.categories),
+        Uri.parse(ApiConstant.baseUrl + ApiConstant.categories),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstants.token}',
+          'Authorization': 'Bearer ${ApiConstant.token}',
         },
       );
 
@@ -37,11 +37,11 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   Future<ResultApi<ProductDto>> getProducts() async {
     try {
       final response = await http.get(
-        Uri.parse(ApiConstants.baseUrl + ApiConstants.products),
+        Uri.parse(ApiConstant.baseUrl + ApiConstant.products),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstants.token}',
+          'Authorization': 'Bearer ${ApiConstant.token}',
         },
       );
       if (response.statusCode == 200) {

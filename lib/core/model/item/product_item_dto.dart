@@ -8,16 +8,16 @@ class ProductDto {
 
   ProductDto({this.products, this.total, this.skip, this.limit});
 
-ProductDto.fromJson(Map<String, dynamic> json) {
-  if (json['list'] != null) {
-    products = (json['list'] as List)
-        .map((e) => ProductItemDto.fromJson(e))
-        .toList();
+  ProductDto.fromJson(Map<String, dynamic> json) {
+    if (json['list'] != null) {
+      products = (json['list'] as List)
+          .map((e) => ProductItemDto.fromJson(e))
+          .toList();
+    }
+    total = json['total'];
+    skip = json['skip'];
+    limit = json['limit'];
   }
-  total = json['total'];
-  skip = json['skip'];
-  limit = json['limit'];
-}
 
   Map<String, dynamic> toJson() {
     return {

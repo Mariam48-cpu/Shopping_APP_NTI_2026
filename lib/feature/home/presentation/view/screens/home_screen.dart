@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_app/core/di/service_locator.dart';
-import 'package:shopping_app/feature/home/presentation/category_cubit/category_cubit.dart';
-import 'package:shopping_app/feature/home/presentation/category_cubit/category_state.dart';
-import 'package:shopping_app/feature/home/presentation/product_cubit/product_cubit.dart';
-import 'package:shopping_app/feature/home/presentation/product_cubit/product_state.dart';
-
+import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../../widgets/categories_list_widget.dart';
+import '../../category_cubit/category_cubit.dart';
+import '../../category_cubit/category_state.dart';
+import '../../product_cubit/product_cubit.dart';
+import '../../product_cubit/product_state.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  int selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -54,7 +60,7 @@ class HomeScreen extends StatelessWidget {
                       );
                     }
 
-                    return const SizedBox();
+                    return const SizedBox.shrink();
                   },
                 ),
 
@@ -76,22 +82,22 @@ class HomeScreen extends StatelessWidget {
                         return GridView.builder(
                           itemCount: state.products.products.length,
                           gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                childAspectRatio: 0.62,
-                                mainAxisSpacing: 10,
-                              ),
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            childAspectRatio: 0.62,
+                            mainAxisSpacing: 10,
+                          ),
                           itemBuilder: (context, index) {
                             final product = state.products.products[index];
 
                             return ProductItemCard(
-                              product: product ,
+                              product: product,
                             );
                           },
                         );
                       }
 
-                      return const SizedBox();
+                      return const SizedBox.shrink();
                     },
                   ),
                 ),

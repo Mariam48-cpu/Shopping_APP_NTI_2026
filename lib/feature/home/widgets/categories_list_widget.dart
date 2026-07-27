@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/feature/category/view/screens/products_by_category_screen.dart';
 import 'package:shopping_app/feature/home/domain/entities/category_entity.dart';
-
 class CategoriesListWidget extends StatefulWidget {
   const CategoriesListWidget({super.key, required this.categories});
 
@@ -24,6 +24,23 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
             onTap: () {
               selectedIndex = index;
               setState(() {});
+
+              final cleanSlug = widget.categories[index].slug;
+                  // .trim()
+                  // .toLowerCase()
+                  // .replaceAll(RegExp(r'[^a-z0-9\s-]'), '')
+                  // .replaceAll(RegExp(r'\s+'), '-');
+              if (!mounted) return;
+
+              // Navigator.pushNamed(
+              //   context,
+              //   Routes.productOfCategoryScreen,
+              //   arguments: {
+              //     'slug': cleanSlug,
+              //     'categoryName': widget.categories[index].name,
+              //   },
+              // );
+              Navigator.of(context).push(MaterialPageRoute(builder: (_)=> ProductsByCategoryScreen(slug: cleanSlug, categoryName: widget.categories[index].name)));
             },
             child: Container(
               decoration: BoxDecoration(

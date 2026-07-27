@@ -73,6 +73,10 @@ class AppTheme {
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: AppColors.scaffoldBg,
       selectedItemColor: AppColors.primaryOrange,
+      unselectedItemColor: AppColors.grayText,
+      unselectedLabelStyle: TextStyle(color: AppColors.grayText),
+      selectedLabelStyle: TextStyle(color: AppColors.primaryOrange) ,
+      unselectedIconTheme: IconThemeData(color: Colors.black),
 
       type: BottomNavigationBarType.fixed,
       elevation: 8,

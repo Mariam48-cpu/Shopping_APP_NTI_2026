@@ -24,9 +24,7 @@ class ProductItemCard extends StatelessWidget {
                         ? product.images.first
                         : dummyImage,
                     width: double.infinity,
-
                     height: 238,
-
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -52,11 +50,13 @@ class ProductItemCard extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-            Text(
-              product.title,
-              style: Theme.of(context).textTheme.bodyMedium,
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
+            Expanded(
+              child: Text(
+                product.title,
+                style: Theme.of(context).textTheme.bodyMedium,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
 
             const SizedBox(height: 4),
@@ -84,5 +84,4 @@ class ProductItemCard extends StatelessWidget {
   }
 }
 
-String dummyImage =
-    'https://picsum.photos/200';
+String dummyImage = 'https://picsum.photos/200';
