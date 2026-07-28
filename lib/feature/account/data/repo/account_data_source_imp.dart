@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 import 'package:shopping_app/feature/account/domain/repo/account_data_source_interface.dart';
@@ -9,7 +10,7 @@ import 'package:shopping_app/feature/account/domain/repo/account_data_source_int
 import '../../../../core/constants/api_constants.dart';
 import '../model/account_model.dart';
 import '../model/update_account_model.dart';
-
+@Injectable(as: AccountDataSourceInterface)
 class AccountDataSourceImp implements AccountDataSourceInterface {
   @override
   Future<ResultApi<AccountEntity>> getAccount() async {

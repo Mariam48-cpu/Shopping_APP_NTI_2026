@@ -7,7 +7,7 @@ class UserDataDto {
 
   UserDataDto.fromJson(Map<String, dynamic> json) {
     message = json['message'] != null
-        ?  MessageDto.fromJson(json['message'])
+        ? MessageDto.fromJson(json['message'])
         : null;
   }
   AccountEntity toEntity() {

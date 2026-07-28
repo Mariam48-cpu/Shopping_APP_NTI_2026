@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/feature/account/presentation/view/screens/edit_account_screen.dart';
 import 'package:shopping_app/feature/account/presentation/view/screens/widget/account_info_title.dart';
+import 'package:shopping_app/feature/account/presentation/view_model/account_cubit.dart';
+import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 
 import '../../../../../core/common/widgets/custom_button.dart';
 
@@ -17,138 +21,167 @@ class _AccountScreenState extends State<AccountScreen> {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Scaffold(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          body: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    "Account",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+        child: BlocProvider(
+          create: (context) =>
+              serviceLocator<AccountCubit>()..intent(FetchAccountIntent()),
+          child: Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            body: BlocBuilder<AccountCubit, AccountState>(
+              builder: (context, state) {
+                switch (state) {
+                  case AccountInitial():
+                    return Center(child: CircularProgressIndicator());
+                  case AccountLoading():
+                    return Center(child: CircularProgressIndicator());
+                  case AccountSuccess():
+                    return Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              "Account",
+                              style: Theme.of(context).textTheme.headlineMedium,
+                            ),
 
-                  Icon(Icons.notifications_none),
-                ],
-              ),
-              SizedBox(height: 16),
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-
-                    children: [
-                      CircleAvatar(
-                        radius: 64,
-                        backgroundColor: Colors.white,
-                        child: Icon(
-                          Icons.person,
-                          size: 80,
-                          color: Color(0xffff9900),
+                            Icon(Icons.notifications_none),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "Mohamed Essam",
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
-                  SizedBox(height: 8),
-                  Text(
-                    "Account",
-                    style: Theme.of(context).textTheme.bodyMedium,
-                  ),
-                ],
-              ),
-              SizedBox(height: 38),
-              Container(
-                decoration: BoxDecoration(
-                  color:  Color(0xffffffff),
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                child: Column(
-                  children: [
-                    AccountInfoTile(
-                      icon: Icons.person_outline_rounded,
-                      title: 'Full Name',
-                      value: 'Mohamed Essam',
-                    ),
-                     Divider(
-                      height: 4,
-                      indent: 16,
-                      endIndent: 16,
-                      color: Color(0xFFEEEEEE),
-                    ),
+                        SizedBox(height: 16),
+                        Column(
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
 
-                    AccountInfoTile(
-                      icon: Icons.email_outlined,
-                      title: 'Email',
-                      value: 'Mohamed@gmail.com',
-                    ),
-                    Divider(
-                      height: 4,
-                      indent: 16,
-                      endIndent: 16,
-                      color: Color(0xFFEEEEEE),
-                    ),
+                              children: [
+                                CircleAvatar(
+                                  radius: 64,
+                                  backgroundImage:
+                                      state.account.image.isNotEmpty
+                                      ? NetworkImage(state.account.image)
+                                      : null,
 
-                    AccountInfoTile(
-                      icon: Icons.lock_outline_rounded,
-                      title: 'Password',
-                      value: '********',
-                    ),
-                    Divider(
-                      height: 1,
-                      indent: 16,
-                      endIndent: 16,
-                      color: Color(0xFFEEEEEE),
-                    ),
+                                  child: state.account.image.isEmpty
+                                      ? Icon(
+                                          Icons.person,
+                                          size: 80,
+                                          color: Color(0xffff9900),
+                                        )
+                                      : null,
 
-                    AccountInfoTile(
-                      icon: Icons.phone_outlined,
-                      title: 'Phone',
-                      value: '+20 123 456 7890',
-                    ),
-                    Divider(
-                      height: 4,
-                      indent: 16,
-                      endIndent: 16,
-                      color: Color(0xFFEEEEEE),
-                    ),
 
-                    AccountInfoTile(
-                      icon: Icons.location_on_outlined,
-                      title: 'Address',
-                      value: 'Cairo, Egypt',
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 80),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          state.account.name ,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          state.account.email,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
 
-              CustomButton(
-                txt: "Edit Profile",
-                width: 343,
-                height: 48,
-                color: Color(0xff121212),
-                fun: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditAccountScreen(),
-                    ),
-                  );
-                },
-                borderColor: Color(0xff121212),
-                txtColor: Color(0xffffffff),
-              ),
-            ],
+                        SizedBox(height: 38),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Color(0xffffffff),
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            children: [
+                              AccountInfoTile(
+                                icon: Icons.person_outline_rounded,
+                                title: 'Full Name',
+                                value: state.account.name,
+                              ),
+                              Divider(
+                                height: 4,
+                                indent: 16,
+                                endIndent: 16,
+                                color: Color(0xFFEEEEEE),
+                              ),
+
+                              AccountInfoTile(
+                                icon: Icons.email_outlined,
+                                title: 'Email',
+                                value: state.account.email ,
+                              ),
+                              Divider(
+                                height: 4,
+                                indent: 16,
+                                endIndent: 16,
+                                color: Color(0xFFEEEEEE),
+                              ),
+
+                              AccountInfoTile(
+                                icon: Icons.lock_outline_rounded,
+                                title: 'Password',
+                                value: '********',
+                              ),
+                              Divider(
+                                height: 1,
+                                indent: 16,
+                                endIndent: 16,
+                                color: Color(0xFFEEEEEE),
+                              ),
+
+                              AccountInfoTile(
+                                icon: Icons.phone_outlined,
+                                title: 'Phone',
+                                value: state.account.phone ,
+                              ),
+                              Divider(
+                                height: 4,
+                                indent: 16,
+                                endIndent: 16,
+                                color: Color(0xFFEEEEEE),
+                              ),
+
+                              AccountInfoTile(
+                                icon: Icons.location_on_outlined,
+                                title: 'Address',
+                                value: state.account.address,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: 80),
+
+                        CustomButton(
+                          txt: "Edit Profile",
+                          width: 343,
+                          height: 48,
+                          color: Color(0xff121212),
+                          fun: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditAccountScreen(),
+                              ),
+                            );
+                          },
+                          borderColor: Color(0xff121212),
+                          txtColor: Color(0xffffffff),
+                        ),
+                      ],
+                    );
+
+                  case AccountError():
+                    return Center(child: Text(state.messageError ));
+                  case AccountUpdateSuccess():
+                    // TODO: Handle this case.
+                    throw UnimplementedError();
+                }
+              },
+            ),
           ),
         ),
       ),
     );
   }
 }
-

@@ -1,8 +1,9 @@
 import 'dart:io';
 
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/account/domain/repo/account_repo_interface.dart';
-
+@injectable
 class UpdateAccountUseCase {
   final AccountRepoInterface _repo;
   UpdateAccountUseCase(this._repo);
@@ -17,5 +18,6 @@ class UpdateAccountUseCase {
     phone: phone,
     email: email,
     address: address,
+    image: image,
   );
 }

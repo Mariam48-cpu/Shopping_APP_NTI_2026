@@ -11,6 +11,20 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/feature/account/data/repo/account_data_source_imp.dart'
+    as _i766;
+import 'package:shopping_app/feature/account/data/repo/account_repo_imp.dart'
+    as _i568;
+import 'package:shopping_app/feature/account/domain/repo/account_data_source_interface.dart'
+    as _i1064;
+import 'package:shopping_app/feature/account/domain/repo/account_repo_interface.dart'
+    as _i144;
+import 'package:shopping_app/feature/account/domain/use_case/account_use_case.dart'
+    as _i214;
+import 'package:shopping_app/feature/account/domain/use_case/update_account_use_case.dart'
+    as _i821;
+import 'package:shopping_app/feature/account/presentation/view_model/account_cubit.dart'
+    as _i375;
 import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_imp.dart'
     as _i322;
 import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_interface.dart'
@@ -32,9 +46,9 @@ import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_s
 import 'package:shopping_app/feature/home/domain/repositories/home_repository_interface.dart'
     as _i863;
 import 'package:shopping_app/feature/home/domain/use_cases/get_categories_use_case.dart'
-    as _i10;
+    as _i116;
 import 'package:shopping_app/feature/home/domain/use_cases/get_products_use_case.dart'
-    as _i153;
+    as _i740;
 import 'package:shopping_app/feature/home/presentation/category_cubit/category_cubit.dart'
     as _i513;
 import 'package:shopping_app/feature/home/presentation/product_cubit/product_cubit.dart'
@@ -50,7 +64,10 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i767.CategoryRemoteDataSourceInterface>(
       () => _i322.CategoryRemoteDataSourceImpl(),
     );
-    gh.lazySingleton<_i394.HomeRemoteDataSourceInterface>(
+    gh.factory<_i1064.AccountDataSourceInterface>(
+      () => _i766.AccountDataSourceImp(),
+    );
+    gh.factory<_i394.HomeRemoteDataSourceInterface>(
       () => _i525.HomeRemoteDataSourceImpl(),
     );
     gh.factory<_i125.CategoryRepoInterface>(
@@ -61,11 +78,20 @@ extension GetItInjectableX on _i174.GetIt {
         remoteDataSource: gh<_i394.HomeRemoteDataSourceInterface>(),
       ),
     );
-    gh.factory<_i10.GetCategoriesUseCase>(
-      () => _i10.GetCategoriesUseCase(gh<_i863.HomeRepository>()),
+    gh.factory<_i144.AccountRepoInterface>(
+      () => _i568.AccountRepoImp(gh<_i1064.AccountDataSourceInterface>()),
     );
-    gh.factory<_i153.GetProductsUseCase>(
-      () => _i153.GetProductsUseCase(gh<_i863.HomeRepository>()),
+    gh.factory<_i214.AccountUseCase>(
+      () => _i214.AccountUseCase(gh<_i144.AccountRepoInterface>()),
+    );
+    gh.factory<_i821.UpdateAccountUseCase>(
+      () => _i821.UpdateAccountUseCase(gh<_i144.AccountRepoInterface>()),
+    );
+    gh.factory<_i116.GetCategoriesUseCase>(
+      () => _i116.GetCategoriesUseCase(gh<_i863.HomeRepository>()),
+    );
+    gh.factory<_i740.GetProductsUseCase>(
+      () => _i740.GetProductsUseCase(gh<_i863.HomeRepository>()),
     );
     gh.factory<_i577.GetAllProductsByCategoryUseCase>(
       () => _i577.GetAllProductsByCategoryUseCase(
@@ -73,7 +99,13 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i93.ProductCubit>(
-      () => _i93.ProductCubit(gh<_i153.GetProductsUseCase>()),
+      () => _i93.ProductCubit(gh<_i740.GetProductsUseCase>()),
+    );
+    gh.factory<_i375.AccountCubit>(
+      () => _i375.AccountCubit(
+        gh<_i214.AccountUseCase>(),
+        gh<_i821.UpdateAccountUseCase>(),
+      ),
     );
     gh.factory<_i409.ProductsByCategoryCubit>(
       () => _i409.ProductsByCategoryCubit(
@@ -81,7 +113,7 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i513.CategoryCubit>(
-      () => _i513.CategoryCubit(gh<_i10.GetCategoriesUseCase>()),
+      () => _i513.CategoryCubit(gh<_i116.GetCategoriesUseCase>()),
     );
     return this;
   }

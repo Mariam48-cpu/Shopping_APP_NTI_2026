@@ -7,18 +7,19 @@ class AccountInitial extends AccountState {}
 class AccountLoading extends AccountState {}
 
 class AccountSuccess extends AccountState {
-  AccountEntity? account;
+  final AccountEntity account;
+
   AccountSuccess(this.account);
 }
 
 class AccountError extends AccountState {
-  String ?messageError;
+  final String messageError;
 
   AccountError(this.messageError);
 }
 
 class AccountUpdateSuccess extends AccountState {
-  String? message;
+  final String message;
 
   AccountUpdateSuccess(this.message);
 }

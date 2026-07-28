@@ -1,12 +1,13 @@
 import 'dart:io';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 import 'package:shopping_app/feature/account/domain/use_case/account_use_case.dart';
 import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 import '../../domain/use_case/update_account_use_case.dart';
-
+@injectable
 class AccountCubit extends Cubit<AccountState> {
   AccountCubit(this._accountUseCase, this._updateAccountUseCase)
     : super(AccountInitial());
@@ -27,9 +28,9 @@ class AccountCubit extends Cubit<AccountState> {
     var result = await _accountUseCase.invoke();
     switch (result) {
       case Success<AccountEntity>():
-        emit(AccountSuccess(result.data));
+        emit(AccountSuccess(result.data!));
       case Error<AccountEntity>():
-        emit(AccountError(result.messageError));
+        emit(AccountError(result.messageError!));
     }
   }
 
@@ -43,9 +44,9 @@ class AccountCubit extends Cubit<AccountState> {
     );
     switch (result) {
       case Success<String>():
-        emit(AccountUpdateSuccess(result.data));
+        emit(AccountUpdateSuccess(result.data!));
       case Error<String>():
-        emit(AccountError(result.messageError));
+        emit(AccountError(result.messageError!));
     }
   }
 }
