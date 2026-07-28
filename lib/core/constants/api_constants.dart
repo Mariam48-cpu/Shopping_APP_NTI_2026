@@ -4,7 +4,10 @@ class ApiConstant {
   static const String products = 'home/products';
   static final String signin = "auth/signIn";
   static final String signup = "auth/signUp";
-  static String productsByCategory(String slug)=>"home/products/category/$slug?skip=0&limit=5";
+  static String productsByCategory(String slug) =>
+      "home/products/category/$slug?skip=0&limit=5";
+  static final String account = "portfoilo/userData";
+  static final String updateAccount = "portfoilo/addImage";
   static const String token =
       "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjUwMDg4NWNjYzdlODkwMzMzNjUzNSIsImlhdCI6MTc4NTAyMzIxOSwiZXhwIjoxNzg3NjE1MjE5fQ.BwPUqDvzIvht2Kf-Ym1iQhpPQcZeBTfKJAGes3PLDG0";
 }

@@ -10,6 +10,4 @@
   static const String profileIcon="assets/icon/profile.svg";
   static const String magnifierIcon="assets/icon/magnifier.svg";
 
-
-
 }

@@ -8,6 +8,7 @@ import '../../feature/category/view/screens/product_details_screen.dart';
 import '../../feature/category/view/screens/products_by_category_screen.dart';
 import '../../feature/home/presentation/view/screens/home_screen.dart';
 import '../../feature/onboarding/onboarding_screen.dart';
+import '../../feature/app_section/view/bottom_navigation_Screen.dart';
 
 class AppRouters {
   static Route? createRoute(RouteSettings settings) {
@@ -32,7 +33,7 @@ class AppRouters {
         );
       case Routes.homeScreen:
         return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
+          builder: (_) => const BottomNavigationScreen(),
         );
       case Routes.firstOnBoardingScreen:
         return MaterialPageRoute(
