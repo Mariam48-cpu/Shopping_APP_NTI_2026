@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
@@ -49,29 +50,58 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
     File? image,
   }) async {
     try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount),
-      );
-      request.headers.addAll({
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Authorization': 'Bearer ${ApiConstant.token}',
-      });
-      request.fields.addAll({
-        'name': name,
-        'phone': phone,
-        'email': email,
-        'address': address,
-      });
-      if (image != null) {
-        request.files.add(
-          await http.MultipartFile.fromPath('image', image.path),
-        );
-      }
-      var streamedResponse = await request.send();
+      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount);
 
-      var response = await http.Response.fromStream(streamedResponse);
+      var response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${ApiConstant.token}',
+        },
+        body: jsonEncode({
+          "name": name,
+          "phone": phone,
+          "address": address,
+          "image": "",
+        }),
+      );
+
+      print(response.statusCode);
+      print(response.body);
+
+      // var request = http.MultipartRequest(
+      //   'POST',
+      //   Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount),
+      // );
+      // request.headers.addAll({
+      //   'Accept': 'application/json',
+      //   'Authorization': 'Bearer ${ApiConstant.token}',
+      // });
+      // request.fields.addAll({
+      //   'name': name,
+      //   'phone': phone,
+      //   'email': email,
+      //   'address': address,
+      // });
+      // if (image != null) {
+      //   print("Image path: ${image.path}");
+      //   request.files.add(
+      //
+      //       await http.MultipartFile.fromPath(
+      //         'image',
+      //         image.path,
+      //       ),
+      //   );
+      // }
+      // print(request.fields);
+      // print(request.files.length);
+      // var streamedResponse = await request.send();
+
+     // var response = await http.Response.fromStream(streamedResponse);
+      print(response.statusCode);
+      print(response.body);
+
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Map<String, dynamic> json = jsonDecode(response.body);
@@ -80,12 +110,15 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
           data: data.message ?? 'Data updated successfuly',
         );
       } else {
+        print(response.statusCode);
+        print(response.body);
         Map<String, dynamic> json = jsonDecode(response.body);
         return Error<String>(
           messageError: json['message'] ?? 'Failed update data',
         );
       }
     } catch (e) {
+      print(e);
       return Error<String>(messageError: e.toString());
     }
   }

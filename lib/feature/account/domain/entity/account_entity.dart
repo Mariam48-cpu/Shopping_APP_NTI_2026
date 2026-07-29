@@ -13,6 +13,6 @@ class AccountEntity {
     this.email = '',
     this.address = '',
     this.image =
-        'http://supermarket-dan1.onrender.com/api/v1/portfolio/simple.jpg',
+        '',
   });
 }

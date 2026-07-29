@@ -7,6 +7,7 @@ import 'package:shopping_app/feature/account/presentation/view_model/account_cub
 import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 
 import '../../../../../core/common/widgets/custom_button.dart';
+import '../../../../../core/constants/api_constants.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -35,6 +36,10 @@ class _AccountScreenState extends State<AccountScreen> {
                   return Center(child: Text(state.messageError));
                 }
                 if (state is AccountSuccess) {
+                  final imageUrl =
+                  state.account.image.startsWith("http")
+                      ? state.account.image
+                      : "${ApiConstant.baseUrl}${state.account.image}";
                   return Column(
                     children: [
                       Row(
@@ -49,6 +54,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         ],
                       ),
                       SizedBox(height: 16),
+
                       Column(
                         children: [
                           Row(
@@ -58,17 +64,30 @@ class _AccountScreenState extends State<AccountScreen> {
                               CircleAvatar(
                                 radius: 64,
                                 backgroundImage: state.account.image.isNotEmpty
-                                    ? NetworkImage(state.account.image)
+                                    ? NetworkImage(imageUrl)
                                     : null,
-
                                 child: state.account.image.isEmpty
-                                    ? Icon(
-                                        Icons.person,
-                                        size: 80,
-                                        color: Color(0xffff9900),
-                                      )
+                                    ? const Icon(
+                                  Icons.person,
+                                  size: 80,
+                                  color: Color(0xffff9900),
+                                )
                                     : null,
-                              ),
+                              )
+                              // CircleAvatar(
+                              //   radius: 64,
+                              //   backgroundImage: state.account.image.isNotEmpty
+                              //       ? NetworkImage(state.account.image)
+                              //       : null,
+                              //
+                              //   child: state.account.image.isEmpty
+                              //       ? Icon(
+                              //           Icons.person,
+                              //           size: 80,
+                              //           color: Color(0xffff9900),
+                              //         )
+                              //       : null,
+                              // ),
                             ],
                           ),
                         ],
@@ -155,18 +174,16 @@ class _AccountScreenState extends State<AccountScreen> {
                         width: 343,
                         height: 48,
                         color: Color(0xff121212),
-                        fun: () {
-                          final result = Navigator.push(
+                        fun: () async {
+                          final result =await Navigator.push<bool>(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
                                   EditAccountScreen(account: state.account),
                             ),
                           );
-                          if (result == true) {
-                            context.read<AccountCubit>().intent(
-                              FetchAccountIntent(),
-                            );
+                          if (result == true && context.mounted) {
+                            context.read<AccountCubit>().intent(FetchAccountIntent());
                           }
                         },
                         borderColor: Color(0xff121212),
