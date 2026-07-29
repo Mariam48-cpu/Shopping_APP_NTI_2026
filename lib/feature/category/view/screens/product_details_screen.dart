@@ -87,7 +87,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           child: SizedBox(
             width: double.infinity,
             height: 50,
-            child:CustomButton(txt: "Add to cart", width: 343, height: 48, color: AppColors.buttonBlack, fun: (){}, borderColor: AppColors.buttonBlack, txtColor: AppColors.white),
+            child:Padding(
+              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
+              child: CustomButton(txt: "Add to cart", width: 343, height: 48, color: AppColors.buttonBlack, fun: (){}, borderColor: AppColors.buttonBlack, txtColor: AppColors.white),
+            ),
                 ),
         ),)
     );
