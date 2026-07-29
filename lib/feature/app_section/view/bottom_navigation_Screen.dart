@@ -3,6 +3,9 @@ import 'package:shopping_app/feature/app_section/view/widget/svg_icon.dart';
 import 'package:shopping_app/feature/app_section/view_model/bottom_navigation_state.dart';
 import 'package:flutter/material.dart';
 import '../view_model/bottom_navigation_cubit.dart';
+import 'package:shopping_app/feature/home/presentation/view/screens/home_screen.dart';
+import 'package:shopping_app/feature/cart/presentation/view/screens/cart_screen.dart';
+import 'package:shopping_app/feature/favorite/presentation/view/screens/favorite_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -13,10 +16,10 @@ class BottomNavigationScreen extends StatefulWidget {
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
   final List<Widget> _tabs = const [
-    Center(child: Text('Home ')),
-    Center(child: Text('Cart ')),
-    Center(child: Text('Favorite')),
-    Center(child: Text('Account')),
+    HomeScreen(),
+    CartScreen(),
+    FavouriteScreen(),
+    Center(child: Text("Account")),
   ];
 
   @override

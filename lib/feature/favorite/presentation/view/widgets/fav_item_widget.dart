@@ -40,27 +40,18 @@ class FavoriteItemWidget extends StatelessWidget {
                   right: 8,
                   child: InkWell(
                     onTap: onFavorite,
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Colors.red,
-                    ),
+                    child: const Icon(Icons.favorite, color: Colors.red),
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 8),
-          Text(
-            product.title,
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-          ),
+          Text(product.title, maxLines: 2, overflow: TextOverflow.ellipsis),
           const SizedBox(height: 4),
           Text(
             "EGP ${product.price}",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           SizedBox(

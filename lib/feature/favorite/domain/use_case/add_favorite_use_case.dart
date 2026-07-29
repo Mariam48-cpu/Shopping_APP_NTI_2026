@@ -4,9 +4,8 @@ import 'package:shopping_app/feature/favorite/domain/repo/favorite_repo_interfac
 
 @injectable
 class AddFavoriteUseCase {
-  final FavoriteRepoInterface _repo;
-  AddFavoriteUseCase(this._repo);
-
+  final FavoriteRepoInterface favoriteRepoInterface ;
+  AddFavoriteUseCase(this.favoriteRepoInterface);
   Future<ResultApi<String>> invoke(int productId) async =>
-      await _repo.addFavorite(productId: productId.toString());
+      await favoriteRepoInterface.addFavorite(productId: productId.toString());
 }

@@ -5,7 +5,8 @@ import 'package:shopping_app/feature/favorite/domain/repo/favorite_repo_interfac
 
 @injectable
 class GetFavoriteUseCase {
-  FavoriteRepoInterface repo;
-  GetFavoriteUseCase(this.repo);
-  Future<ResultApi<FavoriteEntity>> invoke() async => await repo.getFavorite();
+  FavoriteRepoInterface favoriteRepoInterface;
+  GetFavoriteUseCase(this.favoriteRepoInterface);
+  Future<ResultApi<FavoriteEntity>> invoke() async =>
+      await favoriteRepoInterface.getFavorite();
 }

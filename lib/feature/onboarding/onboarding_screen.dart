@@ -154,15 +154,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     controller.nextPage(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.easeIn,
-
                     );
-
                   } else {
                     if (!mounted) return;
-                    Navigator.pushNamedAndRemoveUntil(
+                    Navigator.pushReplacementNamed(
                       context,
-                      Routes.homeScreen,
-                          (route) => false,
+                      Routes.bottomNavigationScreen,
                     );
                   }
                 },

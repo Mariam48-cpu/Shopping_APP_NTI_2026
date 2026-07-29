@@ -3,10 +3,8 @@ import 'package:shopping_app/feature/favorite/domain/entities/favorite_entity.da
 
 class FavoriteDto {
   List<ProductItemDto> list = [];
-
   FavoriteDto.fromJson(Map<String, dynamic> json) {
     if (json['list'] == null) return;
-
     for (final item in json['list']) {
       if (item['list'] != null) {
         list.addAll(

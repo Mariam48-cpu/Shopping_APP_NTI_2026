@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shopping_app/feature/cart/presentation/view/screens/cart_screen.dart';
-import 'package:shopping_app/feature/favorite/presentation/view/screens/favorite_screen.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+
 import 'core/di/service_locator.dart';
 import 'core/routes/app_routers.dart';
 import 'core/routes/app_routes.dart';
@@ -17,14 +19,23 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      
-      // initialRoute: Routes.firstOnBoardingScreen,
-      // onGenerateRoute: AppRouters.createRoute,
-      home: const CartScreen(),
-      debugShowCheckedModeBanner: false,
-      title: 'Shopping App',
-      theme: AppTheme.lightTheme,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<CartCubit>(
+          create: (_) => serviceLocator<CartCubit>()..getCart(),
+        ),
+        BlocProvider<FavoriteCubit>(
+          create: (_) => serviceLocator<FavoriteCubit>()..getFavorite(),
+        ),
+      ],
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Shopping App',
+        theme: AppTheme.lightTheme,
+        initialRoute: Routes.firstOnBoardingScreen,
+        onGenerateRoute: AppRouters.createRoute,
+        // home: const CartScreen(),
+      ),
     );
   }
 }

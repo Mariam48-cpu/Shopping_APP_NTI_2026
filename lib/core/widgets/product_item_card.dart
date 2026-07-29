@@ -2,10 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
 
 class ProductItemCard extends StatelessWidget {
-  const ProductItemCard({super.key, required this.product, this.onTap});
+  const ProductItemCard({
+    super.key,
+    required this.product,
+    this.onTap,
+    this.onFavorite,
+    this.isFavorite = false,
+  });
 
   final ProductItemEntity product;
   final void Function()? onTap;
+  final VoidCallback? onFavorite;
+  final bool isFavorite;
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,10 +46,13 @@ class ProductItemCard extends StatelessWidget {
                       color: Colors.white,
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(
-                      Icons.favorite_border,
-                      size: 20,
-                      color: Colors.black,
+                    child: IconButton(
+                      onPressed: onFavorite,
+                      icon: Icon(
+                        isFavorite ? Icons.favorite : Icons.favorite_border,
+                        color: Colors.red,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ),
@@ -50,14 +61,12 @@ class ProductItemCard extends StatelessWidget {
 
             const SizedBox(height: 8),
 
-
-              Text(
-                product.title,
-                style: Theme.of(context).textTheme.bodyMedium,
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-
+            Text(
+              product.title,
+              style: Theme.of(context).textTheme.bodyMedium,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+            ),
 
             const SizedBox(height: 4),
 

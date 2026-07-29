@@ -73,29 +73,21 @@ class FavoriteDataSourceImp implements FavoriteDataSourceInterface {
         'DELETE',
         Uri.parse('${ApiConstant.baseUrl}${ApiConstant.deleteFavourite}'),
       );
-
       request.headers.addAll({
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Authorization": "Bearer ${ApiConstant.token}",
       });
-
       request.body = jsonEncode({"productId": productId.toString()});
-
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
-      print("STATUS = ${response.statusCode}");
-      print("BODY = ${response.body}");
       final data = jsonDecode(response.body);
       if (response.statusCode >= 200 && response.statusCode < 300) {
         return Success(data: data["message"] ?? "Removed successfully");
       } else {
         return Error(messageError: data["message"]);
       }
-    } catch (e, s) {
-      print("EXCEPTION = $e");
-      print(s);
+    } catch (e) {
       return Error(messageError: e.toString());
     }
   }

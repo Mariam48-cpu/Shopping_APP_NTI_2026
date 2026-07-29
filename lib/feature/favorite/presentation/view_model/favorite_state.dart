@@ -10,12 +10,18 @@ class FavoriteLoadingState extends FavoriteStates {}
 class FavoriteSuccessState extends FavoriteStates {
   final FavoriteEntity? favorites;
   FavoriteSuccessState(this.favorites);
-
-  @override
-  String toString() => 'FavoriteSuccessState(favorites: $favorites)';
 }
 
 class FavoriteErrorState extends FavoriteStates {
   final String? error;
   FavoriteErrorState(this.error);
+}
+class FavoriteActionSuccessState extends FavoriteStates {
+  final FavoriteEntity? favorites;
+  final String message;
+
+  FavoriteActionSuccessState({
+    required this.favorites,
+    required this.message,
+  });
 }

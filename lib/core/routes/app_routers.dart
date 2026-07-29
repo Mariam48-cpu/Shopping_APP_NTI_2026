@@ -7,6 +7,7 @@ import '../../feature/category/view/screens/product_details_screen.dart';
 import '../../feature/category/view/screens/products_by_category_screen.dart';
 import '../../feature/home/presentation/view/screens/home_screen.dart';
 import '../../feature/onboarding/onboarding_screen.dart';
+import 'package:shopping_app/feature/app_section/view/bottom_navigation_screen.dart';
 
 class AppRouters {
   static Route? createRoute(RouteSettings settings) {
@@ -17,26 +18,24 @@ class AppRouters {
         return MaterialPageRoute(builder: (_) => const SignUpScreen());
       case Routes.helloScreen:
         return MaterialPageRoute(builder: (_) => const HelloScreen());
+      case Routes.bottomNavigationScreen:
+        return MaterialPageRoute(
+          builder: (_) => const BottomNavigationScreen(),
+        );
       case Routes.productOfCategoryScreen:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (_) => ProductsByCategoryScreen(
-            slug: args['slug'] ,
+            slug: args['slug'],
             categoryName: args['categoryName'] ?? 'Electronics',
           ),
         );
       case Routes.productDetailsScreen:
-        return MaterialPageRoute(
-          builder: (_) => ProductDetailsScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => ProductDetailsScreen());
       case Routes.homeScreen:
-        return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       case Routes.firstOnBoardingScreen:
-        return MaterialPageRoute(
-          builder: (_) => const OnboardingScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
 
       default:
         return null;

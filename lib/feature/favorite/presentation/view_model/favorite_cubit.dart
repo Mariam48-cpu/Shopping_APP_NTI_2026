@@ -6,72 +6,67 @@ import 'package:shopping_app/feature/favorite/domain/use_case/add_favorite_use_c
 import 'package:shopping_app/feature/favorite/domain/use_case/delete_favorite_use_case.dart';
 import 'package:shopping_app/feature/favorite/domain/use_case/get_favorite_use_case.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
- //todo edit the names of variables
+
 @injectable
 class FavoriteCubit extends Cubit<FavoriteStates> {
   FavoriteCubit(
-    this._getFavoriteUseCase,
-    this._addFavoriteUseCase,
-    this._deleteFavoriteUseCase,
+    this.getFavoriteUseCase,
+    this.addFavoriteUseCase,
+    this.deleteFavoriteUseCase,
   ) : super(FavoriteIntialState());
 
-  final GetFavoriteUseCase _getFavoriteUseCase;
-  final AddFavoriteUseCase _addFavoriteUseCase;
-  final DeleteFavoriteUseCase _deleteFavoriteUseCase;
+  final GetFavoriteUseCase getFavoriteUseCase;
+  final AddFavoriteUseCase addFavoriteUseCase;
+  final DeleteFavoriteUseCase deleteFavoriteUseCase;
 
   Future<void> getFavorite() async {
     emit(FavoriteLoadingState());
-    await _fetchAndEmit();
+    await fetchAndEmitProduct();
   }
 
-Future<void> _fetchAndEmit() async {
-  final result = await _getFavoriteUseCase.invoke();
-
-  switch (result) {
-    case Success<FavoriteEntity>():
-      print("Products after fetch:");
-      print(result.data?.productList.map((e) => e.id).toList());
-
-      emit(FavoriteSuccessState(result.data));
-      break;
-
-    case Error<FavoriteEntity>():
-      emit(FavoriteErrorState(result.messageError));
-      break;
+  Future<void> fetchAndEmitProduct() async {
+    final result = await getFavoriteUseCase.invoke();
+    switch (result) {
+      case Success<FavoriteEntity>():
+        emit(FavoriteSuccessState(result.data));
+        break;
+      case Error<FavoriteEntity>():
+        emit(FavoriteErrorState(result.messageError));
+        break;
+    }
   }
-}
+
   Future<ResultApi<String>> addFavorite(int productId) async {
-    final result = await _addFavoriteUseCase.invoke(productId);
+    final result = await addFavoriteUseCase.invoke(productId);
+    if (result is Success<String>) {
+      await fetchAndEmitProduct();
+    }
+    return result;
+  }
 
-    if (result is Success<String>) {
-      await _fetchAndEmit();
-    }
-    return result;
-  }
   Future<ResultApi<String>> deleteFavorite(int productId) async {
-    final result = await _deleteFavoriteUseCase.invoke(productId);
+    final result = await deleteFavoriteUseCase.invoke(productId);
     if (result is Success<String>) {
-      await _fetchAndEmit();
+      await fetchAndEmitProduct();
     }
     return result;
   }
+
   bool isFavorite(int productId) {
-    final s = state;
-    if (s is FavoriteSuccessState) {
-      return s.favorites!.productList.any((p) => p.id == productId);
+    final favoriteState = state;
+    if (favoriteState is FavoriteSuccessState) {
+      return favoriteState.favorites!.productList.any((product) => product.id == productId);
     }
     return false;
   }
+
   Future<ResultApi<String>> toggleFavorite(int productId) async {
-    final currentlyFavorite = isFavorite(productId);
-
-    final result = currentlyFavorite
-        ? await _deleteFavoriteUseCase.invoke(productId)
-        : await _addFavoriteUseCase.invoke(productId);
+    final result = isFavorite(productId)
+        ? await deleteFavoriteUseCase.invoke(productId)
+        : await addFavoriteUseCase.invoke(productId);
     if (result is Success<String>) {
-      await _fetchAndEmit();
+      await fetchAndEmitProduct();
     }
-
     return result;
   }
 }

@@ -5,9 +5,11 @@ import 'package:shopping_app/feature/favorite/domain/repo/favorite_repo_interfac
 
 @injectable
 class DeleteFavoriteUseCase {
-  final FavoriteRepoInterface _repo;
-  DeleteFavoriteUseCase(this._repo);
+  final FavoriteRepoInterface favoriteRepoInterface;
+  DeleteFavoriteUseCase(this.favoriteRepoInterface);
 
   Future<ResultApi<String>> invoke(int productId) async =>
-      await _repo.deleteFavorite(productId: productId.toString());
+      await favoriteRepoInterface.deleteFavorite(
+        productId: productId.toString(),
+      );
 }
