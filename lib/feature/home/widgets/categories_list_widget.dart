@@ -48,7 +48,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
                 border: Border.all(
                   color: isSelected
                       ? Colors.black
-                      : Theme.of(context).hintColor,
+                      : Theme.of(context).hintColor,width: 1.25
                 ),
                 borderRadius: BorderRadius.circular(6),
               ),
@@ -60,7 +60,7 @@ class _CategoriesListWidgetState extends State<CategoriesListWidget> {
             ),
           );
         },
-        separatorBuilder: (context, index) => SizedBox(width: 10),
+        separatorBuilder: (context, index) => SizedBox(width: 15),
         itemCount: widget.categories.length,
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart';
 import '../../../../core/di/service_locator.dart';
@@ -15,6 +16,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
 
   final String slug;
   final String categoryName;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -22,7 +24,20 @@ class ProductsByCategoryScreen extends StatelessWidget {
           serviceLocator<ProductsByCategoryCubit>()
             ..intent(GetAllProductsByCategoryIntent(slug: slug)),
       child: Scaffold(
-        appBar: AppBar(title: Text(categoryName), centerTitle: true),
+        appBar: AppBar(
+          title: Text(categoryName),
+          actions: [
+            Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: IconButton(
+                onPressed: () {
+                  Navigator.pushNamed(context, Routes.productSearchScreen);
+                },
+                icon: SvgPicture.asset("assets/icon/magnifier.svg"),
+              ),
+            ),
+          ],
+        ),
         body: BlocBuilder<ProductsByCategoryCubit, CategoryProductsState>(
           builder: (context, state) {
             if (state is CategoryInitialState ||
@@ -42,7 +57,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
                     crossAxisCount: 2,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
-                    childAspectRatio: 0.7,
+                    childAspectRatio: 0.62,
                   ),
                   itemBuilder: (context, index) {
                     return ProductItemCard(
