@@ -1,5 +1,4 @@
 abstract class Routes{
-
   static const String homeScreen="/homeScreen";
   static const String logInAndSignUpScreen="/logInAndSignUpScreen";
   static const String logInScreen="/logInScreen";

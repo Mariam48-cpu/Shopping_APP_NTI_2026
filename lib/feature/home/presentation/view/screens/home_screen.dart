@@ -3,10 +3,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../../widgets/categories_list_widget.dart';
-import '../../category_cubit/category_cubit.dart';
-import '../../category_cubit/category_state.dart';
-import '../../product_cubit/product_cubit.dart';
-import '../../product_cubit/product_state.dart';
+import '../../view_model/category_cubit/category_cubit.dart';
+import '../../view_model/category_cubit/category_state.dart';
+import '../../view_model/product_cubit/product_cubit.dart';
+import '../../view_model/product_cubit/product_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

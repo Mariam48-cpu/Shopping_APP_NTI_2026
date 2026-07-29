@@ -6,18 +6,18 @@ class CartItemWidget extends StatelessWidget {
     super.key,
     required this.item,
     required this.onDelete,
+    required this.onAdd,
+    required this.onRemove,
   });
-
   final ProductItemEntity item;
   final VoidCallback onDelete;
+  final VoidCallback onAdd;
+  final VoidCallback onRemove;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(
-        horizontal: 16,
-        vertical: 8,
-      ),
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -41,42 +41,31 @@ class CartItemWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  item.title,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
+                Text(item.title, maxLines: 2, overflow: TextOverflow.ellipsis),
                 const SizedBox(height: 8),
-
                 Text(
                   "EGP ${item.price}",
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
           ),
-
           Column(
             children: [
-              IconButton(
-                onPressed: onDelete,
-                icon: const Icon(Icons.close),
-              ),
-
+              IconButton(onPressed: onDelete, icon: const Icon(Icons.close)),
               Row(
                 children: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: onRemove,
                     icon: const Icon(Icons.remove_circle_outline),
                   ),
-
-                  const Text("1"),
-
+                  //todo  :  add counter
+                  Text(
+                    "1",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: onAdd,
                     icon: const Icon(Icons.add_circle_outline),
                   ),
                 ],

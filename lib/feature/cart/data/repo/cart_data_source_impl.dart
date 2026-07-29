@@ -20,19 +20,14 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
           'Authorization': 'Bearer ${ApiConstant.token}',
         },
       );
-      print(ApiConstant.token);
-      print('${ApiConstant.baseUrl}${ApiConstant.getCart}');
-
-      print("Status Code: ${response.statusCode}");
-      print("Body: ${response.body}");
+      print("GET TOKEN = ${ApiConstant.token}");
       if (response.statusCode == 200) {
+        print("GET CART RESPONSE");
+        print(response.body);
         final json = jsonDecode(response.body);
-
         final responseDto = CartDto.fromJson(json);
-
         return Success(data: responseDto);
       }
-
       return Error(
         messageError: "Status: ${response.statusCode}\n${response.body}",
       );
@@ -53,14 +48,11 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
         },
         body: jsonEncode({"productId": productId}),
       );
-      print(response.body);
-      print(response.statusCode);
       if (response.statusCode == 200 || response.statusCode == 201) {
         final json = jsonDecode(response.body);
 
         return Success(data: json["message"]);
       }
-
       return Error(messageError: "Failed to add item");
     } catch (e) {
       return Error(messageError: e.toString());
@@ -70,21 +62,32 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
   @override
   Future<ResultApi<String>> deleteCart({required int productId}) async {
     try {
-      final response = await http.delete(
-        Uri.parse('${ApiConstant.baseUrl}${ApiConstant.deleteCart}/$productId'),
-        headers: {
-          "Content-Type": "application/json",
-          'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
-        },
+      final request = http.Request(
+        'DELETE',
+        Uri.parse('${ApiConstant.baseUrl}${ApiConstant.deleteCart}'),
       );
 
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body);
+      request.headers.addAll({
+        "Authorization": "Bearer ${ApiConstant.token}",
+        "Content-Type": "application/json",
+        "Accept": "application/json",
+      });
 
+      request.body = jsonEncode({"productId": productId.toString()});
+
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      print("STATUS = ${response.statusCode}");
+      print("BODY = ${response.body}");
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        print(response.headers);
+        print("DELETE RESPONSE");
+        print(response.body);
+        final json = jsonDecode(response.body);
         return Success(data: json["message"]);
       }
-
       return Error(messageError: "Delete failed");
     } catch (e) {
       return Error(messageError: e.toString());

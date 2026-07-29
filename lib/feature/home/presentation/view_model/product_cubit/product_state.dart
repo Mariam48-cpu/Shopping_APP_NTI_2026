@@ -1,6 +1,4 @@
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
-import '../../../../core/model/item/product_item_entity.dart';
-
 sealed class ProductState {}
 
 final class  ProductInitial extends  ProductState {}

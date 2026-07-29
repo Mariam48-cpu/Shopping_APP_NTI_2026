@@ -7,7 +7,6 @@ abstract class CartRepositoryInterface {
   Future<ResultApi<String>> addToCart({
     required int productId,
   });
-
   Future<ResultApi<String>> deleteCart({
     required int productId,
   });

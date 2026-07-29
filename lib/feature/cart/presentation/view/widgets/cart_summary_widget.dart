@@ -1,41 +1,38 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/feature/cart/presentation/view/widgets/cart_summary_row_widget.dart';
 
 class CartSummaryWidget extends StatelessWidget {
-  const CartSummaryWidget({
-    super.key,
-    required this.total,
-  });
+  const CartSummaryWidget({super.key, required this.total});
 
   final double total;
 
   @override
   Widget build(BuildContext context) {
-    const double shipping = 0.0;
-
+    final double shipping = 0;
     return Container(
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(20),
-        ),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
       child: SafeArea(
         top: false,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            _buildRow(
-              title: "Shipping",
+            CartSummaryRowWidget(
+              title: "Shipping fee",
               value: shipping,
+              isBold: false,
             ),
             const SizedBox(height: 10),
-            _buildRow(
+            CartSummaryRowWidget(
               title: "Subtotal",
               value: total,
+              isBold: false,
             ),
             const Divider(height: 30),
-            _buildRow(
+            CartSummaryRowWidget(
               title: "Total",
               value: total + shipping,
               isBold: true,
@@ -55,31 +52,4 @@ class CartSummaryWidget extends StatelessWidget {
     );
   }
 
-  Widget _buildRow({
-    required String title,
-    required double value,
-    bool isBold = false,
-  }) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight:
-                isBold ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-        Text(
-          "\$${value.toStringAsFixed(2)}",
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight:
-                isBold ? FontWeight.bold : FontWeight.normal,
-          ),
-        ),
-      ],
-    );
-  }
 }

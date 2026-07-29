@@ -20,66 +20,41 @@ class CartCubit extends Cubit<CartState> {
     required this.deleteCartUseCase,
   }) : super(CartInitial());
 
-  CartEntity? cartEntity;
-
   Future<void> getCart() async {
     emit(CartLoading());
-
-    final result = await getCartUseCase();
+    final result = await getCartUseCase.call();
 
     switch (result) {
       case Success<CartEntity>():
-        print(result.data?.list.length);
-
-        for (final item in result.data!.list) {
-          print(item.title);
-          print(item.price);
-          print(item.thumbnail);
-        }
-
-        cartEntity = result.data;
-        emit(CartSuccess(cart: result.data));
-
+  print("Cart:");
+  print(result.data?.list.map((e) => e.id).toList());
+  emit(CartSuccess(cart: result.data));
       case Error<CartEntity>():
         emit(CartError(message: result.messageError));
     }
   }
 
   Future<String?> addToCart({required int productId}) async {
-    final result = await addToCartUseCase(productId: productId);
-
+    final result = await addToCartUseCase.call(productId: productId);
     switch (result) {
       case Success<String>():
         await getCart();
         return result.data;
-
       case Error<String>():
         return result.messageError;
     }
   }
 
-  Future<String?> deleteCart({required int productId}) async {
-    final result = await deleteCartUseCase(productId: productId);
-
+  Future<String?> deleteCart({
+    required int productId,
+  }) async {
+    final result = await deleteCartUseCase.call(productId: productId);
     switch (result) {
       case Success<String>():
         await getCart();
         return result.data;
-
       case Error<String>():
         return result.messageError;
     }
-  }
-
-  double calculateTotalPrice() {
-    double total = 0;
-
-    if (cartEntity == null) return total;
-
-    for (final product in cartEntity!.list) {
-      total += product.price;
-    }
-
-    return total;
   }
 }

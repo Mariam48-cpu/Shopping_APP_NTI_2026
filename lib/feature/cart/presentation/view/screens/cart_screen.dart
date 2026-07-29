@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
+import 'package:shopping_app/feature/cart/domain/entities/cart_entity.dart';
 import 'package:shopping_app/feature/cart/presentation/view/widgets/cart_item_widget.dart';
 import 'package:shopping_app/feature/cart/presentation/view/widgets/cart_summary_widget.dart';
 import 'package:shopping_app/feature/cart/presentation/view/widgets/empty_cart_widget.dart';
@@ -11,8 +12,13 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double calculateTotal(CartEntity cart) {
+      return cart.list.fold(0, (sum, item) => sum + item.price);
+    }
+
     return BlocProvider(
       create: (_) => serviceLocator<CartCubit>()..getCart(),
+
       child: Scaffold(
         appBar: AppBar(title: const Text("My Cart"), centerTitle: true),
         body: BlocConsumer<CartCubit, CartState>(
@@ -32,19 +38,13 @@ class CartScreen extends StatelessWidget {
                 return Center(
                   child: Text(state.message ?? 'Something went wrong'),
                 );
-
               case CartSuccess():
                 final cart = state.cart;
-
                 if (cart!.list.isEmpty) {
                   return const EmptyCartWidget();
                 }
-
-                final total = cart.list.fold<double>(
-                  0,
-                  (sum, item) => sum + item.price,
-                );
-
+                final total = calculateTotal(cart);
+                print("UI Count = ${cart.list.length}");
                 return Column(
                   children: [
                     Expanded(
@@ -53,12 +53,25 @@ class CartScreen extends StatelessWidget {
                         itemBuilder: (context, index) {
                           return CartItemWidget(
                             item: cart.list[index],
-                            onDelete: () {},
+                            onDelete: () async {
+                              context.read<CartCubit>().deleteCart(
+                                productId: cart.list[index].id,
+                              );
+                            },
+                            onAdd: () {
+                              context.read<CartCubit>().addToCart(
+                                productId: cart.list[index].id,
+                              );
+                            },
+                            onRemove: () {
+                              context.read<CartCubit>().deleteCart(
+                                productId: cart.list[index].id,
+                              );
+                            },
                           );
                         },
                       ),
                     ),
-
                     CartSummaryWidget(total: total),
                   ],
                 );

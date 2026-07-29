@@ -7,28 +7,27 @@ import 'package:shopping_app/feature/cart/domain/repo/cart_repo_interface.dart';
 
 @LazySingleton(as: CartRepositoryInterface)
 class CartRepositoryImpl implements CartRepositoryInterface {
-  final CartDataSourceInterface remoteDataSource;
+  CartRepositoryImpl(this.DataSource);
 
-  CartRepositoryImpl({required this.remoteDataSource});
+  final CartDataSourceInterface DataSource;
 
   @override
   Future<ResultApi<CartEntity>> getCart() async {
-    final result = await remoteDataSource.getCart();
-
-    if (result is Success<CartDto>) {
-      return Success(data: result.data?.toEntity());
+    final result = await DataSource.getCart();
+    switch (result) {
+      case Success<CartDto>():
+        return Success(data: result.data?.toEntity());
+      case Error<CartDto>():
+        return Error(messageError: result.messageError);
     }
-
-    return Error(messageError: (result as Error).messageError);
   }
-
   @override
   Future<ResultApi<String>> addToCart({required int productId}) async {
-    return await remoteDataSource.addToCart(productId: productId);
+    return DataSource.addToCart(productId: productId);
   }
 
   @override
   Future<ResultApi<String>> deleteCart({required int productId}) async {
-    return await remoteDataSource.deleteCart(productId: productId);
+    return DataSource.deleteCart(productId: productId);
   }
 }
