@@ -11,6 +11,7 @@ abstract interface class AccountRepoInterface {
     required String phone,
     required String email,
     required String address,
+    required String currentImage,
     File? image,
   });
 }

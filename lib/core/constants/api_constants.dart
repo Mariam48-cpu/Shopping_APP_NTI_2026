@@ -8,6 +8,7 @@ class ApiConstant {
       "home/products/category/$slug?skip=0&limit=5";
   static final String account = "portfoilo/userData";
   static final String updateAccount = "portfoilo/editUserData";
+  static const String uploadImage = "portfoilo/addImage";
   static const String token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNmEyNmI1M2IzY2U3OGFjZDA2YzgzNiIsImlhdCI6MTc4NTM0MTY4MSwiZXhwIjoxNzg3OTMzNjgxfQ.yKfCPVHv1_xyKeOCnco-BwbrM7xyB-mzbe32Bd1JRqQ";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNmE0ZTI0M2IzY2U3OGFjZDA2Y2EwMSIsImlhdCI6MTc4NTM1MTczNiwiZXhwIjoxNzg3OTQzNzM2fQ.NcIhayjgYpxTki1jmrmVnEwnMj0b-2SuIhNBxRHYXOc";
 }

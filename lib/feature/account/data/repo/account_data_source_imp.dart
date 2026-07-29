@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
-import 'package:http_parser/http_parser.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
@@ -11,6 +10,7 @@ import 'package:shopping_app/feature/account/domain/repo/account_data_source_int
 import '../../../../core/constants/api_constants.dart';
 import '../model/account_model.dart';
 import '../model/update_account_model.dart';
+
 @Injectable(as: AccountDataSourceInterface)
 class AccountDataSourceImp implements AccountDataSourceInterface {
   @override
@@ -47,11 +47,16 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
     required String phone,
     required String email,
     required String address,
+    required String currentImage,
     File? image,
   }) async {
     try {
-      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount);
+      String imagePath = currentImage;
 
+      if (image != null) {
+        imagePath = await uploadImage(image);
+      }
+      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount);
       var response = await http.post(
         url,
         headers: {
@@ -62,46 +67,11 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
         body: jsonEncode({
           "name": name,
           "phone": phone,
+          "email": email,
           "address": address,
-          "image": "",
+          "image": imagePath,
         }),
       );
-
-      print(response.statusCode);
-      print(response.body);
-
-      // var request = http.MultipartRequest(
-      //   'POST',
-      //   Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount),
-      // );
-      // request.headers.addAll({
-      //   'Accept': 'application/json',
-      //   'Authorization': 'Bearer ${ApiConstant.token}',
-      // });
-      // request.fields.addAll({
-      //   'name': name,
-      //   'phone': phone,
-      //   'email': email,
-      //   'address': address,
-      // });
-      // if (image != null) {
-      //   print("Image path: ${image.path}");
-      //   request.files.add(
-      //
-      //       await http.MultipartFile.fromPath(
-      //         'image',
-      //         image.path,
-      //       ),
-      //   );
-      // }
-      // print(request.fields);
-      // print(request.files.length);
-      // var streamedResponse = await request.send();
-
-     // var response = await http.Response.fromStream(streamedResponse);
-      print(response.statusCode);
-      print(response.body);
-
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
         Map<String, dynamic> json = jsonDecode(response.body);
@@ -110,16 +80,38 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
           data: data.message ?? 'Data updated successfuly',
         );
       } else {
-        print(response.statusCode);
-        print(response.body);
         Map<String, dynamic> json = jsonDecode(response.body);
         return Error<String>(
           messageError: json['message'] ?? 'Failed update data',
         );
       }
     } catch (e) {
-      print(e);
       return Error<String>(messageError: e.toString());
     }
+  }
+
+  Future<String> uploadImage(File image) async {
+    var request = http.MultipartRequest(
+      "POST",
+      Uri.parse(ApiConstant.baseUrl + ApiConstant.uploadImage),
+    );
+    request.headers.addAll({
+      "Authorization": "Bearer ${ApiConstant.token}",
+      "Accept": "application/json",
+    });
+    request.files.add(
+      await http.MultipartFile.fromPath(
+        "file",
+        image.path,
+        contentType: http.MediaType("image", "jpeg"),
+      ),
+    );
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+
+    if (response.statusCode >= 200 && response.statusCode < 300) {
+      return '';
+    }
+    throw Exception("Upload image failed");
   }
 }

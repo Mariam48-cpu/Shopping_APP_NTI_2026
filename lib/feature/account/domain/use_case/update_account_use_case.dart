@@ -12,12 +12,14 @@ class UpdateAccountUseCase {
     required String phone,
     required String email,
     required String address,
+    required String currentImage,
     File? image,
   }) async => await _repo.updateAccount(
     name: name,
     phone: phone,
     email: email,
     address: address,
+    currentImage: currentImage,
     image: image,
   );
 }

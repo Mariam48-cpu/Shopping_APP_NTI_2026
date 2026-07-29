@@ -12,7 +12,7 @@ class AccountEntity {
     this.phone = '',
     this.email = '',
     this.address = '',
-    this.image =
-        '',
+    this.image ='',
   });
+ 
 }

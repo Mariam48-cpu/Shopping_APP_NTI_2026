@@ -7,6 +7,7 @@ import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 import 'package:shopping_app/feature/account/domain/use_case/account_use_case.dart';
 import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 import '../../domain/use_case/update_account_use_case.dart';
+
 @injectable
 class AccountCubit extends Cubit<AccountState> {
   AccountCubit(this._accountUseCase, this._updateAccountUseCase)
@@ -34,26 +35,22 @@ class AccountCubit extends Cubit<AccountState> {
     }
   }
 
-
   Future<void> _updateAccount(UpdateAccountIntent intent) async {
-    print("Cubit Update Called");
     emit(AccountUpdateLoading());
-    print("Before Invoke");
+
     var result = await _updateAccountUseCase.invoke(
       name: intent.name,
       phone: intent.phone,
       email: intent.email,
       address: intent.address,
+      currentImage: intent.currentImage,
       image: intent.image,
     );
-    print("After Invoke");
-    print(result.runtimeType);
-    print(result);
+
     switch (result) {
       case Success<String>():
         emit(AccountUpdateSuccess(result.data!));
       case Error<String>():
-        print(result.messageError);
         emit(AccountUpdateError(result.messageError!));
     }
   }
@@ -68,6 +65,7 @@ class UpdateAccountIntent extends AccountIntent {
   String phone;
   String email;
   String address;
+  String currentImage;
   File? image;
 
   UpdateAccountIntent({
@@ -75,6 +73,7 @@ class UpdateAccountIntent extends AccountIntent {
     required this.phone,
     required this.email,
     required this.address,
+    required this.currentImage,
     this.image,
   });
 }

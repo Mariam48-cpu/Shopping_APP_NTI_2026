@@ -9,7 +9,7 @@ import 'package:shopping_app/feature/account/domain/repo/account_data_source_int
 import '../../domain/repo/account_repo_interface.dart';
 @Injectable(as: AccountRepoInterface)
 class AccountRepoImp implements AccountRepoInterface {
-  AccountDataSourceInterface _dataSourceInterface;
+  final AccountDataSourceInterface _dataSourceInterface;
   AccountRepoImp(this._dataSourceInterface);
   @override
   Future<ResultApi<AccountEntity>> getAccount() async =>
@@ -21,12 +21,14 @@ class AccountRepoImp implements AccountRepoInterface {
     required String phone,
     required String email,
     required String address,
+    required String currentImage,
     File? image,
   }) async => await _dataSourceInterface.updateAccount(
     name: name,
     phone: phone,
     email: email,
     address: address,
+    currentImage: currentImage,
     image: image,
   );
 }

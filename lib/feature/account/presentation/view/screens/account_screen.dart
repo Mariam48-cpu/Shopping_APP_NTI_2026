@@ -7,7 +7,7 @@ import 'package:shopping_app/feature/account/presentation/view_model/account_cub
 import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 
 import '../../../../../core/common/widgets/custom_button.dart';
-import '../../../../../core/constants/api_constants.dart';
+import '../../../../../core/utils/image_helper.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({super.key});
@@ -36,10 +36,8 @@ class _AccountScreenState extends State<AccountScreen> {
                   return Center(child: Text(state.messageError));
                 }
                 if (state is AccountSuccess) {
-                  final imageUrl =
-                  state.account.image.startsWith("http")
-                      ? state.account.image
-                      : "${ApiConstant.baseUrl}${state.account.image}";
+                  final imageUrl = ImageHelper.getImageUrl(state.account.image);
+
                   return Column(
                     children: [
                       Row(
@@ -63,31 +61,18 @@ class _AccountScreenState extends State<AccountScreen> {
                             children: [
                               CircleAvatar(
                                 radius: 64,
-                                backgroundImage: state.account.image.isNotEmpty
+                                backgroundImage: imageUrl.isNotEmpty
                                     ? NetworkImage(imageUrl)
                                     : null,
-                                child: state.account.image.isEmpty
+                                child: imageUrl.isEmpty
                                     ? const Icon(
-                                  Icons.person,
-                                  size: 80,
-                                  color: Color(0xffff9900),
-                                )
+                                        Icons.person,
+                                        size: 80,
+                                        color: Color(0xffff9900),
+                                      )
                                     : null,
-                              )
-                              // CircleAvatar(
-                              //   radius: 64,
-                              //   backgroundImage: state.account.image.isNotEmpty
-                              //       ? NetworkImage(state.account.image)
-                              //       : null,
-                              //
-                              //   child: state.account.image.isEmpty
-                              //       ? Icon(
-                              //           Icons.person,
-                              //           size: 80,
-                              //           color: Color(0xffff9900),
-                              //         )
-                              //       : null,
-                              // ),
+                              ),
+
                             ],
                           ),
                         ],
@@ -175,7 +160,7 @@ class _AccountScreenState extends State<AccountScreen> {
                         height: 48,
                         color: Color(0xff121212),
                         fun: () async {
-                          final result =await Navigator.push<bool>(
+                          final result = await Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
@@ -183,7 +168,9 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                           );
                           if (result == true && context.mounted) {
-                            context.read<AccountCubit>().intent(FetchAccountIntent());
+                            context.read<AccountCubit>().intent(
+                              FetchAccountIntent(),
+                            );
                           }
                         },
                         borderColor: Color(0xff121212),

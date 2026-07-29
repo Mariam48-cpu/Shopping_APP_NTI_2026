@@ -8,9 +8,10 @@ import 'package:shopping_app/feature/account/presentation/view_model/account_cub
 import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 
 import '../../../../../core/common/widgets/custom_button.dart';
-import '../../../../../core/constants/api_constants.dart';
+import '../../../../../core/constants/app_assets.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/utils/image_helper.dart';
 import '../../../domain/entity/account_entity.dart';
 
 class EditAccountScreen extends StatefulWidget {
@@ -83,17 +84,10 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                 }
               },
 
-
               builder: (context, state) {
-                final imageUrl =
-                widget.account.image.startsWith("http")
-                    ? widget.account.image
-                    : "${ApiConstant.baseUrl}${widget.account.image}";
-                print(widget.account.image);
-                print(imageUrl);
+                final imageUrl = ImageHelper.getImageUrl(widget.account.image);
 
-                final ImageProvider imageProvider =
-                selectedImage != null
+                final ImageProvider imageProvider = selectedImage != null
                     ? FileImage(selectedImage!)
                     : NetworkImage(imageUrl);
 
@@ -122,13 +116,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                               radius: 60,
                               backgroundImage: imageProvider,
                             ),
-                            // CircleAvatar(
-                            //   radius: 60,
-                            //   backgroundImage: selectedImage != null
-                            //       ? FileImage(selectedImage!)
-                            //       : NetworkImage(widget.account.image)
-                            //             as ImageProvider,
-                            // ),
 
                             Positioned(
                               bottom: 0,
@@ -149,7 +136,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                     ],
                                   ),
                                   child: Image.asset(
-                                    "assets/image/camira.png",
+                                    AppAssets.camera,
                                     width: 20,
                                     height: 20,
                                   ),
@@ -224,15 +211,14 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           height: 48,
                           color: Color(0xff121212),
                           fun: () {
-                            print("Submit Clicked");
                             if (_formKey.currentState!.validate()) {
-                              print("Form Valid");
                               context.read<AccountCubit>().intent(
                                 UpdateAccountIntent(
                                   name: _nameController.text.trim(),
                                   phone: _phoneController.text.trim(),
                                   email: _emailController.text.trim(),
                                   address: _addressController.text.trim(),
+                                  currentImage: widget.account.image,
                                   image: selectedImage,
                                 ),
                               );
