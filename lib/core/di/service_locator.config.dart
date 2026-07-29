@@ -15,16 +15,28 @@ import 'package:shopping_app/feature/category/data/data_sources/category_data_so
     as _i572;
 import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart'
     as _i824;
+import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_imp.dart'
+    as _i828;
+import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_interface.dart'
+    as _i907;
 import 'package:shopping_app/feature/category/data/repo/category_repo_imp.dart'
     as _i59;
+import 'package:shopping_app/feature/category/data/repo/product_details_repo_imp.dart'
+    as _i358;
 import 'package:shopping_app/feature/category/domain/repo/category_repo_interface.dart'
     as _i125;
+import 'package:shopping_app/feature/category/domain/repo/product_details_repo_interface.dart'
+    as _i167;
 import 'package:shopping_app/feature/category/domain/use_case/get_all_products_by_category_use_case.dart'
     as _i577;
+import 'package:shopping_app/feature/category/domain/use_case/get_product_details_use_case.dart'
+    as _i905;
 import 'package:shopping_app/feature/category/domain/use_case/products_by_search_use_case.dart'
     as _i313;
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart'
     as _i409;
+import 'package:shopping_app/feature/category/view_model/product_cubit.dart'
+    as _i440;
 import 'package:shopping_app/feature/category/view_model/products_search_cubit.dart'
     as _i131;
 import 'package:shopping_app/feature/home/data/data_sources/home_remote_data_source_impl.dart'
@@ -51,6 +63,9 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.factory<_i907.ProductDetailsRemoteDataSourceInterface>(
+      () => _i828.ProductDetailsRemoteDataSourceImp(),
+    );
     gh.factory<_i394.HomeRemoteDataSourceInterface>(
       () => _i525.HomeRemoteDataSourceImpl(),
     );
@@ -60,9 +75,19 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i125.CategoryRepoInterface>(
       () => _i59.CategoryRepoImp(gh<_i824.CategoryRemoteDataSourceInterface>()),
     );
+    gh.factory<_i167.ProductDetailsRepoInterface>(
+      () => _i358.ProductDetailsRepoImp(
+        gh<_i907.ProductDetailsRemoteDataSourceInterface>(),
+      ),
+    );
     gh.lazySingleton<_i863.HomeRepository>(
       () => _i302.HomeRepositoryImpl(
         remoteDataSource: gh<_i394.HomeRemoteDataSourceInterface>(),
+      ),
+    );
+    gh.factory<_i905.GetProductDetailsUseCase>(
+      () => _i905.GetProductDetailsUseCase(
+        gh<_i167.ProductDetailsRepoInterface>(),
       ),
     );
     gh.factory<_i116.GetCategoriesUseCase>(
@@ -70,6 +95,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i740.GetProductsUseCase>(
       () => _i740.GetProductsUseCase(gh<_i863.HomeRepository>()),
+    );
+    gh.factory<_i440.ProductCubit>(
+      () => _i440.ProductCubit(gh<_i905.GetProductDetailsUseCase>()),
     );
     gh.factory<_i577.GetAllProductsByCategoryUseCase>(
       () => _i577.GetAllProductsByCategoryUseCase(

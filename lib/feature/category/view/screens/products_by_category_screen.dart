@@ -5,6 +5,7 @@ import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
+import '../../../../core/theme/app_colors.dart';
 import '../../view_model/category_products_state.dart';
 
 class ProductsByCategoryScreen extends StatelessWidget {
@@ -21,8 +22,8 @@ class ProductsByCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-          serviceLocator<ProductsByCategoryCubit>()
-            ..intent(GetAllProductsByCategoryIntent(slug: slug)),
+      serviceLocator<ProductsByCategoryCubit>()
+        ..intent(GetAllProductsByCategoryIntent(slug: slug)),
       child: Scaffold(
         appBar: AppBar(
           title: Text(categoryName),

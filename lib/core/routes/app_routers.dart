@@ -11,6 +11,7 @@ import '../../feature/home/presentation/view/screens/home_screen.dart';
 import '../../feature/onboarding/onboarding_screen.dart';
 import '../model/item/product_item_entity.dart';
 
+// import '../../feature/search/presentation/view/screens/search_screen.dart';
 
 class AppRouters {
   static Route? createRoute(RouteSettings settings) {
@@ -29,10 +30,10 @@ class AppRouters {
             categoryName: args['categoryName'] ?? 'Electronics',
           ),
         );
-      case Routes.productDetailsScreen:
-        return MaterialPageRoute(
-          builder: (_) => ProductDetailsScreen(),
-        );
+      // case Routes.productDetailsScreen:
+        // return MaterialPageRoute(
+          // builder: (_) => ProductDetailsScreen(),
+        // );
       case Routes.homeScreen:
         return MaterialPageRoute(
           builder: (_) => const HomeScreen(),
