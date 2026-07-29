@@ -17,9 +17,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ProductDetailsScreen(product: ProductItemEntity(),),
-      // initialRoute: Routes.firstOnBoardingScreen,
-      // onGenerateRoute: AppRouters.createRoute,
+      //home: ProductDetailsScreen(product: ProductItemEntity(),),
+      initialRoute: Routes.firstOnBoardingScreen,
+      onGenerateRoute: AppRouters.createRoute,
       debugShowCheckedModeBanner: false,
       title: 'Shopping App',
       theme: AppTheme.lightTheme,
