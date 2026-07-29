@@ -9,5 +9,5 @@ class ApiConstant {
   static final String account = "portfoilo/userData";
   static final String updateAccount = "portfoilo/addImage";
   static const String token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjdhYzFkOGI3OGVhZTUzZjM0Yjg2YyIsImlhdCI6MTc4NTIwMDU1MiwiZXhwIjoxNzg3NzkyNTUyfQ.QeeQbW1pQzBM3DzxpYXW0bMw_pxvaLMCV0xrxD1F2a4";
+      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNjc0YmYzNGU0ZDg0ZGE3NTVkZWExMSIsImlhdCI6MTc4NTI3OTg4NywiZXhwIjoxNzg3ODcxODg3fQ.n-Mhhb2Gc-0KorIbMVAc0ata8L7-bC1LbMxwxz-J7rI";
 }

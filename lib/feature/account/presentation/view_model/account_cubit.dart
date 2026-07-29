@@ -35,7 +35,7 @@ class AccountCubit extends Cubit<AccountState> {
   }
 
   Future<void> _updateAccount(UpdateAccountIntent intent) async {
-    emit(AccountLoading());
+    emit(AccountUpdateLoading());
     var result = await _updateAccountUseCase.invoke(
       name: intent.name,
       phone: intent.phone,
@@ -46,7 +46,7 @@ class AccountCubit extends Cubit<AccountState> {
       case Success<String>():
         emit(AccountUpdateSuccess(result.data!));
       case Error<String>():
-        emit(AccountError(result.messageError!));
+        emit(AccountUpdateError(result.messageError!));
     }
   }
 }
