@@ -9,6 +9,8 @@
   static const String homeIcon="assets/icon/home.svg";
   static const String profileIcon="assets/icon/profile.svg";
   static const String magnifierIcon="assets/icon/magnifier.svg";
+  static const String productNotFound="assets/image/product_not_found.jpg";
+  static const String searchInitial="assets/image/search_initial.png";
 
 
 

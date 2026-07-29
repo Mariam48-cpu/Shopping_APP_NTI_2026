@@ -11,10 +11,10 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
-import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_imp.dart'
-    as _i322;
-import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_interface.dart'
-    as _i767;
+import 'package:shopping_app/feature/category/data/data_sources/category_data_source_imp.dart'
+    as _i572;
+import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart'
+    as _i824;
 import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_imp.dart'
     as _i828;
 import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_interface.dart'
@@ -31,10 +31,14 @@ import 'package:shopping_app/feature/category/domain/use_case/get_all_products_b
     as _i577;
 import 'package:shopping_app/feature/category/domain/use_case/get_product_details_use_case.dart'
     as _i905;
+import 'package:shopping_app/feature/category/domain/use_case/products_by_search_use_case.dart'
+    as _i313;
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart'
     as _i409;
 import 'package:shopping_app/feature/category/view_model/product_cubit.dart'
     as _i440;
+import 'package:shopping_app/feature/category/view_model/products_search_cubit.dart'
+    as _i131;
 import 'package:shopping_app/feature/home/data/data_sources/home_remote_data_source_impl.dart'
     as _i525;
 import 'package:shopping_app/feature/home/data/repositories/home_repository_impl.dart'
@@ -59,17 +63,17 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-    gh.factory<_i767.CategoryRemoteDataSourceInterface>(
-      () => _i322.CategoryRemoteDataSourceImpl(),
-    );
     gh.factory<_i907.ProductDetailsRemoteDataSourceInterface>(
       () => _i828.ProductDetailsRemoteDataSourceImp(),
     );
     gh.factory<_i394.HomeRemoteDataSourceInterface>(
       () => _i525.HomeRemoteDataSourceImpl(),
     );
+    gh.factory<_i824.CategoryRemoteDataSourceInterface>(
+      () => _i572.CategoryRemoteDataSourceImpl(),
+    );
     gh.factory<_i125.CategoryRepoInterface>(
-      () => _i59.CategoryRepoImp(gh<_i767.CategoryRemoteDataSourceInterface>()),
+      () => _i59.CategoryRepoImp(gh<_i824.CategoryRemoteDataSourceInterface>()),
     );
     gh.factory<_i167.ProductDetailsRepoInterface>(
       () => _i358.ProductDetailsRepoImp(
@@ -100,6 +104,9 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i125.CategoryRepoInterface>(),
       ),
     );
+    gh.factory<_i313.ProductsBySearchUseCase>(
+      () => _i313.ProductsBySearchUseCase(gh<_i125.CategoryRepoInterface>()),
+    );
     gh.factory<_i93.ProductCubit>(
       () => _i93.ProductCubit(gh<_i740.GetProductsUseCase>()),
     );
@@ -107,6 +114,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i409.ProductsByCategoryCubit(
         gh<_i577.GetAllProductsByCategoryUseCase>(),
       ),
+    );
+    gh.factory<_i131.ProductSearchCubit>(
+      () => _i131.ProductSearchCubit(gh<_i313.ProductsBySearchUseCase>()),
     );
     gh.factory<_i513.CategoryCubit>(
       () => _i513.CategoryCubit(gh<_i116.GetCategoriesUseCase>()),
