@@ -17,6 +17,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
 
   final String slug;
   final String categoryName;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,7 +25,6 @@ class ProductsByCategoryScreen extends StatelessWidget {
       serviceLocator<ProductsByCategoryCubit>()
         ..intent(GetAllProductsByCategoryIntent(slug: slug)),
       child: Scaffold(
-        backgroundColor: AppColors.offWhite,
         appBar: AppBar(
           title: Text(categoryName),
           actions: [
@@ -32,7 +32,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
               padding: const EdgeInsets.only(right: 15),
               child: IconButton(
                 onPressed: () {
-                  // Navigator.of(context).pushNamed(Routes.searchScreen);
+                  Navigator.pushNamed(context, Routes.productSearchScreen);
                 },
                 icon: SvgPicture.asset("assets/icon/magnifier.svg"),
               ),
