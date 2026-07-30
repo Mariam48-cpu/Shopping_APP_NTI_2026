@@ -1,11 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/feature/category/domain/entities/product_details_entity.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
 class ProductDetailsCard extends StatefulWidget {
-  final ProductItemEntity product;
+  final ProductDetailsEntity product;
 
   const ProductDetailsCard({super.key, required this.product});
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/feature/category/domain/entities/product_details_entity.dart';
 import 'package:shopping_app/feature/category/view/screens/product_details_screen.dart';
 import 'core/di/service_locator.dart';
 import 'core/routes/app_routers.dart';
@@ -17,9 +18,9 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: ProductDetailsScreen(product: ProductItemEntity(),),
-      // initialRoute: Routes.firstOnBoardingScreen,
-      // onGenerateRoute: AppRouters.createRoute,
+      // home: ProductDetailsScreen(productId: 1),
+      initialRoute: Routes.firstOnBoardingScreen,
+      onGenerateRoute: AppRouters.createRoute,
       debugShowCheckedModeBanner: false,
       title: 'Shopping App',
       theme: AppTheme.lightTheme,

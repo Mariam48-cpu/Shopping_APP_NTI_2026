@@ -161,7 +161,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     if (!mounted) return;
                     Navigator.pushNamedAndRemoveUntil(
                       context,
-                      Routes.homeScreen,
+                      Routes.helloScreen,
                           (route) => false,
                     );
                   }

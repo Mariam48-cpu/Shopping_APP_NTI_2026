@@ -67,7 +67,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           Routes.productDetailsScreen,
-                          arguments: state.products[index],
+                          arguments: state.products[index].id,
                         );
                       },
                     );

@@ -8,12 +8,10 @@ import 'package:shopping_app/feature/category/view_model/product_state.dart';
 import 'package:shopping_app/feature/category/view_model/widgets/product_details_card.dart';
 
 import '../../../../core/di/service_locator.dart';
-import '../../../../core/model/item/product_item_entity.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
-  final ProductItemEntity product;
-
-  const ProductDetailsScreen({super.key, required this.product});
+  final int productId;
+  const ProductDetailsScreen({super.key, required this.productId});
 
   @override
   State<ProductDetailsScreen> createState() => _ProductDetailsScreenState();
@@ -25,7 +23,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return BlocProvider(
       create: (BuildContext context) =>
       serviceLocator<ProductCubit>()
-        ..intent(GetProductDetailsIntent(id: widget.product.id)),
+        ..intent(GetProductDetailsIntent(id: widget.productId)),
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(
