@@ -66,10 +66,9 @@ class ProductItemCard extends StatelessWidget {
 
             Text(
               product.title,
+              style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
-
-              style: Theme.of(context).textTheme.bodyMedium,
             ),
 
             const SizedBox(height: 6),

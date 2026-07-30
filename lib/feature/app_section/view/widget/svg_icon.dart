@@ -24,7 +24,7 @@ class CustomSvgIcon extends StatelessWidget {
         Theme.of(context).bottomNavigationBarTheme.unselectedItemColor ??
         AppColors.grayText;
     return SvgPicture.asset(
-      assetPath!,
+      assetPath,
       colorFilter: ColorFilter.mode(
         isSelected ? selectedColor : unselectedColor,
         BlendMode.srcIn,

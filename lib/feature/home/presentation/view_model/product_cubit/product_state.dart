@@ -1,18 +1,19 @@
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
-sealed class ProductState {}
 
-final class  ProductInitial extends  ProductState {}
+sealed class ProductState<T> {}
 
-final class  ProductLoading extends  ProductState {}
+final class ProductInitial<T> extends ProductState<T> {}
 
-final class  ProductSuccess extends  ProductState {
-  final  ProductEntity products;
+final class ProductLoading<T> extends ProductState<T> {}
 
-   ProductSuccess({required this.products});
+final class ProductSuccess<T> extends ProductState<T> {
+  final ProductEntity products;
+
+  ProductSuccess({required this.products});
 }
 
-final class  ProductError extends  ProductState {
+final class ProductError<T> extends ProductState<T> {
   final String messageError;
 
-   ProductError({required this.messageError});
+  ProductError({required this.messageError});
 }
