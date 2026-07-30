@@ -9,7 +9,11 @@ class EmptyCartWidget extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Image.asset("assets/icon/empty_cart.png", width: 180, height: 180),
+          Image.asset(
+            "assets/image/shopping_cart.png",
+            width: 180,
+            height: 180,
+          ),
           const SizedBox(height: 20),
           const Text("Your cart is empty", style: TextStyle(fontSize: 18)),
         ],

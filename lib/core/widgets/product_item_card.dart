@@ -11,22 +11,26 @@ class ProductItemCard extends StatelessWidget {
   });
 
   final ProductItemEntity product;
-  final void Function()? onTap;
+  final VoidCallback? onTap;
   final VoidCallback? onFavorite;
   final bool isFavorite;
+
   @override
   Widget build(BuildContext context) {
+    final originalPrice =
+        product.price / (1 - (product.discountPercentage / 100));
+
     return GestureDetector(
       onTap: onTap,
       child: SizedBox(
         width: 168,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
             Stack(
               children: [
                 ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
                   child: Image.network(
                     product.images.isNotEmpty
                         ? product.images.first
@@ -41,7 +45,6 @@ class ProductItemCard extends StatelessWidget {
                   top: 10,
                   right: 10,
                   child: Container(
-                    padding: const EdgeInsets.all(8),
                     decoration: const BoxDecoration(
                       color: Colors.white,
                       shape: BoxShape.circle,
@@ -51,7 +54,7 @@ class ProductItemCard extends StatelessWidget {
                       icon: Icon(
                         isFavorite ? Icons.favorite : Icons.favorite_border,
                         color: Colors.red,
-                        size: 20,
+                        size: 22,
                       ),
                     ),
                   ),
@@ -63,28 +66,61 @@ class ProductItemCard extends StatelessWidget {
 
             Text(
               product.title,
-              style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
+
+              style: Theme.of(context).textTheme.bodyMedium,
             ),
 
-            const SizedBox(height: 4),
+            const SizedBox(height: 6),
 
-            Text.rich(
-              TextSpan(
-                children: [
-                  TextSpan(
-                    text: "EGP ",
-                    style: Theme.of(context).textTheme.bodyMedium,
+            const SizedBox(height: 6),
+
+            Row(
+              children: [
+                Text(
+                  "EG ${product.price.toStringAsFixed(2)}",
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
                   ),
-                  TextSpan(
-                    text: product.price.toStringAsFixed(0),
-                    style: Theme.of(
-                      context,
-                    ).textTheme.labelLarge?.copyWith(color: Colors.black),
+                ),
+
+                const SizedBox(width: 6),
+
+                Text(
+                  "EG ${originalPrice.toStringAsFixed(2)}",
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    color: Colors.grey,
                   ),
-                ],
-              ),
+                ),
+
+                const Spacer(),
+              ],
+            ),
+            Row(
+              children: [
+                Text(
+                  "-${product.discountPercentage.toStringAsFixed(0)}%",
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12,
+                  ),
+                ),
+                const SizedBox(width: 30),
+                Row(
+                  children: [
+                    const Icon(Icons.star, color: Colors.amber, size: 16),
+                    const SizedBox(width: 4),
+                    Text(
+                      product.rating.toStringAsFixed(1),
+                      style: Theme.of(context).textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -93,4 +129,4 @@ class ProductItemCard extends StatelessWidget {
   }
 }
 
-String dummyImage = 'https://picsum.photos/200';
+const String dummyImage = 'https://picsum.photos/200';

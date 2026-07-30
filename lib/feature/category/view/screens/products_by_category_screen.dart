@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../view_model/category_products_state.dart';
@@ -59,13 +61,29 @@ class ProductsByCategoryScreen extends StatelessWidget {
                     childAspectRatio: 0.62,
                   ),
                   itemBuilder: (context, index) {
-                    return ProductItemCard(
-                      product: state.products[index],
-                      onTap: () {
-                        Navigator.pushNamed(
-                          context,
-                          Routes.productDetailsScreen,
-                          arguments: state.products[index],
+                    final product = state.products[index];
+
+                    return BlocBuilder<FavoriteCubit, FavoriteStates>(
+                      builder: (context, favoriteState) {
+                        return ProductItemCard(
+                          product: product,
+                          isFavorite: context.read<FavoriteCubit>().isFavorite(
+                            product.id,
+                          ),
+
+                          onFavorite: () {
+                            context.read<FavoriteCubit>().toggleFavorite(
+                              product.id,
+                            );
+                          },
+
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.productDetailsScreen,
+                              arguments: product,
+                            );
+                          },
                         );
                       },
                     );

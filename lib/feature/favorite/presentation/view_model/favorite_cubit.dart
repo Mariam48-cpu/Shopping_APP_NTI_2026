@@ -63,34 +63,16 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
   }
 
   Future<ResultApi<String>> toggleFavorite(int productId) async {
-    final Favorite = isFavorite(productId);
+    final favorite = isFavorite(productId);
 
-    final result = Favorite
+    final result = favorite
         ? await deleteFavoriteUseCase.call(productId)
         : await addFavoriteUseCase.call(productId);
 
     if (result is Success<String>) {
-      final favoritesResult = await getFavoriteUseCase.call();
-
-      switch (favoritesResult) {
-        case Success<FavoriteEntity>():
-          emit(
-            FavoriteActionSuccessState(
-              favorites: favoritesResult.data,
-              message: Favorite
-                  ? "Removed from favourites"
-                  : "Added to favourites",
-            ),
-          );
-          break;
-
-        case Error<FavoriteEntity>():
-          emit(FavoriteErrorState(favoritesResult.messageError));
-          break;
-      }
+      await fetchAndEmitProduct();
     }
 
     return result;
   }
-
 }
