@@ -1,9 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/feature/category/domain/repo/category_repo_interface.dart';
-
 import '../../../../core/model/item/product_item_entity.dart';
 import '../../../../core/network/result_api.dart';
-import '../entities/search_request_entity.dart';
+
 
 @injectable
 class ProductsBySearchUseCase {
