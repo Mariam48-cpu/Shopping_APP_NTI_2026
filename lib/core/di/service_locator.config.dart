@@ -11,6 +11,18 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/feature/auth/data/repo/auth_data_source_imp.dart'
+    as _i733;
+import 'package:shopping_app/feature/auth/data/repo/auth_repo_imp.dart'
+    as _i1033;
+import 'package:shopping_app/feature/auth/domain/repo/auth_data_source_interface.dart'
+    as _i680;
+import 'package:shopping_app/feature/auth/domain/repo/auth_repo_interface.dart'
+    as _i157;
+import 'package:shopping_app/feature/auth/domain/use_case/register_use_case.dart'
+    as _i921;
+import 'package:shopping_app/feature/auth/presentation/view_model/register_cubit.dart'
+    as _i320;
 import 'package:shopping_app/feature/cart/data/repo/cart_data_source_impl.dart'
     as _i398;
 import 'package:shopping_app/feature/cart/data/repo/cart_repo_imp.dart'
@@ -27,22 +39,6 @@ import 'package:shopping_app/feature/cart/domain/use_case/get_cart_use_case.dart
     as _i949;
 import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart'
     as _i706;
-import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart'
-    as _i824;
-import 'package:shopping_app/feature/category/data/repo/category_data_source_imp.dart'
-    as _i988;
-import 'package:shopping_app/feature/auth/data/repo/auth_data_source_imp.dart'
-    as _i733;
-import 'package:shopping_app/feature/auth/data/repo/auth_repo_imp.dart'
-    as _i1033;
-import 'package:shopping_app/feature/auth/domain/repo/auth_data_source_interface.dart'
-    as _i680;
-import 'package:shopping_app/feature/auth/domain/repo/auth_repo_interface.dart'
-    as _i157;
-import 'package:shopping_app/feature/auth/domain/use_case/register_use_case.dart'
-    as _i921;
-import 'package:shopping_app/feature/auth/presentation/view_model/register_cubit.dart'
-    as _i320;
 import 'package:shopping_app/feature/category/data/data_sources/category_data_source_imp.dart'
     as _i572;
 import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart'
@@ -67,7 +63,10 @@ import 'package:shopping_app/feature/category/domain/use_case/products_by_search
     as _i313;
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart'
     as _i409;
-<<<<<<< HEAD
+import 'package:shopping_app/feature/category/view_model/product_cubit.dart'
+    as _i440;
+import 'package:shopping_app/feature/category/view_model/products_search_cubit.dart'
+    as _i131;
 import 'package:shopping_app/feature/favorite/data/repo/favorite_data_source_imp.dart'
     as _i231;
 import 'package:shopping_app/feature/favorite/data/repo/favorite_repo_imp.dart'
@@ -104,28 +103,6 @@ import 'package:shopping_app/feature/home/presentation/view_model/category_cubit
     as _i833;
 import 'package:shopping_app/feature/home/presentation/view_model/product_cubit/product_cubit.dart'
     as _i925;
-=======
-import 'package:shopping_app/feature/category/view_model/product_cubit.dart'
-    as _i440;
-import 'package:shopping_app/feature/category/view_model/products_search_cubit.dart'
-    as _i131;
-import 'package:shopping_app/feature/home/data/data_sources/home_remote_data_source_impl.dart'
-    as _i525;
-import 'package:shopping_app/feature/home/data/repositories/home_repository_impl.dart'
-    as _i302;
-import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_source_interface.dart'
-    as _i394;
-import 'package:shopping_app/feature/home/domain/repositories/home_repository_interface.dart'
-    as _i863;
-import 'package:shopping_app/feature/home/domain/use_cases/get_categories_use_case.dart'
-    as _i116;
-import 'package:shopping_app/feature/home/domain/use_cases/get_products_use_case.dart'
-    as _i740;
-import 'package:shopping_app/feature/home/presentation/category_cubit/category_cubit.dart'
-    as _i513;
-import 'package:shopping_app/feature/home/presentation/product_cubit/product_cubit.dart'
-    as _i93;
->>>>>>> origin/dev
 
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
@@ -134,29 +111,12 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
-<<<<<<< HEAD
     gh.factory<_i108.CartDataSourceInterface>(
       () => _i398.CartRemoteDataSourceImpl(),
     );
-    gh.factory<_i55.FavoriteDataSourceInterface>(
-      () => _i231.FavoriteDataSourceImp(),
-    );
-    gh.lazySingleton<_i313.CartRepositoryInterface>(
-      () => _i360.CartRepositoryImpl(gh<_i108.CartDataSourceInterface>()),
-    );
-    gh.factory<_i756.HomeRemoteDataSourceInterface>(
-      () => _i196.HomeRemoteDataSourceImpl(),
-    );
-    gh.factory<_i824.CategoryRemoteDataSourceInterface>(
-      () => _i988.CategoryRemoteDataSourceImpl(),
-=======
     gh.factory<_i680.AuthDataSourceInterface>(() => _i733.AuthDataSourceImp());
     gh.factory<_i907.ProductDetailsRemoteDataSourceInterface>(
       () => _i828.ProductDetailsRemoteDataSourceImp(),
-    );
-    gh.factory<_i394.HomeRemoteDataSourceInterface>(
-      () => _i525.HomeRemoteDataSourceImpl(),
->>>>>>> origin/dev
     );
     gh.factory<_i157.AuthRepoInterface>(
       () => _i1033.AuthRepoImp(gh<_i680.AuthDataSourceInterface>()),
@@ -164,22 +124,25 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i824.CategoryRemoteDataSourceInterface>(
       () => _i572.CategoryRemoteDataSourceImpl(),
     );
+    gh.factory<_i55.FavoriteDataSourceInterface>(
+      () => _i231.FavoriteDataSourceImp(),
+    );
+    gh.lazySingleton<_i313.CartRepositoryInterface>(
+      () => _i360.CartRepositoryImpl(gh<_i108.CartDataSourceInterface>()),
+    );
     gh.factory<_i921.RegisterUseCase>(
       () => _i921.RegisterUseCase(gh<_i157.AuthRepoInterface>()),
     );
+    gh.factory<_i756.HomeRemoteDataSourceInterface>(
+      () => _i196.HomeRemoteDataSourceImpl(),
+    );
     gh.factory<_i125.CategoryRepoInterface>(
       () => _i59.CategoryRepoImp(gh<_i824.CategoryRemoteDataSourceInterface>()),
-<<<<<<< HEAD
-=======
     );
     gh.factory<_i167.ProductDetailsRepoInterface>(
       () => _i358.ProductDetailsRepoImp(
         gh<_i907.ProductDetailsRemoteDataSourceInterface>(),
       ),
-    );
-    gh.factory<_i320.RegisterCubit>(
-      () => _i320.RegisterCubit(gh<_i921.RegisterUseCase>()),
->>>>>>> origin/dev
     );
     gh.factory<_i439.AddToCartUseCase>(
       () => _i439.AddToCartUseCase(gh<_i313.CartRepositoryInterface>()),
@@ -190,6 +153,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i949.GetCartUseCase>(
       () => _i949.GetCartUseCase(gh<_i313.CartRepositoryInterface>()),
     );
+    gh.factory<_i320.RegisterCubit>(
+      () => _i320.RegisterCubit(gh<_i921.RegisterUseCase>()),
+    );
     gh.factory<_i706.CartCubit>(
       () => _i706.CartCubit(
         getCartUseCase: gh<_i949.GetCartUseCase>(),
@@ -197,29 +163,22 @@ extension GetItInjectableX on _i174.GetIt {
         deleteCartUseCase: gh<_i778.DeleteCartUseCase>(),
       ),
     );
-<<<<<<< HEAD
-=======
     gh.factory<_i905.GetProductDetailsUseCase>(
       () => _i905.GetProductDetailsUseCase(
         gh<_i167.ProductDetailsRepoInterface>(),
       ),
     );
-    gh.factory<_i116.GetCategoriesUseCase>(
-      () => _i116.GetCategoriesUseCase(gh<_i863.HomeRepository>()),
-    );
-    gh.factory<_i740.GetProductsUseCase>(
-      () => _i740.GetProductsUseCase(gh<_i863.HomeRepository>()),
-    );
     gh.factory<_i440.ProductCubit>(
       () => _i440.ProductCubit(gh<_i905.GetProductDetailsUseCase>()),
     );
->>>>>>> origin/dev
     gh.factory<_i577.GetAllProductsByCategoryUseCase>(
       () => _i577.GetAllProductsByCategoryUseCase(
         gh<_i125.CategoryRepoInterface>(),
       ),
     );
-<<<<<<< HEAD
+    gh.factory<_i313.ProductsBySearchUseCase>(
+      () => _i313.ProductsBySearchUseCase(gh<_i125.CategoryRepoInterface>()),
+    );
     gh.factory<_i355.HomeRepository>(
       () => _i507.HomeRepositoryImpl(
         remoteDataSource: gh<_i756.HomeRemoteDataSourceInterface>(),
@@ -241,28 +200,20 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i1056.GetProductsUseCase>(
       () => _i1056.GetProductsUseCase(gh<_i355.HomeRepository>()),
-=======
-    gh.factory<_i313.ProductsBySearchUseCase>(
-      () => _i313.ProductsBySearchUseCase(gh<_i125.CategoryRepoInterface>()),
-    );
-    gh.factory<_i93.ProductCubit>(
-      () => _i93.ProductCubit(gh<_i740.GetProductsUseCase>()),
->>>>>>> origin/dev
-    );
-    gh.factory<_i409.ProductsByCategoryCubit>(
-      () => _i409.ProductsByCategoryCubit(
-        gh<_i577.GetAllProductsByCategoryUseCase>(),
-      ),
-    );
-<<<<<<< HEAD
-    gh.factory<_i208.GetFavoriteUseCase>(
-      () => _i208.GetFavoriteUseCase(gh<_i871.FavoriteRepoInterface>()),
     );
     gh.factory<_i188.AddFavoriteUseCase>(
       () => _i188.AddFavoriteUseCase(gh<_i871.FavoriteRepoInterface>()),
     );
     gh.factory<_i852.DeleteFavoriteUseCase>(
       () => _i852.DeleteFavoriteUseCase(gh<_i871.FavoriteRepoInterface>()),
+    );
+    gh.factory<_i208.GetFavoriteUseCase>(
+      () => _i208.GetFavoriteUseCase(gh<_i871.FavoriteRepoInterface>()),
+    );
+    gh.factory<_i409.ProductsByCategoryCubit>(
+      () => _i409.ProductsByCategoryCubit(
+        gh<_i577.GetAllProductsByCategoryUseCase>(),
+      ),
     );
     gh.factory<_i417.FavoriteCubit>(
       () => _i417.FavoriteCubit(
@@ -271,18 +222,14 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i852.DeleteFavoriteUseCase>(),
       ),
     );
+    gh.factory<_i131.ProductSearchCubit>(
+      () => _i131.ProductSearchCubit(gh<_i313.ProductsBySearchUseCase>()),
+    );
     gh.factory<_i833.CategoryCubit>(
       () => _i833.CategoryCubit(gh<_i644.GetCategoriesUseCase>()),
     );
     gh.factory<_i925.ProductCubit>(
       () => _i925.ProductCubit(gh<_i988.GetProductsUseCase>()),
-=======
-    gh.factory<_i131.ProductSearchCubit>(
-      () => _i131.ProductSearchCubit(gh<_i313.ProductsBySearchUseCase>()),
-    );
-    gh.factory<_i513.CategoryCubit>(
-      () => _i513.CategoryCubit(gh<_i116.GetCategoriesUseCase>()),
->>>>>>> origin/dev
     );
     return this;
   }

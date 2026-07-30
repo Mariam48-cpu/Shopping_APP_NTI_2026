@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
-import 'package:shopping_app/feature/home/presentation/view/widgets/categories_list_widget.dart';
+import 'package:shopping_app/feature/home/widgets/categories_list_widget.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../view_model/category_cubit/category_cubit.dart';
