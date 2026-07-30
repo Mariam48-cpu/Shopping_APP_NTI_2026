@@ -63,13 +63,12 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       obscureText: obscureText,
 
       keyboardType: widget.keyboardType,
-      // inputFormatters: widget.inputFormatters,
       textInputAction: widget.action ?? TextInputAction.next,
       focusNode: widget.focusNode,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       style: TextStyle(
         fontSize: 16,
-        // color: AppColor.primary,
+
         fontWeight: FontWeight.w500,
       ),
 
@@ -80,7 +79,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
         hintText: widget.hintText,
         hintStyle: TextStyle(
           fontSize: 16,
-          // color: AppColor.gray,
+
           fontWeight: FontWeight.w500,
         ),
         errorMaxLines: 4,
@@ -92,7 +91,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                 onTap: _toggleObscureText,
                 child: Icon(
                   obscureText ? Icons.visibility_off : Icons.visibility,
-                  // color: AppColor.gray,
+
                   size: 27,
                 ),
               )
