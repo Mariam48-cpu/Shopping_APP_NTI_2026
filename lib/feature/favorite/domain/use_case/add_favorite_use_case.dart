@@ -6,6 +6,6 @@ import 'package:shopping_app/feature/favorite/domain/repo/favorite_repo_interfac
 class AddFavoriteUseCase {
   final FavoriteRepoInterface favoriteRepoInterface ;
   AddFavoriteUseCase(this.favoriteRepoInterface);
-  Future<ResultApi<String>> invoke(int productId) async =>
+  Future<ResultApi<String>> call(int productId) async =>
       await favoriteRepoInterface.addFavorite(productId: productId.toString());
 }

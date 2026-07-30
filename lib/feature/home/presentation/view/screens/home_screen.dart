@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../../widgets/categories_list_widget.dart';
@@ -84,20 +85,27 @@ class _HomeScreenState extends State<HomeScreen> {
                           itemCount: state.products.products.length,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.62,
-                            mainAxisSpacing: 10,
-                          ),
+                                crossAxisCount: 2,
+                                childAspectRatio: 0.62,
+                                mainAxisSpacing: 10,
+                              ),
                           itemBuilder: (context, index) {
                             final product = state.products.products[index];
 
-                            return ProductItemCard(
-                              product: product,
-                              isFavorite: context.watch<FavoriteCubit>().isFavorite(product.id),
-                              onFavorite: () async {
-                                await context.read<FavoriteCubit>().toggleFavorite(product.id);
+                            return BlocBuilder<FavoriteCubit, FavoriteStates>(
+                              builder: (context, favoriteState) {
+                                return ProductItemCard(
+                                  product: product,
+                                  isFavorite: context
+                                      .read<FavoriteCubit>()
+                                      .isFavorite(product.id),
+                                  onFavorite: () {
+                                    context
+                                        .read<FavoriteCubit>()
+                                        .toggleFavorite(product.id);
+                                  },
+                                );
                               },
-                              onTap: () {},
                             );
                           },
                         );

@@ -25,7 +25,7 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
   }
 
   Future<void> fetchAndEmitProduct() async {
-    final result = await getFavoriteUseCase.invoke();
+    final result = await getFavoriteUseCase.call();
     switch (result) {
       case Success<FavoriteEntity>():
         emit(FavoriteSuccessState(result.data));
@@ -37,7 +37,7 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
   }
 
   Future<ResultApi<String>> addFavorite(int productId) async {
-    final result = await addFavoriteUseCase.invoke(productId);
+    final result = await addFavoriteUseCase.call(productId);
     if (result is Success<String>) {
       await fetchAndEmitProduct();
     }
@@ -45,7 +45,7 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
   }
 
   Future<ResultApi<String>> deleteFavorite(int productId) async {
-    final result = await deleteFavoriteUseCase.invoke(productId);
+    final result = await deleteFavoriteUseCase.call(productId);
     if (result is Success<String>) {
       await fetchAndEmitProduct();
     }
@@ -55,18 +55,42 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
   bool isFavorite(int productId) {
     final favoriteState = state;
     if (favoriteState is FavoriteSuccessState) {
-      return favoriteState.favorites!.productList.any((product) => product.id == productId);
+      return favoriteState.favorites!.productList.any(
+        (product) => product.id == productId,
+      );
     }
     return false;
   }
 
   Future<ResultApi<String>> toggleFavorite(int productId) async {
-    final result = isFavorite(productId)
-        ? await deleteFavoriteUseCase.invoke(productId)
-        : await addFavoriteUseCase.invoke(productId);
+    final Favorite = isFavorite(productId);
+
+    final result = Favorite
+        ? await deleteFavoriteUseCase.call(productId)
+        : await addFavoriteUseCase.call(productId);
+
     if (result is Success<String>) {
-      await fetchAndEmitProduct();
+      final favoritesResult = await getFavoriteUseCase.call();
+
+      switch (favoritesResult) {
+        case Success<FavoriteEntity>():
+          emit(
+            FavoriteActionSuccessState(
+              favorites: favoritesResult.data,
+              message: Favorite
+                  ? "Removed from favourites"
+                  : "Added to favourites",
+            ),
+          );
+          break;
+
+        case Error<FavoriteEntity>():
+          emit(FavoriteErrorState(favoritesResult.messageError));
+          break;
+      }
     }
+
     return result;
   }
+
 }

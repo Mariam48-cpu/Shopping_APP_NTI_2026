@@ -8,7 +8,7 @@ class DeleteFavoriteUseCase {
   final FavoriteRepoInterface favoriteRepoInterface;
   DeleteFavoriteUseCase(this.favoriteRepoInterface);
 
-  Future<ResultApi<String>> invoke(int productId) async =>
+  Future<ResultApi<String>> call(int productId) async =>
       await favoriteRepoInterface.deleteFavorite(
         productId: productId.toString(),
       );

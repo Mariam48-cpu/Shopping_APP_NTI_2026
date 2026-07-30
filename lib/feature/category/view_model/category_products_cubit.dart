@@ -8,8 +8,8 @@ import '../domain/use_case/get_all_products_by_category_use_case.dart';
 @injectable
 class ProductsByCategoryCubit
     extends Cubit<CategoryProductsState<List<ProductItemEntity>>> {
-  ProductsByCategoryCubit(this._useCase) : super(CategoryInitialState());
-  final GetAllProductsByCategoryUseCase _useCase;
+  ProductsByCategoryCubit(this.useCase) : super(CategoryInitialState());
+  final GetAllProductsByCategoryUseCase useCase;
   Future<void> intent(CategoryProductsIntent intent) async {
     if (intent case GetAllProductsByCategoryIntent(:final slug)) {
       await _getProductsByCategory(slug);
@@ -20,7 +20,7 @@ class ProductsByCategoryCubit
     emit(CategoryLoadingState());
 
     try {
-      var result = await _useCase.call(slug);
+      var result = await useCase.call(slug);
       switch (result) {
         case Success<List<ProductItemEntity>>():
           emit(

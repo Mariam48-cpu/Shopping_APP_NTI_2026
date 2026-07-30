@@ -1,15 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view/widgets/fav_item_widget.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
-import '../../../../../core/routes/app_routes.dart';
 
 class FavouriteScreen extends StatelessWidget {
   const FavouriteScreen({super.key});
-  static const routeName = Routes.favouriteScreen;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +14,14 @@ class FavouriteScreen extends StatelessWidget {
       appBar: AppBar(title: const Text('My Favourite'), centerTitle: true),
       body: BlocConsumer<FavoriteCubit, FavoriteStates>(
         listener: (context, state) {
+          if (state is FavoriteActionSuccessState) {
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
+          }
           if (state is FavoriteErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error ?? 'An error occurred')),
+              SnackBar(content: Text(state.error ?? 'Something went wrong')),
             );
           }
         },
@@ -27,85 +29,59 @@ class FavouriteScreen extends StatelessWidget {
           if (state is FavoriteLoadingState || state is FavoriteIntialState) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (state is FavoriteErrorState) {
-            return Center(child: Text(state.error ?? 'An error occurred'));
+          final favorites = state is FavoriteSuccessState
+              ? state.favorites
+              : state is FavoriteActionSuccessState
+              ? state.favorites
+              : null;
+          if (favorites == null) {
+            return const SizedBox();
           }
-          if (state is FavoriteSuccessState) {
-            final products = state.favorites?.productList ?? [];
-            if (products.isEmpty) {
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.favorite_border,
-                      size: 120,
-                      color: Theme.of(context).colorScheme.secondary,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'There are no products in your favourite list',
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                        color: const Color(0xff2F2F2F),
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
-                ),
-              );
-            }
-
-            return GridView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: products.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 35,
-                mainAxisSpacing: 16.75,
-                childAspectRatio: 0.58,
+          final products = favorites.productList;
+          if (products.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    size: 120,
+                    color: Theme.of(context).colorScheme.secondary,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'There are no products in your favourite list',
+                    style: Theme.of(context).textTheme.titleSmall,
+                  ),
+                ],
               ),
-              itemBuilder: (context, index) {
-                final product = products[index];
-                return FavoriteItemWidget(
-                  product: product.toEntity(),
-                  onAddToCart: () {
-                    context.read<CartCubit>().addToCart(productId: product.id!);
-                  },
-                  onFavorite: () {
-                    handleToggle(context, product.toEntity().id);
-                  },
-                );
-              },
             );
           }
+          return GridView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: products.length,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 35,
+              mainAxisSpacing: 16.75,
+              childAspectRatio: 0.58,
+            ),
+            itemBuilder: (context, index) {
+              final product = products[index];
 
-          return const SizedBox.shrink();
+              return FavoriteItemWidget(
+                product: product.toEntity(),
+                onAddToCart: () {
+                  context.read<CartCubit>().addToCart(productId: product.id!);
+                },
+                onFavorite: () {
+                  context.read<FavoriteCubit>().toggleFavorite(product.id!);
+                },
+              );
+            },
+          );
         },
       ),
     );
-  }
-
-  Future<void> handleToggle(BuildContext context, int productId) async {
-    final cubit = context.read<FavoriteCubit>();
-    final wasFavorite = cubit.isFavorite(productId);
-    final result = await cubit.toggleFavorite(productId);
-
-    if (!context.mounted) return;
-    switch (result) {
-      case Success<String>():
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              wasFavorite ? 'Removed from favourites' : 'Added to favourites',
-            ),
-          ),
-        );
-        break;
-      case Error<String>():
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(SnackBar(content: Text(result.messageError ?? '')));
-        break;
-    }
   }
 }
