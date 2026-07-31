@@ -1,3 +1,5 @@
+import '../../core/constants/app_assets.dart';
+
 class OnboardingData {
   final String title;
   final String description;
@@ -14,12 +16,12 @@ List<OnboardingData> dataOnboarding() {
     OnboardingData(
       title: "Discover Trends",
       description: "Now we are here to provide variety of the best fashion",
-      image: 'assets/image/onboarding_1.png',
+      image: AppAssets.firstOnboarding,
     ),
     OnboardingData(
       title: "Latest out fit",
       description: "Express your self through the art of the fashionism",
-      image: 'assets/image/onboarding_2.png',
+      image:AppAssets.secondOnboarding,
     ),
   ];
 }
