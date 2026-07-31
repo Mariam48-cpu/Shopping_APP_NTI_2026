@@ -88,7 +88,9 @@ class ProductDetailsDto {
 
     meta = json['meta'] != null ? MetaDto.fromJson(json['meta']) : null;
 
-    images = (json['images'] as List<dynamic>?)?.map((e) => e.toString()).toList();
+    images = (json['images'] as List<dynamic>?)
+        ?.map((e) => e.toString())
+        .toList();
     thumbnail = json['thumbnail'] as String?;
   }
 
@@ -139,14 +141,18 @@ class ProductDetailsDto {
       brand: brand ?? '',
       sku: sku ?? '',
       weight: weight ?? 0,
-      dimensions: dimensions?.toEntity() ?? DimensionsEntity(width: 0.0, height: 0.0, depth: 0.0),
+      dimensions:
+          dimensions?.toEntity() ??
+          DimensionsEntity(width: 0.0, height: 0.0, depth: 0.0),
       warrantyInformation: warrantyInformation ?? '',
       shippingInformation: shippingInformation ?? '',
       availabilityStatus: availabilityStatus ?? '',
       reviews: reviews?.map((e) => e.toEntity()).toList() ?? [],
       returnPolicy: returnPolicy ?? '',
       minimumOrderQuantity: minimumOrderQuantity ?? 0,
-      meta: meta?.toEntity() ?? MetaEntity(createdAt: '', updatedAt: '', barcode: '', qrCode: ''),
+      meta:
+          meta?.toEntity() ??
+          MetaEntity(createdAt: '', updatedAt: '', barcode: '', qrCode: ''),
       images: images ?? [],
       thumbnail: thumbnail ?? '',
     );
@@ -167,11 +173,7 @@ class DimensionsDto {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'width': width,
-      'height': height,
-      'depth': depth,
-    };
+    return {'width': width, 'height': height, 'depth': depth};
   }
 
   DimensionsEntity toEntity() {

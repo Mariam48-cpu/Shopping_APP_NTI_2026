@@ -8,8 +8,8 @@ import '../domain/entities/product_details_entity.dart';
 
 @injectable
 class ProductCubit extends Cubit<ProductState<ProductDetailsEntity>> {
-  ProductCubit(this._useCase) : super(ProductInitialState<ProductDetailsEntity>());
-
+  ProductCubit(this._useCase)
+    : super(ProductInitialState<ProductDetailsEntity>());
   final GetProductDetailsUseCase _useCase;
 
   Future<void> intent(ProductDetailsIntent intent) async {
@@ -27,11 +27,13 @@ class ProductCubit extends Cubit<ProductState<ProductDetailsEntity>> {
           if (data != null) {
             emit(ProductSuccessState<ProductDetailsEntity>(products: data));
           } else {
-            emit(ProductErrorState<ProductDetailsEntity>(messageError: "No product data found"));
+            emit(
+              ProductErrorState<ProductDetailsEntity>(
+                messageError: "No product data found",
+              ),
+            );
           }
         case Error<ProductDetailsEntity>(:final messageError):
-          /////print
-          print("API ERROR DETAILS: $messageError");
           emit(
             ProductErrorState<ProductDetailsEntity>(
               messageError: messageError ?? "Something went wrong",
@@ -39,8 +41,6 @@ class ProductCubit extends Cubit<ProductState<ProductDetailsEntity>> {
           );
       }
     } catch (e) {
-      //////print
-      print("CUBIT CATCH ERROR: $e");
       emit(ProductErrorState<ProductDetailsEntity>(messageError: e.toString()));
     }
   }

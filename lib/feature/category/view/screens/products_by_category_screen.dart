@@ -21,8 +21,8 @@ class ProductsByCategoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-      serviceLocator<ProductsByCategoryCubit>()
-        ..intent(GetAllProductsByCategoryIntent(slug: slug)),
+          serviceLocator<ProductsByCategoryCubit>()
+            ..intent(GetAllProductsByCategoryIntent(slug: slug)),
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(

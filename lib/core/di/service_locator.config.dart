@@ -27,13 +27,13 @@ import 'package:shopping_app/feature/auth/presentation/view_model/login/login_cu
     as _i462;
 import 'package:shopping_app/feature/auth/presentation/view_model/register/register_cubit.dart'
     as _i371;
-import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_imp.dart'
+import 'package:shopping_app/feature/category/data/data_sources/category_data_source_imp.dart'
     as _i322;
-import 'package:shopping_app/feature/category/data/data_sources/category_remote_data_source_interface.dart'
+import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart'
     as _i767;
-import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_imp.dart'
+import 'package:shopping_app/feature/category/data/data_sources/product_details_data_source_imp.dart'
     as _i828;
-import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_interface.dart'
+import 'package:shopping_app/feature/category/data/data_sources/product_details_data_source_interface.dart'
     as _i907;
 import 'package:shopping_app/feature/category/data/repo/category_repo_imp.dart'
     as _i59;

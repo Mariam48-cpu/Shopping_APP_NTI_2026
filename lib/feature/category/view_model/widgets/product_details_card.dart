@@ -60,10 +60,7 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
                       color: Colors.white,
                       shape: BoxShape.circle,
                       boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                        )
+                        BoxShadow(color: Colors.black12, blurRadius: 4),
                       ],
                     ),
                     child: const Icon(
@@ -84,7 +81,7 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             imagesList.length,
-                (index) => Container(
+            (index) => Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: 8,
               height: 8,

@@ -22,7 +22,8 @@ class ProductDetailsEntity {
   List<String> images;
   String thumbnail;
 
-  ProductDetailsEntity({required this.id,
+  ProductDetailsEntity({
+    required this.id,
     required this.title,
     required this.description,
     required this.category,
@@ -43,16 +44,20 @@ class ProductDetailsEntity {
     required this.minimumOrderQuantity,
     required this.meta,
     required this.images,
-    required this.thumbnail});
-
-
+    required this.thumbnail,
+  });
 }
+
 class DimensionsEntity {
   double width;
   double height;
   double depth;
 
-  DimensionsEntity({required this.width,required this.height,required this.depth});
+  DimensionsEntity({
+    required this.width,
+    required this.height,
+    required this.depth,
+  });
 }
 
 class ReviewsEntity {
@@ -62,12 +67,13 @@ class ReviewsEntity {
   String? reviewerName;
   String? reviewerEmail;
 
-  ReviewsEntity(
-      {this.rating,
-        this.comment,
-        this.date,
-        this.reviewerName,
-        this.reviewerEmail});
+  ReviewsEntity({
+    this.rating,
+    this.comment,
+    this.date,
+    this.reviewerName,
+    this.reviewerEmail,
+  });
 }
 
 class MetaEntity {
@@ -76,6 +82,10 @@ class MetaEntity {
   String barcode;
   String qrCode;
 
-  MetaEntity({required this.createdAt,required this.updatedAt,required this.barcode,required this.qrCode});
-
+  MetaEntity({
+    required this.createdAt,
+    required this.updatedAt,
+    required this.barcode,
+    required this.qrCode,
+  });
 }

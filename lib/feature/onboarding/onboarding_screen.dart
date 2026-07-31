@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shopping_app/feature/onboarding/widget/custom_animated_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 import '../../core/routes/app_routes.dart';
+import '../../core/storage_helper/secure_storage_helper.dart';
 import '../../core/theme/app_colors.dart';
 import 'onboarding_data.dart';
 
@@ -50,6 +51,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     if (index < onboardingList.length - 1)
                       TextButton(
                         onPressed: () {
+                          Navigator.of(context).pushNamed(Routes.logInScreen);
                           controller.animateToPage(
                             onboardingList.length - 1,
                             duration: Duration(milliseconds: 400),
@@ -149,20 +151,22 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               MaterialButton(
                 minWidth: double.infinity,
                 height: 48,
-                onPressed: () {
+                onPressed: () async {
+                  await SecureStorageHelper.instance.saveSecure(
+                    key: 'is_first_time',
+                    value: 'false',
+                  );
                   if (index < onboardingList.length - 1) {
                     controller.nextPage(
                       duration: Duration(milliseconds: 500),
                       curve: Curves.easeIn,
-
                     );
-
                   } else {
                     if (!mounted) return;
                     Navigator.pushNamedAndRemoveUntil(
                       context,
                       Routes.helloScreen,
-                          (route) => false,
+                      (route) => false,
                     );
                   }
                 },

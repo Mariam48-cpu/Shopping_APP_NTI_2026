@@ -2,8 +2,10 @@ import 'dart:convert';
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/constants/app_keys.dart';
 import '../../../../core/model/item/product_item_dto.dart';
-import 'category_remote_data_source_interface.dart';
+import '../../../../core/storage_helper/secure_storage_helper.dart';
+import 'category_data_source_interface.dart';
 import 'package:http/http.dart' as http;
 
 @Injectable(as: CategoryRemoteDataSourceInterface)
@@ -16,6 +18,9 @@ class CategoryRemoteDataSourceImpl
     int limit = 5,
   }) async {
     try {
+      String? savedToken = await SecureStorageHelper.instance.getSecure(
+        key: AppKeys.token,
+      );
       Uri url = Uri.parse(
         ApiConstant.baseUrl + ApiConstant.productsByCategory(slug),
       );
@@ -24,7 +29,8 @@ class CategoryRemoteDataSourceImpl
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+          if (savedToken != null && savedToken.isNotEmpty)
+            'Authorization': 'Bearer $savedToken',
         },
       );
       final Map<String, dynamic> json = jsonDecode(response.body);

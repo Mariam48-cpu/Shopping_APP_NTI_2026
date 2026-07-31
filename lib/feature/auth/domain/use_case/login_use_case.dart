@@ -9,5 +9,8 @@ class LoginUseCase {
   final AuthRepoInterface _repo;
   LoginUseCase(this._repo);
 
-  Future<ResultApi<LoginResponseEntity>> call({required String email,required String password}) async => await _repo.login(email: email, password: password);
+  Future<ResultApi<LoginResponseEntity>> call({
+    required String email,
+    required String password,
+  }) async => await _repo.login(email: email, password: password);
 }

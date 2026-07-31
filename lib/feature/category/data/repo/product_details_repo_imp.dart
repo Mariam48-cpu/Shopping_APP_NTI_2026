@@ -1,6 +1,6 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_interface.dart';
+import 'package:shopping_app/feature/category/data/data_sources/product_details_data_source_interface.dart';
 import 'package:shopping_app/feature/category/domain/repo/product_details_repo_interface.dart';
 
 import '../../domain/entities/product_details_entity.dart';
@@ -24,8 +24,11 @@ class ProductDetailsRepoImp implements ProductDetailsRepoInterface {
             return Error<ProductDetailsEntity>(
               messageError: 'No product details found',
             );
-          }        case Error():
-          return Error(messageError: result.messageError ?? 'Something went wrong');
+          }
+        case Error():
+          return Error(
+            messageError: result.messageError ?? 'Something went wrong',
+          );
       }
     } catch (e) {
       return Error<ProductDetailsEntity>(messageError: e.toString());

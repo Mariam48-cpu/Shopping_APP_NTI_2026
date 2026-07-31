@@ -35,8 +35,7 @@ class _HelloScreenState extends State<HelloScreen> {
                   width: 343,
                   height: 48,
                   color: Color(0xffFF9900),
-                  fun: () =>
-                      Navigator.pushNamed(context, Routes.signUpScreen),
+                  fun: () => Navigator.pushNamed(context, Routes.signUpScreen),
                   borderColor: Color(0xffFFB700),
                   txtColor: Color(0xffFFFFFF),
                 ),
@@ -45,8 +44,7 @@ class _HelloScreenState extends State<HelloScreen> {
                   width: 343,
                   height: 48,
                   color: Color(0xffffffff),
-                  fun: () =>
-                      Navigator.pushNamed(context, Routes.logInScreen),
+                  fun: () => Navigator.pushNamed(context, Routes.logInScreen),
                   borderColor: Color(0xffFF9900),
                   txtColor: Color(0xffFF9900),
                 ),

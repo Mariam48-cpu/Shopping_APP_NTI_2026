@@ -5,13 +5,16 @@ class RegisterRequestDto {
   String? password;
   String? confirmPassword;
 
-  RegisterRequestDto(
-      {this.name, this.phone, this.email, this.password, this.confirmPassword});
-
-
+  RegisterRequestDto({
+    this.name,
+    this.phone,
+    this.email,
+    this.password,
+    this.confirmPassword,
+  });
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data =  <String, dynamic>{};
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
     data['phone'] = phone;
     data['email'] = email;

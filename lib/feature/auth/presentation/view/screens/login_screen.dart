@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/app_dialogs.dart';
 import 'package:shopping_app/core/utils/app_toast.dart';
-import 'package:shopping_app/feature/auth/presentation/view/screens/sign_up_screen.dart';
 import 'package:shopping_app/feature/auth/presentation/view_model/login/login_cubit.dart';
 import 'package:shopping_app/feature/auth/presentation/view_model/login/login_state.dart';
 import 'package:toastification/toastification.dart';

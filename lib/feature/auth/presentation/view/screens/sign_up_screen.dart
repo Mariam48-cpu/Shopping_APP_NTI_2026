@@ -181,29 +181,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
           ? Align(
-        alignment: Alignment.bottomCenter,
-        child: Text.rich(
-          TextSpan(
-            text: "Already have an account? ",
-            style: TextStyle(fontSize: 14, color: Color(0xff6E6A7C)),
+              alignment: Alignment.bottomCenter,
+              child: Text.rich(
+                TextSpan(
+                  text: "Already have an account? ",
+                  style: TextStyle(fontSize: 14, color: Color(0xff6E6A7C)),
 
-            children: [
-              TextSpan(
-                text: "Login",
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Color(0xff212121),
-                  fontWeight: FontWeight.w500,
+                  children: [
+                    TextSpan(
+                      text: "Login",
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color(0xff212121),
+                        fontWeight: FontWeight.w500,
+                      ),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          Navigator.of(context).pushNamed(Routes.logInScreen);
+                        },
+                    ),
+                  ],
                 ),
-                recognizer: TapGestureRecognizer()
-                  ..onTap = () {
-                    Navigator.of(context).pushNamed(Routes.logInScreen);
-                  },
               ),
-            ],
-          ),
-        ),
-      )
+            )
           : null,
     );
   }

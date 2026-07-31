@@ -5,5 +5,8 @@ import '../entities/register_request_entity.dart';
 
 abstract interface class AuthDataSourceInterface {
   Future<ResultApi<String>> register(RegisterRequestEntity request);
-  Future<ResultApi<LoginResponseEntity>> login({required String email,required String password});
+  Future<ResultApi<LoginResponseEntity>> login({
+    required String email,
+    required String password,
+  });
 }

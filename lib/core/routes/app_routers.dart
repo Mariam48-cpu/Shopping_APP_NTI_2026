@@ -17,11 +17,12 @@ class AppRouters {
       case Routes.logInScreen:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case Routes.signUpScreen:
-        return MaterialPageRoute(builder: (_) =>
-            BlocProvider(
-              create: (context) =>serviceLocator<RegisterCubit>(),
-              child: SignUpScreen(),
-            ));
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => serviceLocator<RegisterCubit>(),
+            child: SignUpScreen(),
+          ),
+        );
       case Routes.helloScreen:
         return MaterialPageRoute(builder: (_) => const HelloScreen());
       case Routes.productOfCategoryScreen:
@@ -38,13 +39,9 @@ class AppRouters {
           builder: (_) => ProductDetailsScreen(productId: productId),
         );
       case Routes.homeScreen:
-        return MaterialPageRoute(
-          builder: (_) => const HomeScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
       case Routes.firstOnBoardingScreen:
-        return MaterialPageRoute(
-          builder: (_) => const OnboardingScreen(),
-        );
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
 
       default:
         return null;

@@ -22,8 +22,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (BuildContext context) =>
-      serviceLocator<ProductCubit>()
-        ..intent(GetProductDetailsIntent(id: widget.productId)),
+          serviceLocator<ProductCubit>()
+            ..intent(GetProductDetailsIntent(id: widget.productId)),
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(
@@ -85,9 +85,18 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           child: SizedBox(
             width: double.infinity,
             height: 50,
-            child:CustomButton(txt: "Add to cart", width: 343, height: 48, color: AppColors.buttonBlack, fun: (){}, borderColor: AppColors.buttonBlack, txtColor: AppColors.white),
-                ),
-        ),)
+            child: CustomButton(
+              txt: "Add to cart",
+              width: 343,
+              height: 48,
+              color: AppColors.buttonBlack,
+              fun: () {},
+              borderColor: AppColors.buttonBlack,
+              txtColor: AppColors.white,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

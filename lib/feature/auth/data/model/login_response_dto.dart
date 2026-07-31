@@ -22,6 +22,7 @@ class LoginResponseDto {
     }
     return data;
   }
+
   // to Entity
   LoginResponseEntity toEntity() {
     return LoginResponseEntity(
@@ -58,6 +59,7 @@ class AppUserDto {
     data['image'] = this.image;
     return data;
   }
+
   //to entity
   UserEntity toEntity() {
     return UserEntity(
