@@ -92,11 +92,6 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
             },
             builder: (context, state) {
               final imageUrl = ImageHelper.getImageUrl(widget.account.image);
-
-              final ImageProvider imageProvider = selectedImage != null
-                  ? FileImage(selectedImage!)
-                  : NetworkImage(imageUrl);
-
               return SingleChildScrollView(
                 padding: const EdgeInsets.all(16),
                 child: Form(

@@ -38,11 +38,7 @@ class _AccountScreenState extends State<AccountScreen> {
                 }
 
                 if (state is AccountSuccess) {
-                  print("Image from API: ${state.account.image}");
-
                   final imageUrl = ImageHelper.getImageUrl(state.account.image);
-
-                  print("Final URL: $imageUrl");
 
                   return SingleChildScrollView(
                     child: Column(
