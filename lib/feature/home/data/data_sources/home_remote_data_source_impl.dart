@@ -6,18 +6,24 @@ import 'package:shopping_app/feature/home/domain/repositories/home_remote_data_s
 import 'package:shopping_app/feature/home/data/dto/category_dto.dart';
 import 'package:shopping_app/core/model/item/product_item_dto.dart';
 import '../../../../core/constants/api_constants.dart';
+import '../../../../core/constants/app_keys.dart';
+import '../../../../core/storage_helper/secure_storage_helper.dart';
 
 @Injectable(as: HomeRemoteDataSourceInterface)
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   @override
   Future<ResultApi<CategoryDto>> getCategories() async {
     try {
+      String? savedToken = await SecureStorageHelper.instance.getSecure(
+        key: AppKeys.token,
+      );
       final response = await http.get(
         Uri.parse(ApiConstant.baseUrl + ApiConstant.categories),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+          if (savedToken != null && savedToken.isNotEmpty)
+            'Authorization': 'Bearer $savedToken',
         },
       );
 
@@ -36,13 +42,16 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSourceInterface {
   @override
   Future<ResultApi<ProductDto>> getProducts() async {
     try {
-      
+      String? savedToken = await SecureStorageHelper.instance.getSecure(
+        key: AppKeys.token,
+      );
       final response = await http.get(
         Uri.parse(ApiConstant.baseUrl + ApiConstant.products),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+          if (savedToken != null && savedToken.isNotEmpty)
+            'Authorization': 'Bearer $savedToken',
         },
       );
       if (response.statusCode == 200) {

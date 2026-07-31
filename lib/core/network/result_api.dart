@@ -1,4 +1,3 @@
-import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 
 sealed class ResultApi<T> {}
 class Loading extends ResultApi {}

@@ -1,14 +1,3 @@
-// GENERATED CODE - DO NOT MODIFY BY HAND
-// dart format width=80
-
-// **************************************************************************
-// InjectableConfigGenerator
-// **************************************************************************
-
-// ignore_for_file: type=lint
-// coverage:ignore-file
-
-// ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shopping_app/feature/account/data/repo/account_data_source_imp.dart'
@@ -41,9 +30,9 @@ import 'package:shopping_app/feature/category/data/data_sources/category_data_so
     as _i572;
 import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart'
     as _i824;
-import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_imp.dart'
+import 'package:shopping_app/feature/category/data/data_sources/product_details_data_source_imp.dart'
     as _i828;
-import 'package:shopping_app/feature/category/data/data_sources/product_details_remote_data_source_interface.dart'
+import 'package:shopping_app/feature/category/data/data_sources/product_details_data_source_interface.dart'
     as _i907;
 import 'package:shopping_app/feature/category/data/repo/category_repo_imp.dart'
     as _i59;

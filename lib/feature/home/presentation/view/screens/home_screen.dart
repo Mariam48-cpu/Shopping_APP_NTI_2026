@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/di/service_locator.dart';
+import '../../../../../core/routes/app_routes.dart';
 import '../../../../../core/widgets/product_item_card.dart';
 import '../../../widgets/categories_list_widget.dart';
 import '../../category_cubit/category_cubit.dart';
@@ -92,6 +93,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
                             return ProductItemCard(
                               product: product,
+                              onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  Routes.productDetailsScreen,
+                                  arguments: product.id,
+                                );
+                              },
                             );
                           },
                         );

@@ -10,6 +10,6 @@ class ProductSuccessState<T> extends ProductState<T> {
 }
 
 class ProductErrorState<T> extends ProductState<T> {
- final String messageError;
-  ProductErrorState({ this.messageError = "Something went wrong"});
+  final String messageError;
+  ProductErrorState({this.messageError = "Something went wrong"});
 }

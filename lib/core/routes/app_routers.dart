@@ -10,7 +10,6 @@ import '../../feature/auth/presentation/view_model/register_cubit.dart';
 import '../../feature/category/view/screens/products_by_category_screen.dart';
 import '../../feature/home/presentation/view/screens/home_screen.dart';
 import '../../feature/onboarding/onboarding_screen.dart';
-import '../../feature/app_section/view/bottom_navigation_Screen.dart';
 
 class AppRouters {
   static Route? createRoute(RouteSettings settings) {
@@ -34,13 +33,9 @@ class AppRouters {
                 categoryName: args['categoryName'] ?? 'Electronics',
               ),
         );
-    // case Routes.productDetailsScreen:
-    // return MaterialPageRoute(
-    // builder: (_) => ProductDetailsScreen(),
-    // );
       case Routes.homeScreen:
         return MaterialPageRoute(
-          builder: (_) => const BottomNavigationScreen(),
+          builder: (_) => const HomeScreen(),
         );
       case Routes.firstOnBoardingScreen:
         return MaterialPageRoute(
