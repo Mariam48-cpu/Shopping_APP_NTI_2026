@@ -49,6 +49,7 @@ dependencies:
   http: ^1.6.0
   carousel_slider: ^5.1.2
   toastification: ^3.2.0
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:
@@ -60,6 +61,7 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^6.0.0
+  #flutter pub run build_runner build
   build_runner: ^2.6.0
   injectable_generator: ^2.12.1
 
