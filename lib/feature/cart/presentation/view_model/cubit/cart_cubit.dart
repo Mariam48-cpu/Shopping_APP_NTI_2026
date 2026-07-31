@@ -26,35 +26,37 @@ class CartCubit extends Cubit<CartState> {
 
     switch (result) {
       case Success<CartEntity>():
-  print("Cart:");
-  print(result.data?.list.map((e) => e.id).toList());
-  emit(CartSuccess(cart: result.data));
+        print("Cart:");
+        print(result.data?.list.map((e) => e.id).toList());
+        emit(CartSuccess(cart: result.data));
       case Error<CartEntity>():
         emit(CartError(message: result.messageError));
     }
   }
 
-  Future<String?> addToCart({required int productId}) async {
+  Future<ResultApi<String>> addToCart({required int productId}) async {
     final result = await addToCartUseCase.call(productId: productId);
+
     switch (result) {
       case Success<String>():
         await getCart();
-        return result.data;
+        return result;
+
       case Error<String>():
-        return result.messageError;
+        return result;
     }
   }
 
-  Future<String?> deleteCart({
-    required int productId,
-  }) async {
+  Future<ResultApi<String>> deleteCart({required int productId}) async {
     final result = await deleteCartUseCase.call(productId: productId);
+
     switch (result) {
       case Success<String>():
         await getCart();
-        return result.data;
+        return result;
+
       case Error<String>():
-        return result.messageError;
+        return result;
     }
   }
 }

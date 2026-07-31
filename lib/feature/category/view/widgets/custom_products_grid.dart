@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import '../../../../core/model/item/product_item_entity.dart';
-import '../../../../core/routes/app_routes.dart';
-import '../../../../core/widgets/product_item_card.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/core/routes/app_routes.dart';
+import 'package:shopping_app/core/widgets/product_item_card.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 
 Widget buildProductsGrid(List<ProductItemEntity> products) {
   if (products.isEmpty) {
-    return const Center(
-      child: Text("No products found"),
-    );
+    return const Center(child: Text("No products found"));
   }
 
   return Padding(
@@ -21,13 +22,29 @@ Widget buildProductsGrid(List<ProductItemEntity> products) {
         childAspectRatio: 0.62,
       ),
       itemBuilder: (context, index) {
-        return ProductItemCard(
-          product: products[index],
-          onTap: () {
-            Navigator.pushNamed(
-              context,
-              Routes.productDetailsScreen,
-              arguments: products[index],
+        final product = products[index];
+
+        return BlocBuilder<FavoriteCubit, FavoriteStates>(
+          builder: (context, state) {
+            return ProductItemCard(
+              product: product,
+
+              // هنا الصورة بس هي اللي تفتح الـ Details
+              imageOnlyClickable: true,
+
+              isFavorite: context.read<FavoriteCubit>().isFavorite(product.id),
+
+              onFavorite: () {
+                context.read<FavoriteCubit>().toggleFavorite(product.id);
+              },
+
+              onTap: () {
+                Navigator.pushNamed(
+                  context,
+                  Routes.productDetailsScreen,
+                  arguments: product,
+                );
+              },
             );
           },
         );

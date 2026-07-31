@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/routes/app_routes.dart';
+import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
 import 'package:shopping_app/feature/category/view/screens/product_search_screen.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import '../../feature/auth/presentation/view/screens/hello_screen.dart';
 import '../../feature/auth/presentation/view/screens/login_screen.dart';
 import '../../feature/auth/presentation/view/screens/sign_up_screen.dart';
@@ -11,6 +13,8 @@ import '../../feature/category/view/screens/products_by_category_screen.dart';
 import '../../feature/home/presentation/view/screens/home_screen.dart';
 import '../../feature/onboarding/onboarding_screen.dart';
 import 'package:shopping_app/feature/app_section/view/bottom_navigation_screen.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/feature/category/view/screens/product_details_screen.dart';
 
 class AppRouters {
   static Route? createRoute(RouteSettings settings) {
@@ -18,11 +22,12 @@ class AppRouters {
       case Routes.logInScreen:
         return MaterialPageRoute(builder: (_) => const LoginScreen());
       case Routes.signUpScreen:
-        return MaterialPageRoute(builder: (_) =>
-            BlocProvider(
-              create: (context) =>serviceLocator<RegisterCubit>(),
-              child: SignUpScreen(),
-            ));
+        return MaterialPageRoute(
+          builder: (_) => BlocProvider(
+            create: (context) => serviceLocator<RegisterCubit>(),
+            child: SignUpScreen(),
+          ),
+        );
       case Routes.helloScreen:
         return MaterialPageRoute(builder: (_) => const HelloScreen());
       case Routes.bottomNavigationScreen:
@@ -38,19 +43,25 @@ class AppRouters {
           ),
         );
       case Routes.productDetailsScreen:
-        // return MaterialPageRoute(builder: (_) => ProductDetailsScreen());
+        final product = settings.arguments as ProductItemEntity;
+
+        return MaterialPageRoute(
+          builder: (_) => MultiBlocProvider(
+            providers: [
+              BlocProvider.value(value: serviceLocator<FavoriteCubit>()),
+              BlocProvider.value(value: serviceLocator<CartCubit>()),
+            ],
+            child: ProductDetailsScreen(product: product),
+          ),
+        );
       case Routes.homeScreen:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case Routes.firstOnBoardingScreen:
         return MaterialPageRoute(builder: (_) => const OnboardingScreen());
-        return MaterialPageRoute(
-          builder: (_) => const OnboardingScreen(),
-        );
+      case Routes.secondOnBoardingScreen:
+        return MaterialPageRoute(builder: (_) => const OnboardingScreen());
       case Routes.productSearchScreen:
-        return MaterialPageRoute(
-          builder: (_) => ProductSearchScreen(),
-        );
-
+        return MaterialPageRoute(builder: (_) => ProductSearchScreen());
 
       default:
         return null;

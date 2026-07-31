@@ -5,6 +5,7 @@ import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
+
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
 import '../../view_model/category_products_state.dart';
@@ -21,10 +22,17 @@ class ProductsByCategoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-      serviceLocator<ProductsByCategoryCubit>()
-        ..intent(GetAllProductsByCategoryIntent(slug: slug)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProductsByCategoryCubit>(
+          create: (_) =>
+              serviceLocator<ProductsByCategoryCubit>()
+                ..intent(GetAllProductsByCategoryIntent(slug: slug)),
+        ),
+        BlocProvider<FavoriteCubit>.value(
+          value: serviceLocator<FavoriteCubit>(),
+        ),
+      ],
       child: Scaffold(
         appBar: AppBar(
           title: Text(categoryName),
@@ -45,39 +53,49 @@ class ProductsByCategoryScreen extends StatelessWidget {
             if (state is CategoryInitialState ||
                 state is CategoryLoadingState) {
               return const Center(child: CircularProgressIndicator());
-            } else if (state is CategoryErrorState) {
+            }
+
+            if (state is CategoryErrorState) {
               return Center(
                 child: Text(state.messageError ?? "Something went wrong"),
               );
-            } else if (state is CategoryEmptyState) {
-              return const Center(child: Text('No products found.'));
-            } else if (state is CategorySuccessState) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 10,
-                    mainAxisSpacing: 10,
-                    childAspectRatio: 0.62,
-                  ),
-                  itemBuilder: (context, index) {
-                    final product = state.products[index];
+            }
 
-                    return BlocBuilder<FavoriteCubit, FavoriteStates>(
-                      builder: (context, favoriteState) {
+            if (state is CategoryEmptyState) {
+              return const Center(child: Text("No products found."));
+            }
+
+            if (state is CategorySuccessState) {
+              return Padding(
+                padding: const EdgeInsets.all(8),
+                child: BlocBuilder<FavoriteCubit, FavoriteStates>(
+                  builder: (context, favoriteState) {
+                    return GridView.builder(
+                      itemCount: state.products.length,
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                            childAspectRatio: 0.62,
+                          ),
+                      itemBuilder: (context, index) {
+                        final product = state.products[index];
+
                         return ProductItemCard(
+                          key: ValueKey(
+                            product.id,
+                          ),
                           product: product,
+                          imageOnlyClickable: false,
                           isFavorite: context.read<FavoriteCubit>().isFavorite(
                             product.id,
                           ),
-
                           onFavorite: () {
                             context.read<FavoriteCubit>().toggleFavorite(
                               product.id,
                             );
                           },
-
                           onTap: () {
                             Navigator.pushNamed(
                               context,
@@ -89,11 +107,11 @@ class ProductsByCategoryScreen extends StatelessWidget {
                       },
                     );
                   },
-                  itemCount: state.products.length,
                 ),
               );
             }
-            return Center(child: Text('Unknown State: ${state.runtimeType}'));
+
+            return Center(child: Text("Unknown State: ${state.runtimeType}"));
           },
         ),
       ),

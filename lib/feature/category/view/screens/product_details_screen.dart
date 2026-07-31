@@ -6,7 +6,10 @@ import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/feature/category/view_model/product_cubit.dart';
 import 'package:shopping_app/feature/category/view_model/product_state.dart';
 import 'package:shopping_app/feature/category/view_model/widgets/product_details_card.dart';
-
+import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/model/item/product_item_entity.dart';
 
@@ -22,10 +25,18 @@ class ProductDetailsScreen extends StatefulWidget {
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (BuildContext context) =>
-      serviceLocator<ProductCubit>()
-        ..intent(GetProductDetailsIntent(id: widget.product.id)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider<ProductCubit>(
+          create: (_) =>
+              serviceLocator<ProductCubit>()
+                ..intent(GetProductDetailsIntent(id: widget.product.id)),
+        ),
+        BlocProvider<CartCubit>.value(value: serviceLocator<CartCubit>()),
+        BlocProvider<FavoriteCubit>.value(
+          value: serviceLocator<FavoriteCubit>(),
+        ),
+      ],
       child: Scaffold(
         backgroundColor: AppColors.offWhite,
         appBar: AppBar(
@@ -60,9 +71,13 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
               return SingleChildScrollView(
                 padding: const EdgeInsets.symmetric(horizontal: 16.0),
                 child: Column(
-                  crossAxisAlignment: .start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    ProductDetailsCard(product: productDetails),
+                    BlocBuilder<FavoriteCubit, FavoriteStates>(
+                      builder: (context, favoriteState) {
+                        return ProductDetailsCard(product: productDetails);
+                      },
+                    ),
                     const SizedBox(height: 16),
                     Text(
                       productDetails.description.isNotEmpty
@@ -87,12 +102,45 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
           child: SizedBox(
             width: double.infinity,
             height: 50,
-            child:Padding(
-              padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-              child: CustomButton(txt: "Add to cart", width: 343, height: 48, color: AppColors.buttonBlack, fun: (){}, borderColor: AppColors.buttonBlack, txtColor: AppColors.white),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: CustomButton(
+                txt: "Add to cart",
+                width: 343,
+                height: 48,
+                color: AppColors.buttonBlack,
+                borderColor: AppColors.buttonBlack,
+                txtColor: AppColors.white,
+                fun: () async {
+                  final result = await context.read<CartCubit>().addToCart(
+                    productId: widget.product.id,
+                  );
+
+                  if (!context.mounted) return;
+
+                  switch (result) {
+                    case Success<String>():
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text("Added to cart")),
+                      );
+                      break;
+
+                    case Error<String>():
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            result.messageError ?? "Something went wrong",
+                          ),
+                        ),
+                      );
+                      break;
+                  }
+                },
+              ),
             ),
-                ),
-        ),)
+          ),
+        ),
+      ),
     );
   }
 }

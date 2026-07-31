@@ -1,6 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 
 import '../../../../core/theme/app_colors.dart';
 
@@ -20,10 +23,10 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
   Widget build(BuildContext context) {
     final imagesList = widget.product.images.isNotEmpty
         ? widget.product.images
-        : [dummyImage, dummyImage, dummyImage];
+        : [dummyImage];
 
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AspectRatio(
           aspectRatio: 343 / 331,
@@ -42,7 +45,7 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
                   }).toList(),
                   options: CarouselOptions(
                     height: double.infinity,
-                    viewportFraction: 1.0,
+                    viewportFraction: 1,
                     enableInfiniteScroll: false,
                     onPageChanged: (index, reason) {
                       setState(() {
@@ -51,26 +54,32 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
                     },
                   ),
                 ),
+
                 Positioned(
-                  top: 4,
+                  top: 10,
                   right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black12,
-                          blurRadius: 4,
-                        )
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.favorite_border,
-                      size: 20,
-                      color: Colors.black,
-                    ),
+                  child: BlocBuilder<FavoriteCubit, FavoriteStates>(
+                    builder: (context, state) {
+                      final favoriteCubit = context.read<FavoriteCubit>();
+
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                        ),
+                        child: IconButton(
+                          onPressed: () {
+                            favoriteCubit.toggleFavorite(widget.product.id);
+                          },
+                          icon: Icon(
+                            favoriteCubit.isFavorite(widget.product.id)
+                                ? Icons.favorite
+                                : Icons.favorite_border,
+                            color: Colors.red,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -84,7 +93,7 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             imagesList.length,
-                (index) => Container(
+            (index) => Container(
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: 8,
               height: 8,
@@ -105,40 +114,22 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
           children: [
             Expanded(
               child: Text(
-                widget.product.title.isNotEmpty
-                    ? widget.product.title
-                    : "T-shirt oversize",
+                widget.product.title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
             ),
-
             const SizedBox(width: 12),
-            Text.rich(
-              TextSpan(
-                children: [
-                  const TextSpan(
-                    text: "EGP ",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryOrange,
-                    ),
-                  ),
-                  TextSpan(
-                    text: widget.product.price.toStringAsFixed(0),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryOrange,
-                    ),
-                  ),
-                ],
+            Text(
+              "EGP ${widget.product.price.toStringAsFixed(0)}",
+              style: const TextStyle(
+                fontSize: 16,
+                color: AppColors.primaryOrange,
+                fontWeight: FontWeight.bold,
               ),
             ),
           ],
@@ -148,4 +139,4 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
   }
 }
 
-String dummyImage = 'https://picsum.photos/200';
+const String dummyImage = 'https://picsum.photos/200';
