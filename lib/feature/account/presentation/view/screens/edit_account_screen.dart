@@ -18,20 +18,26 @@ class EditAccountScreen extends StatefulWidget {
   const EditAccountScreen({super.key, required this.account});
 
   final AccountEntity account;
+
   @override
   State<EditAccountScreen> createState() => _EditAccountScreenState();
 }
 
 class _EditAccountScreenState extends State<EditAccountScreen> {
   final _formKey = GlobalKey<FormState>();
+
   late final TextEditingController _nameController;
   late final TextEditingController _emailController;
   late final TextEditingController _phoneController;
   late final TextEditingController _addressController;
+
   File? selectedImage;
+
   final ImagePicker picker = ImagePicker();
+
   Future<void> pickImage() async {
     final XFile? image = await picker.pickImage(source: ImageSource.gallery);
+
     if (image != null) {
       setState(() {
         selectedImage = File(image.path);
@@ -42,6 +48,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   @override
   void initState() {
     super.initState();
+
     _nameController = TextEditingController(text: widget.account.name);
 
     _emailController = TextEditingController(text: widget.account.email);
@@ -63,60 +70,79 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => serviceLocator<AccountCubit>(),
+      create: (_) => serviceLocator<AccountCubit>(),
       child: Scaffold(
+        resizeToAvoidBottomInset: true,
         body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: BlocConsumer<AccountCubit, AccountState>(
-              listener: (context, state) {
-                if (state is AccountUpdateSuccess) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.message)));
+          child: BlocConsumer<AccountCubit, AccountState>(
+            listener: (context, state) {
+              if (state is AccountUpdateSuccess) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.message)));
 
-                  Navigator.pop(context, true);
-                }
-                if (state is AccountUpdateError) {
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(SnackBar(content: Text(state.messageError)));
-                }
-              },
+                Navigator.pop(context, true);
+              }
 
-              builder: (context, state) {
-                final imageUrl = ImageHelper.getImageUrl(widget.account.image);
+              if (state is AccountUpdateError) {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(SnackBar(content: Text(state.messageError)));
+              }
+            },
+            builder: (context, state) {
+              final imageUrl = ImageHelper.getImageUrl(widget.account.image);
 
-                final ImageProvider imageProvider = selectedImage != null
-                    ? FileImage(selectedImage!)
-                    : NetworkImage(imageUrl);
+              final ImageProvider imageProvider = selectedImage != null
+                  ? FileImage(selectedImage!)
+                  : NetworkImage(imageUrl);
 
-                return Form(
+              return SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Form(
                   key: _formKey,
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-
                     children: [
-                      Row(
-                        children: [
-                          IconButton(
-                            icon: const Icon(
-                              Icons.arrow_back,
-                              color: AppColors.charcoal,
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                          ),
-                        ],
+                      IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back,
+                          color: AppColors.charcoal,
+                        ),
+                        onPressed: () => Navigator.pop(context),
                       ),
-                      SizedBox(height: 48),
+
+                      const SizedBox(height: 24),
+
                       Center(
                         child: Stack(
                           children: [
                             CircleAvatar(
                               radius: 60,
-                              backgroundImage: imageProvider,
+                              backgroundColor: Colors.grey.shade200,
+                              child: ClipOval(
+                                child: selectedImage != null
+                                    ? Image.file(
+                                        selectedImage!,
+                                        width: 120,
+                                        height: 120,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.network(
+                                        imageUrl,
+                                        width: 120,
+                                        height: 120,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) {
+                                          return const Icon(
+                                            Icons.person,
+                                            size: 70,
+                                            color: Colors.orange,
+                                          );
+                                        },
+                                      ),
+                              ),
                             ),
-
                             Positioned(
                               bottom: 0,
                               right: 4,
@@ -124,7 +150,7 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                                 onTap: pickImage,
                                 child: Container(
                                   padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
+                                  decoration: const BoxDecoration(
                                     color: AppColors.white,
                                     shape: BoxShape.circle,
                                     boxShadow: [
@@ -146,13 +172,16 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           ],
                         ),
                       ),
-                      SizedBox(height: 38),
+
+                      const SizedBox(height: 32),
 
                       Text(
                         "Name",
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      SizedBox(height: 8),
+
+                      const SizedBox(height: 8),
+
                       CustomTextFormField(
                         controller: _nameController,
                         hintText: "Enter your name",
@@ -163,12 +192,16 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           return null;
                         },
                       ),
-                      SizedBox(height: 8),
+
+                      const SizedBox(height: 16),
+
                       Text(
                         "Email",
                         style: Theme.of(context).textTheme.bodyLarge,
                       ),
-                      SizedBox(height: 8),
+
+                      const SizedBox(height: 8),
+
                       CustomTextFormField(
                         controller: _emailController,
                         hintText: "Enter your email",
@@ -180,6 +213,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                           return null;
                         },
                       ),
+
+                      const SizedBox(height: 16),
+
                       Text(
                         "Phone",
                         style: Theme.of(context).textTheme.bodyLarge,
@@ -191,7 +227,9 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         controller: _phoneController,
                         hintText: "Enter your phone",
                       ),
-                      SizedBox(height: 8),
+
+                      const SizedBox(height: 16),
+
                       Text(
                         "Address",
                         style: Theme.of(context).textTheme.bodyLarge,
@@ -203,13 +241,18 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                         controller: _addressController,
                         hintText: "Enter your address",
                       ),
-                      SizedBox(height: 114),
-                      Center(
+
+                      const SizedBox(height: 40),
+
+                      SizedBox(
+                        width: double.infinity,
                         child: CustomButton(
                           txt: "Submit",
                           width: 343,
                           height: 48,
-                          color: Color(0xff121212),
+                          color: const Color(0xff121212),
+                          borderColor: const Color(0xff121212),
+                          txtColor: Colors.white,
                           fun: () {
                             if (_formKey.currentState!.validate()) {
                               context.read<AccountCubit>().intent(
@@ -224,15 +267,15 @@ class _EditAccountScreenState extends State<EditAccountScreen> {
                               );
                             }
                           },
-                          borderColor: Color(0xff121212),
-                          txtColor: Color(0xffffffff),
                         ),
                       ),
+
+                      const SizedBox(height: 20),
                     ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
           ),
         ),
       ),

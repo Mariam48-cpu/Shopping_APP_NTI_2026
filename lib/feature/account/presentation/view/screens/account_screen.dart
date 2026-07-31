@@ -19,167 +19,154 @@ class AccountScreen extends StatefulWidget {
 class _AccountScreenState extends State<AccountScreen> {
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocProvider(
-          create: (context) =>
-              serviceLocator<AccountCubit>()..intent(FetchAccountIntent()),
-          child: Scaffold(
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            body: BlocBuilder<AccountCubit, AccountState>(
+    return BlocProvider(
+      create: (_) =>
+          serviceLocator<AccountCubit>()..intent(FetchAccountIntent()),
+      child: Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: BlocBuilder<AccountCubit, AccountState>(
               builder: (context, state) {
                 if (state is AccountLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
+
                 if (state is AccountError) {
                   return Center(child: Text(state.messageError));
                 }
+
                 if (state is AccountSuccess) {
+                  print("Image from API: ${state.account.image}");
+
                   final imageUrl = ImageHelper.getImageUrl(state.account.image);
 
-                  return Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Account",
-                            style: Theme.of(context).textTheme.headlineMedium,
-                          ),
+                  print("Final URL: $imageUrl");
 
-                          Icon(Icons.notifications_none),
-                        ],
-                      ),
-                      SizedBox(height: 16),
-
-                      Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-
-                            children: [
-                              CircleAvatar(
-                                radius: 64,
-                                backgroundImage: imageUrl.isNotEmpty
-                                    ? NetworkImage(imageUrl)
-                                    : null,
-                                child: imageUrl.isEmpty
-                                    ? const Icon(
-                                        Icons.person,
-                                        size: 80,
-                                        color: Color(0xffff9900),
-                                      )
-                                    : null,
-                              ),
-
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        state.account.name,
-                        style: Theme.of(context).textTheme.headlineMedium,
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        state.account.email,
-                        style: Theme.of(context).textTheme.bodyMedium,
-                      ),
-
-                      SizedBox(height: 38),
-                      Container(
-                        decoration: BoxDecoration(
-                          color: Color(0xffffffff),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Column(
+                  return SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            AccountInfoTile(
-                              icon: Icons.person_outline_rounded,
-                              title: 'Full Name',
-                              value: state.account.name,
+                            Text(
+                              "Account",
+                              style: Theme.of(context).textTheme.headlineMedium,
                             ),
-                            Divider(
-                              height: 4,
-                              indent: 16,
-                              endIndent: 16,
-                              color: Color(0xFFEEEEEE),
-                            ),
-
-                            AccountInfoTile(
-                              icon: Icons.email_outlined,
-                              title: 'Email',
-                              value: state.account.email,
-                            ),
-                            Divider(
-                              height: 4,
-                              indent: 16,
-                              endIndent: 16,
-                              color: Color(0xFFEEEEEE),
-                            ),
-
-                            AccountInfoTile(
-                              icon: Icons.lock_outline_rounded,
-                              title: 'Password',
-                              value: '********',
-                            ),
-                            Divider(
-                              height: 1,
-                              indent: 16,
-                              endIndent: 16,
-                              color: Color(0xFFEEEEEE),
-                            ),
-
-                            AccountInfoTile(
-                              icon: Icons.phone_outlined,
-                              title: 'Phone',
-                              value: state.account.phone,
-                            ),
-                            Divider(
-                              height: 4,
-                              indent: 16,
-                              endIndent: 16,
-                              color: Color(0xFFEEEEEE),
-                            ),
-
-                            AccountInfoTile(
-                              icon: Icons.location_on_outlined,
-                              title: 'Address',
-                              value: state.account.address,
-                            ),
+                            const Icon(Icons.notifications_none),
                           ],
                         ),
-                      ),
-                      SizedBox(height: 80),
 
-                      CustomButton(
-                        txt: "Edit Profile",
-                        width: 343,
-                        height: 48,
-                        color: Color(0xff121212),
-                        fun: () async {
-                          final result = await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  EditAccountScreen(account: state.account),
-                            ),
-                          );
-                          if (result == true && context.mounted) {
-                            context.read<AccountCubit>().intent(
-                              FetchAccountIntent(),
+                        const SizedBox(height: 16),
+
+                        CircleAvatar(
+                          radius: 64,
+                          backgroundImage: imageUrl.isNotEmpty
+                              ? NetworkImage(imageUrl)
+                              : null,
+                          child: imageUrl.isEmpty
+                              ? const Icon(
+                                  Icons.person,
+                                  size: 80,
+                                  color: Color(0xffff9900),
+                                )
+                              : null,
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        Text(
+                          state.account.name,
+                          style: Theme.of(context).textTheme.headlineMedium,
+                        ),
+
+                        const SizedBox(height: 8),
+
+                        Text(
+                          state.account.email,
+                          style: Theme.of(context).textTheme.bodyMedium,
+                        ),
+
+                        const SizedBox(height: 32),
+
+                        Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Column(
+                            children: [
+                              AccountInfoTile(
+                                icon: Icons.person_outline_rounded,
+                                title: "Full Name",
+                                value: state.account.name,
+                              ),
+                              const Divider(indent: 16, endIndent: 16),
+
+                              AccountInfoTile(
+                                icon: Icons.email_outlined,
+                                title: "Email",
+                                value: state.account.email,
+                              ),
+                              const Divider(indent: 16, endIndent: 16),
+
+                              const AccountInfoTile(
+                                icon: Icons.lock_outline_rounded,
+                                title: "Password",
+                                value: "********",
+                              ),
+                              const Divider(indent: 16, endIndent: 16),
+
+                              AccountInfoTile(
+                                icon: Icons.phone_outlined,
+                                title: "Phone",
+                                value: state.account.phone,
+                              ),
+                              const Divider(indent: 16, endIndent: 16),
+
+                              AccountInfoTile(
+                                icon: Icons.location_on_outlined,
+                                title: "Address",
+                                value: state.account.address,
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        CustomButton(
+                          txt: "Edit Profile",
+                          width: 343,
+                          height: 48,
+                          color: const Color(0xff121212),
+                          borderColor: const Color(0xff121212),
+                          txtColor: Colors.white,
+                          fun: () async {
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) =>
+                                    EditAccountScreen(account: state.account),
+                              ),
                             );
-                          }
-                        },
-                        borderColor: Color(0xff121212),
-                        txtColor: Color(0xffffffff),
-                      ),
-                    ],
+
+                            if (result == true && context.mounted) {
+                              context.read<AccountCubit>().intent(
+                                FetchAccountIntent(),
+                              );
+                            }
+                          },
+                        ),
+
+                        const SizedBox(height: 20),
+                      ],
+                    ),
                   );
                 }
-                return SizedBox.shrink();
+
+                return const SizedBox.shrink();
               },
             ),
           ),
