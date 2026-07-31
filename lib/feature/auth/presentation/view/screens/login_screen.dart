@@ -6,7 +6,6 @@ import 'package:shopping_app/core/utils/app_toast.dart';
 import 'package:shopping_app/feature/auth/presentation/view_model/login/login_cubit.dart';
 import 'package:shopping_app/feature/auth/presentation/view_model/login/login_state.dart';
 import 'package:toastification/toastification.dart';
-
 import '../../../../../core/common/widgets/custom_text_form_field.dart';
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/routes/app_routes.dart';
@@ -57,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 Routes.homeScreen,
-                (route) => false,
+                    (route) => false,
               );
             }
           },
@@ -142,31 +141,31 @@ class _LoginScreenState extends State<LoginScreen> {
         floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
         floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
             ? Align(
-                alignment: Alignment.bottomCenter,
-                child: Text.rich(
-                  TextSpan(
-                    text: "Don't have an account? ",
-                    style: TextStyle(fontSize: 14, color: Color(0xff6E6A7C)),
-                    recognizer: TapGestureRecognizer()..onTap = () {},
-                    children: [
-                      TextSpan(
-                        text: "Sign Up",
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Color(0xff212121),
-                          fontWeight: FontWeight.w500,
-                        ),
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Navigator.of(
-                              context,
-                            ).pushNamed(Routes.signUpScreen);
-                          },
-                      ),
-                    ],
+          alignment: Alignment.bottomCenter,
+          child: Text.rich(
+            TextSpan(
+              text: "Don't have an account? ",
+              style: TextStyle(fontSize: 14, color: Color(0xff6E6A7C)),
+              recognizer: TapGestureRecognizer()..onTap = () {},
+              children: [
+                TextSpan(
+                  text: "Sign Up",
+                  style: TextStyle(
+                    fontSize: 14,
+                    color: Color(0xff212121),
+                    fontWeight: FontWeight.w500,
                   ),
+                  recognizer: TapGestureRecognizer()
+                    ..onTap = () {
+                      Navigator.of(
+                        context,
+                      ).pushNamed(Routes.signUpScreen);
+                    },
                 ),
-              )
+              ],
+            ),
+          ),
+        )
             : null,
       ),
     );

@@ -5,7 +5,6 @@ import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
-import '../../../../core/theme/app_colors.dart';
 import '../../view_model/category_products_state.dart';
 
 class ProductsByCategoryScreen extends StatelessWidget {
@@ -17,6 +16,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
 
   final String slug;
   final String categoryName;
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
@@ -24,7 +24,6 @@ class ProductsByCategoryScreen extends StatelessWidget {
           serviceLocator<ProductsByCategoryCubit>()
             ..intent(GetAllProductsByCategoryIntent(slug: slug)),
       child: Scaffold(
-        backgroundColor: AppColors.offWhite,
         appBar: AppBar(
           title: Text(categoryName),
           actions: [
@@ -32,7 +31,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
               padding: const EdgeInsets.only(right: 15),
               child: IconButton(
                 onPressed: () {
-                  // Navigator.of(context).pushNamed(Routes.searchScreen);
+                  Navigator.pushNamed(context, Routes.productSearchScreen);
                 },
                 icon: SvgPicture.asset("assets/icon/magnifier.svg"),
               ),

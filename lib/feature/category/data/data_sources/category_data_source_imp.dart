@@ -5,6 +5,8 @@ import '../../../../core/constants/api_constants.dart';
 import '../../../../core/constants/app_keys.dart';
 import '../../../../core/model/item/product_item_dto.dart';
 import '../../../../core/storage_helper/secure_storage_helper.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import '../model/search_request_dto.dart';
 import 'category_data_source_interface.dart';
 import 'package:http/http.dart' as http;
 
@@ -31,6 +33,7 @@ class CategoryRemoteDataSourceImpl
           'Accept': 'application/json',
           if (savedToken != null && savedToken.isNotEmpty)
             'Authorization': 'Bearer $savedToken',
+          'Authorization': 'Bearer ${AppKeys.token}',
         },
       );
       final Map<String, dynamic> json = jsonDecode(response.body);
@@ -39,6 +42,42 @@ class CategoryRemoteDataSourceImpl
           .map((item) => ProductItemDto.fromJson(item))
           .toList();
       return Success<List<ProductItemDto>>(data: productsList);
+    } catch (e) {
+      return Error(messageError: e.toString());
+    }
+  }
+  @override
+  Future<ResultApi<List<ProductItemEntity>>> productsBySearch({
+    required String search,
+    int skip = 0,
+    int limit = 5,
+  }) async {
+    var requestDto = SearchRequestDto(search: search, skip: 0, limit: 5);
+    try {
+      String? savedToken = await SecureStorageHelper.instance.getSecure(  key: AppKeys.token,
+      );
+      Uri url = Uri.parse("${ApiConstant.baseUrl}${ApiConstant.search}");
+      var response = await http.post(
+        url,
+        body: jsonEncode(requestDto.toJson()),
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          if (savedToken != null && savedToken.isNotEmpty)
+            'Authorization': 'Bearer $savedToken',
+          'Authorization': 'Bearer ${AppKeys.token}',         },
+      );
+      var responseBody = response.body;
+      var json = jsonDecode(responseBody);
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        List<dynamic> jsonList = json['list'] ?? [];
+        List<ProductItemDto> productsList = jsonList
+            .map((item) => ProductItemDto.fromJson(item))
+            .toList();
+        return Success(data: productsList.map((e) => e.toEntity()).toList());
+      } else {
+        return Error(messageError: json['message']);
+      }
     } catch (e) {
       return Error(messageError: e.toString());
     }

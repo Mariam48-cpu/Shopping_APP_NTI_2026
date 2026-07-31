@@ -9,3 +9,4 @@ abstract interface class AuthRepoInterface {
     required String password,
   });
 }
+

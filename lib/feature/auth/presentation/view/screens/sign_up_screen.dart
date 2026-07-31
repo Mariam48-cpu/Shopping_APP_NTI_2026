@@ -4,12 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/utils/app_dialogs.dart';
 import 'package:shopping_app/feature/auth/domain/entities/register_request_entity.dart';
 import 'package:toastification/toastification.dart';
-import '../../../../../core/common/widgets/custom_text_form_field.dart';
+import '../../../../../core/common/widgets/custom_text_field.dart';
 import '../../../../../core/routes/app_routes.dart';
 import '../../../../../core/utils/app_toast.dart';
 import '../../../../../core/utils/validator.dart';
-import '../../view_model/register/register_cubit.dart';
-import '../../view_model/register/register_state.dart';
+import '../../view_model/register_cubit.dart';
+import '../../view_model/register_state.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -181,29 +181,29 @@ class _SignUpScreenState extends State<SignUpScreen> {
       floatingActionButtonAnimator: FloatingActionButtonAnimator.noAnimation,
       floatingActionButton: MediaQuery.of(context).viewInsets.bottom == 0
           ? Align(
-              alignment: Alignment.bottomCenter,
-              child: Text.rich(
-                TextSpan(
-                  text: "Already have an account? ",
-                  style: TextStyle(fontSize: 14, color: Color(0xff6E6A7C)),
+        alignment: Alignment.bottomCenter,
+        child: Text.rich(
+          TextSpan(
+            text: "Already have an account? ",
+            style: TextStyle(fontSize: 14, color: Color(0xff6E6A7C)),
 
-                  children: [
-                    TextSpan(
-                      text: "Login",
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Color(0xff212121),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          Navigator.of(context).pushNamed(Routes.logInScreen);
-                        },
-                    ),
-                  ],
+            children: [
+              TextSpan(
+                text: "Login",
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Color(0xff212121),
+                  fontWeight: FontWeight.w500,
                 ),
+                recognizer: TapGestureRecognizer()
+                  ..onTap = () {
+                    Navigator.of(context).pushNamed(Routes.logInScreen);
+                  },
               ),
-            )
+            ],
+          ),
+        ),
+      )
           : null,
     );
   }

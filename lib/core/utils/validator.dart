@@ -1,5 +1,4 @@
-
-import '../constants/app_keys.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
 
 abstract class Validator {
   static String? validateEmail(String? val) {

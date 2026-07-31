@@ -3,15 +3,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/api_constants.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/secure_storage_helper.dart';
 import 'package:shopping_app/feature/auth/data/model/login_response_dto.dart';
+import 'package:shopping_app/feature/auth/data/model/register_request_dto.dart';
 import 'package:shopping_app/feature/auth/domain/entities/login_response_entity.dart';
 import 'package:shopping_app/feature/auth/domain/entities/register_request_entity.dart';
 import 'package:shopping_app/feature/auth/domain/repo/auth_data_source_interface.dart';
-
-import '../../../../core/constants/app_keys.dart';
-import '../../../../core/storage_helper/secure_storage_helper.dart';
-import '../model/register_request_dto.dart';
 
 @Injectable(as: AuthDataSourceInterface)
 class AuthDataSourceImp implements AuthDataSourceInterface {
@@ -25,10 +24,12 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
         password: request.password,
         confirmPassword: request.confirmPassword,
       );
+
       String? savedToken = await SecureStorageHelper.instance.getSecure(
         key: AppKeys.token,
       );
-      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.signUp);
+
+      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.signup);
       var response = await http.post(
         url,
         headers: {
@@ -38,8 +39,10 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
         },
         body: jsonEncode(requestDto.toJson()),
       );
+
       var responseBody = response.body;
       var json = jsonDecode(responseBody);
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
         var dto = LoginResponseDto.fromJson(json);
         if (dto.token != null && dto.token!.isNotEmpty) {
@@ -50,7 +53,7 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
         }
         return Success(data: json['message']);
       } else {
-        return Error(messageError: json['message']);
+        return Error(messageError: json['message'] ?? 'Unknown Error');
       }
     } catch (e) {
       return Error(messageError: e.toString());
@@ -63,21 +66,30 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
     required String password,
   }) async {
     try {
-      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.signIn);
+      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.signin);
       var response = await http.post(
         url,
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({"email": email, "password": password}),
       );
+
       var json = jsonDecode(response.body);
+
       if (response.statusCode >= 200 && response.statusCode < 300) {
         var dto = LoginResponseDto.fromJson(json);
+        if (dto.token != null && dto.token!.isNotEmpty) {
+          await SecureStorageHelper.instance.saveSecure(
+            key: AppKeys.token,
+            value: dto.token!,
+          );
+        }
         return Success(data: dto.toEntity());
       } else {
-        return Error(messageError: json['message']);
+        return Error(messageError: json['message'] ?? 'Unknown Error');
       }
     } catch (e) {
       return Error(messageError: e.toString());
     }
   }
+
 }
