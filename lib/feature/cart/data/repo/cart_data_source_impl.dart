@@ -3,7 +3,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/api_constants.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
 import 'package:shopping_app/feature/cart/domain/repo/cart_data_source_interface.dart';
 import 'package:shopping_app/feature/cart/data/dto/cart_dto.dart';
 
@@ -12,18 +15,19 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
   @override
   Future<ResultApi<CartDto>> getCart() async {
     try {
+      String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+        key: AppKeys.token,
+      );
       final response = await http.get(
         Uri.parse(ApiConstant.baseUrl + ApiConstant.getCart),
         headers: {
           "Content-Type": "application/json",
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+          if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
-      print("GET TOKEN = ${ApiConstant.token}");
+
       if (response.statusCode == 200) {
-        print("GET CART RESPONSE");
-        print(response.body);
         final json = jsonDecode(response.body);
         final responseDto = CartDto.fromJson(json);
         return Success(data: responseDto);
@@ -39,12 +43,15 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
   @override
   Future<ResultApi<String>> addToCart({required int productId}) async {
     try {
+      String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+        key: AppKeys.token,
+      );
       final response = await http.post(
         Uri.parse('${ApiConstant.baseUrl}${ApiConstant.addCart}'),
         headers: {
           "Content-Type": "application/json",
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+          if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
         body: jsonEncode({"productId": productId}),
       );
@@ -62,13 +69,16 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
   @override
   Future<ResultApi<String>> deleteCart({required int productId}) async {
     try {
+      String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+        key: AppKeys.token,
+      );
       final request = http.Request(
         'DELETE',
         Uri.parse('${ApiConstant.baseUrl}${ApiConstant.deleteCart}'),
       );
 
       request.headers.addAll({
-        "Authorization": "Bearer ${ApiConstant.token}",
+        if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         "Content-Type": "application/json",
         "Accept": "application/json",
       });
@@ -77,14 +87,7 @@ class CartRemoteDataSourceImpl implements CartDataSourceInterface {
 
       final streamedResponse = await request.send();
       final response = await http.Response.fromStream(streamedResponse);
-
-      print("STATUS = ${response.statusCode}");
-      print("BODY = ${response.body}");
       if (response.statusCode == 200) {
-        print(response.statusCode);
-        print(response.headers);
-        print("DELETE RESPONSE");
-        print(response.body);
         final json = jsonDecode(response.body);
         return Success(data: json["message"]);
       }

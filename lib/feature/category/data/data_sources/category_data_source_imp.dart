@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'package:injectable/injectable.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/model/item/product_item_dto.dart';
 import '../model/search_request_dto.dart';
@@ -18,6 +21,9 @@ class CategoryRemoteDataSourceImpl
     int limit = 5,
   }) async {
     try {
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+        key: AppKeys.token,
+      );
       Uri url = Uri.parse(
         ApiConstant.baseUrl + ApiConstant.productsByCategory(slug),
       );
@@ -26,7 +32,7 @@ class CategoryRemoteDataSourceImpl
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+           if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
       final Map<String, dynamic> json = jsonDecode(response.body);
@@ -48,6 +54,9 @@ class CategoryRemoteDataSourceImpl
   }) async {
     var requestDto = SearchRequestDto(search: search, skip: 0, limit: 5);
     try {
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+        key: AppKeys.token,
+      );
       Uri url = Uri.parse("${ApiConstant.baseUrl}${ApiConstant.search}");
       var response = await http.post(
         url,
@@ -55,7 +64,7 @@ class CategoryRemoteDataSourceImpl
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+            if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
       var responseBody = response.body;

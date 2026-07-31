@@ -4,8 +4,8 @@ class ApiConstant {
   static const String products = 'home/products';
   static final String signin = "auth/signIn";
   static final String signup = "auth/signUp";
-  static const String token =
-      "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNmEyZGU1M2IzY2U3OGFjZDA2YzhhMCIsImlhdCI6MTc4NTM0MzQ3MCwiZXhwIjoxNzg3OTM1NDcwfQ.jS2Ur1x63JjHRzmbJSUhEtJq1xGoQCBsCVgOuYTLYOQ";
+  // static const String token =
+  //     "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhNmEyZGU1M2IzY2U3OGFjZDA2YzhhMCIsImlhdCI6MTc4NTM0MzQ3MCwiZXhwIjoxNzg3OTM1NDcwfQ.jS2Ur1x63JjHRzmbJSUhEtJq1xGoQCBsCVgOuYTLYOQ";
   static String addCart = "user/addCart";
   static String getCart = "user/getCart";
   static String deleteCart = "user/deleteCart";

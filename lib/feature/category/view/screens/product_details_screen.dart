@@ -111,10 +111,15 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 color: AppColors.buttonBlack,
                 borderColor: AppColors.buttonBlack,
                 txtColor: AppColors.white,
+
                 fun: () async {
+                  print("Widget Product Id = ${widget.product.id}");
+
                   final result = await context.read<CartCubit>().addToCart(
                     productId: widget.product.id,
                   );
+
+                  print(result);
 
                   if (!context.mounted) return;
 
@@ -122,7 +127,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     case Success<String>():
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Added to cart")),
-                      ); 
+                      );
                       break;
 
                     case Error<String>():

@@ -7,13 +7,17 @@ import 'package:shopping_app/feature/favorite/domain/use_case/delete_favorite_us
 import 'package:shopping_app/feature/favorite/domain/use_case/get_favorite_use_case.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 
-@injectable
+// 👈 تحويله إلى lazySingleton لضمان مشاركة نفس النسخة في كل الشاشات
+@lazySingleton
 class FavoriteCubit extends Cubit<FavoriteStates> {
   FavoriteCubit(
     this.getFavoriteUseCase,
     this.addFavoriteUseCase,
     this.deleteFavoriteUseCase,
-  ) : super(FavoriteIntialState());
+  ) : super(FavoriteIntialState()) {
+    // 👈 استدعاء جلب المفضلات تلقائياً بمجرد إنشاء الـ Cubit
+    getFavorite();
+  }
 
   final GetFavoriteUseCase getFavoriteUseCase;
   final AddFavoriteUseCase addFavoriteUseCase;
@@ -26,14 +30,23 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
 
   Future<void> fetchAndEmitProduct() async {
     final result = await getFavoriteUseCase.call();
+
     switch (result) {
       case Success<FavoriteEntity>():
+        print("Favorites Count = ${result.data?.productList.length}");
+        print(result.data?.productList.map((e) => e.id).toList());
+
         if (!isClosed) {
           emit(FavoriteSuccessState(result.data));
         }
         break;
+
       case Error<FavoriteEntity>():
-        emit(FavoriteErrorState(result.messageError));
+        print(result.messageError);
+
+        if (!isClosed) {
+          emit(FavoriteErrorState(result.messageError));
+        }
         break;
     }
   }
@@ -57,6 +70,7 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
   bool isFavorite(int productId) {
     final favoriteState = state;
     if (favoriteState is FavoriteSuccessState) {
+      if (favoriteState.favorites == null) return false;
       return favoriteState.favorites!.productList.any(
         (product) => product.id == productId,
       );
@@ -69,6 +83,7 @@ class FavoriteCubit extends Cubit<FavoriteStates> {
     final result = favorite
         ? await deleteFavoriteUseCase.call(productId)
         : await addFavoriteUseCase.call(productId);
+
     if (result is Success<String>) {
       await fetchAndEmitProduct();
     }

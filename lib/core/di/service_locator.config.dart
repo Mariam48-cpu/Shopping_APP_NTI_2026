@@ -11,6 +11,8 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart'
+    as _i1037;
 import 'package:shopping_app/feature/account/data/repo/account_data_source_imp.dart'
     as _i766;
 import 'package:shopping_app/feature/account/data/repo/account_repo_imp.dart'
@@ -33,8 +35,12 @@ import 'package:shopping_app/feature/auth/domain/repo/auth_data_source_interface
     as _i680;
 import 'package:shopping_app/feature/auth/domain/repo/auth_repo_interface.dart'
     as _i157;
+import 'package:shopping_app/feature/auth/domain/use_case/login_use_case.dart'
+    as _i458;
 import 'package:shopping_app/feature/auth/domain/use_case/register_use_case.dart'
     as _i921;
+import 'package:shopping_app/feature/auth/presentation/view_model/login/login_cubit.dart'
+    as _i462;
 import 'package:shopping_app/feature/auth/presentation/view_model/register_cubit.dart'
     as _i320;
 import 'package:shopping_app/feature/cart/data/repo/cart_data_source_impl.dart'
@@ -125,6 +131,9 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.lazySingleton<_i1037.SecureStorageHelper>(
+      () => _i1037.SecureStorageHelper(),
+    );
     gh.factory<_i108.CartDataSourceInterface>(
       () => _i398.CartRemoteDataSourceImpl(),
     );
@@ -147,11 +156,17 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i313.CartRepositoryInterface>(
       () => _i360.CartRepositoryImpl(gh<_i108.CartDataSourceInterface>()),
     );
+    gh.factory<_i458.LoginUseCase>(
+      () => _i458.LoginUseCase(gh<_i157.AuthRepoInterface>()),
+    );
     gh.factory<_i921.RegisterUseCase>(
       () => _i921.RegisterUseCase(gh<_i157.AuthRepoInterface>()),
     );
     gh.factory<_i756.HomeRemoteDataSourceInterface>(
       () => _i196.HomeRemoteDataSourceImpl(),
+    );
+    gh.factory<_i462.LoginCubit>(
+      () => _i462.LoginCubit(gh<_i458.LoginUseCase>()),
     );
     gh.factory<_i125.CategoryRepoInterface>(
       () => _i59.CategoryRepoImp(gh<_i824.CategoryRemoteDataSourceInterface>()),
@@ -176,7 +191,7 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i144.AccountRepoInterface>(
       () => _i568.AccountRepoImp(gh<_i1064.AccountDataSourceInterface>()),
     );
-    gh.factory<_i706.CartCubit>(
+    gh.lazySingleton<_i706.CartCubit>(
       () => _i706.CartCubit(
         getCartUseCase: gh<_i949.GetCartUseCase>(),
         addToCartUseCase: gh<_i439.AddToCartUseCase>(),
@@ -247,7 +262,7 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i577.GetAllProductsByCategoryUseCase>(),
       ),
     );
-    gh.factory<_i417.FavoriteCubit>(
+    gh.lazySingleton<_i417.FavoriteCubit>(
       () => _i417.FavoriteCubit(
         gh<_i208.GetFavoriteUseCase>(),
         gh<_i188.AddFavoriteUseCase>(),

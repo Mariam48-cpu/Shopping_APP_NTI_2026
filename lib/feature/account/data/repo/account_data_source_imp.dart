@@ -3,7 +3,10 @@ import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 import 'package:shopping_app/feature/account/domain/repo/account_data_source_interface.dart';
 import '../../../../core/constants/api_constants.dart';
@@ -15,13 +18,16 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
   @override
   Future<ResultApi<AccountEntity>> getAccount() async {
     try {
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+      key: AppKeys.token,
+    );
       Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.account);
       var response = await http.get(
         url,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+          if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
       if (response.statusCode >= 200 && response.statusCode < 300) {
@@ -50,6 +56,9 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
     File? image,
   }) async {
     try {
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+      key: AppKeys.token,
+    );
       String imagePath = currentImage;
 
       if (image != null) {
@@ -61,7 +70,7 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          'Authorization': 'Bearer ${ApiConstant.token}',
+         if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
         body: jsonEncode({
           "name": name,
@@ -90,12 +99,15 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
   }
 
   Future<String> uploadImage(File image) async {
+     String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+      key: AppKeys.token,
+    );
     var request = http.MultipartRequest(
       "POST",
       Uri.parse(ApiConstant.baseUrl + ApiConstant.uploadImage),
     );
     request.headers.addAll({
-      "Authorization": "Bearer ${ApiConstant.token}",
+      if (savedToken != null) 'Authorization': 'Bearer $savedToken',
       "Accept": "application/json",
     });
     request.files.add(

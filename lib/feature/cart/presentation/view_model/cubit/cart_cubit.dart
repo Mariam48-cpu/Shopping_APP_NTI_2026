@@ -8,7 +8,7 @@ import 'package:shopping_app/feature/cart/domain/use_case/get_cart_use_case.dart
 
 part 'cart_state.dart';
 
-@injectable
+@lazySingleton
 class CartCubit extends Cubit<CartState> {
   final GetCartUseCase getCartUseCase;
   final AddToCartUseCase addToCartUseCase;

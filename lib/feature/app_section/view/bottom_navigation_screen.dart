@@ -25,7 +25,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     FavouriteScreen(),
     AccountScreen(),
   ];
-
+  @override
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(

@@ -26,11 +26,12 @@ class ProductItemCard extends StatelessWidget {
 
     Widget imageWidget = ClipRRect(
       borderRadius: BorderRadius.circular(12),
-      child: Image.network(
-        product.images.isNotEmpty ? product.images.first : dummyImage,
-        width: double.infinity,
-        height: 238,
-        fit: BoxFit.contain,
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Image.network(
+          product.images.isNotEmpty ? product.images.first : dummyImage,
+          fit: BoxFit.contain,
+        ),
       ),
     );
 
@@ -46,21 +47,22 @@ class ProductItemCard extends StatelessWidget {
           Stack(
             children: [
               imageWidget,
-
               Positioned(
-                top: 10,
-                right: 10,
+                top: 8,
+                right: 8,
                 child: Container(
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
+                    constraints: const BoxConstraints(),
+                    padding: const EdgeInsets.all(8),
                     onPressed: onFavorite,
                     icon: Icon(
                       isFavorite ? Icons.favorite : Icons.favorite_border,
                       color: Colors.red,
-                      size: 22,
+                      size: 20,
                     ),
                   ),
                 ),
@@ -68,7 +70,7 @@ class ProductItemCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 8),
+          const SizedBox(height: 6),
 
           Text(
             product.title,
@@ -77,33 +79,37 @@ class ProductItemCard extends StatelessWidget {
             style: Theme.of(context).textTheme.bodyMedium,
           ),
 
-          const SizedBox(height: 6),
+          const SizedBox(height: 4),
 
           Row(
             children: [
-              Text(
-                "EG ${product.price.toStringAsFixed(2)}",
-                style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
+              Expanded(
+                child: Text(
+                  "EG ${product.price.toStringAsFixed(2)}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-
-              const SizedBox(width: 6),
-
-              Text(
-                "EG ${originalPrice.toStringAsFixed(2)}",
-                style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  decoration: TextDecoration.lineThrough,
-                  color: Colors.grey,
+              const SizedBox(width: 4),
+              Flexible(
+                child: Text(
+                  "EG ${originalPrice.toStringAsFixed(2)}",
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                    decoration: TextDecoration.lineThrough,
+                    color: Colors.grey,
+                  ),
                 ),
               ),
-
-              const Spacer(),
             ],
           ),
 
-          const SizedBox(height: 4),
+          const SizedBox(height: 2),
 
           Row(
             children: [
@@ -115,13 +121,9 @@ class ProductItemCard extends StatelessWidget {
                   fontSize: 12,
                 ),
               ),
-
               const Spacer(),
-
-              const Icon(Icons.star, color: Colors.amber, size: 16),
-
-              const SizedBox(width: 4),
-
+              const Icon(Icons.star, color: Colors.amber, size: 15),
+              const SizedBox(width: 2),
               Text(
                 product.rating.toStringAsFixed(1),
                 style: Theme.of(context).textTheme.bodySmall,
