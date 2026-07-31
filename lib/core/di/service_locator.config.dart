@@ -11,6 +11,20 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
+import 'package:shopping_app/feature/account/data/repo/account_data_source_imp.dart'
+    as _i766;
+import 'package:shopping_app/feature/account/data/repo/account_repo_imp.dart'
+    as _i568;
+import 'package:shopping_app/feature/account/domain/repo/account_data_source_interface.dart'
+    as _i1064;
+import 'package:shopping_app/feature/account/domain/repo/account_repo_interface.dart'
+    as _i144;
+import 'package:shopping_app/feature/account/domain/use_case/account_use_case.dart'
+    as _i214;
+import 'package:shopping_app/feature/account/domain/use_case/update_account_use_case.dart'
+    as _i821;
+import 'package:shopping_app/feature/account/presentation/view_model/account_cubit.dart'
+    as _i375;
 import 'package:shopping_app/feature/auth/data/repo/auth_data_source_imp.dart'
     as _i733;
 import 'package:shopping_app/feature/auth/data/repo/auth_repo_imp.dart'
@@ -115,6 +129,9 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i398.CartRemoteDataSourceImpl(),
     );
     gh.factory<_i680.AuthDataSourceInterface>(() => _i733.AuthDataSourceImp());
+    gh.factory<_i1064.AccountDataSourceInterface>(
+      () => _i766.AccountDataSourceImp(),
+    );
     gh.factory<_i907.ProductDetailsRemoteDataSourceInterface>(
       () => _i828.ProductDetailsRemoteDataSourceImp(),
     );
@@ -156,6 +173,9 @@ extension GetItInjectableX on _i174.GetIt {
     gh.factory<_i320.RegisterCubit>(
       () => _i320.RegisterCubit(gh<_i921.RegisterUseCase>()),
     );
+    gh.factory<_i144.AccountRepoInterface>(
+      () => _i568.AccountRepoImp(gh<_i1064.AccountDataSourceInterface>()),
+    );
     gh.factory<_i706.CartCubit>(
       () => _i706.CartCubit(
         getCartUseCase: gh<_i949.GetCartUseCase>(),
@@ -167,6 +187,12 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i905.GetProductDetailsUseCase(
         gh<_i167.ProductDetailsRepoInterface>(),
       ),
+    );
+    gh.factory<_i214.AccountUseCase>(
+      () => _i214.AccountUseCase(gh<_i144.AccountRepoInterface>()),
+    );
+    gh.factory<_i821.UpdateAccountUseCase>(
+      () => _i821.UpdateAccountUseCase(gh<_i144.AccountRepoInterface>()),
     );
     gh.factory<_i440.ProductCubit>(
       () => _i440.ProductCubit(gh<_i905.GetProductDetailsUseCase>()),
@@ -209,6 +235,12 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i208.GetFavoriteUseCase>(
       () => _i208.GetFavoriteUseCase(gh<_i871.FavoriteRepoInterface>()),
+    );
+    gh.factory<_i375.AccountCubit>(
+      () => _i375.AccountCubit(
+        gh<_i214.AccountUseCase>(),
+        gh<_i821.UpdateAccountUseCase>(),
+      ),
     );
     gh.factory<_i409.ProductsByCategoryCubit>(
       () => _i409.ProductsByCategoryCubit(

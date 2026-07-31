@@ -9,6 +9,7 @@ import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cub
 import 'package:shopping_app/feature/favorite/presentation/view/screens/favorite_screen.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/home/presentation/view/screens/home_screen.dart';
+import 'package:shopping_app/feature/account/presentation/view/screens/account_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -22,7 +23,7 @@ class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
     HomeScreen(),
     CartScreen(),
     FavouriteScreen(),
-    Center(child: Text("Account")),
+    AccountScreen(),
   ];
 
   @override

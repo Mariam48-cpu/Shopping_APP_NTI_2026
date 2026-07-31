@@ -122,7 +122,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     case Success<String>():
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text("Added to cart")),
-                      );
+                      ); 
                       break;
 
                     case Error<String>():

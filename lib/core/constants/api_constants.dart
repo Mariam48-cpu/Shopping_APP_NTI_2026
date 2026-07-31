@@ -18,4 +18,7 @@ class ApiConstant {
       "home/products/category/$slug?skip=0&limit=5";
   static const search = "home/productsFilter";
   static String productsDetails(int id) => 'home/products/$id';
+  static final String account = "portfoilo/userData";
+  static final String updateAccount = "portfoilo/editUserData";
+  static const String uploadImage = "portfoilo/addImage";
 }
