@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:shopping_app/core/utils/app_toast.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
+import 'package:shopping_app/feature/category/view/widgets/product_grid_skeleton.dart';
 import 'package:shopping_app/feature/category/view_model/category_products_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
+import 'package:toastification/toastification.dart';
 
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/routes/app_routes.dart';
@@ -52,7 +55,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
           builder: (context, state) {
             if (state is CategoryInitialState ||
                 state is CategoryLoadingState) {
-              return const Center(child: CircularProgressIndicator());
+              return const ProductGridSkeleton();
             }
 
             if (state is CategoryErrorState) {
@@ -77,23 +80,32 @@ class ProductsByCategoryScreen extends StatelessWidget {
                             crossAxisCount: 2,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            childAspectRatio: 0.62,
+                            childAspectRatio: .68,
                           ),
                       itemBuilder: (context, index) {
                         final product = state.products[index];
 
                         return ProductItemCard(
-                          key: ValueKey(
-                            product.id,
-                          ),
+                          key: ValueKey(product.id),
                           product: product,
                           imageOnlyClickable: false,
                           isFavorite: context.read<FavoriteCubit>().isFavorite(
                             product.id,
                           ),
                           onFavorite: () {
+                            final wasFavorite = context
+                                .read<FavoriteCubit>()
+                                .isFavorite(product.id);
                             context.read<FavoriteCubit>().toggleFavorite(
                               product.id,
+                            );
+                            AppToast.showToast(
+                              context: context,
+                              title: "Success",
+                              description: wasFavorite
+                                  ? "Removed from favourites"
+                                  : "Added to favourites",
+                              type: ToastificationType.success,
                             );
                           },
                           onTap: () {

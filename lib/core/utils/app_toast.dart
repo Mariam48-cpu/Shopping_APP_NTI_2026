@@ -8,43 +8,77 @@ abstract class AppToast {
     required String description,
     required ToastificationType type,
   }) {
+    final isSuccess = type == ToastificationType.success;
+    final isError = type == ToastificationType.error;
+
+    final backgroundColor = isSuccess
+        ? const Color(0xffE8F5E9)
+        : isError
+        ? const Color(0xffFFEBEE)
+        : const Color(0xffFFF8E1);
+
+    final textColor = isSuccess
+        ? const Color(0xff2E7D32)
+        : isError
+        ? const Color(0xffC62828)
+        : const Color(0xffEF6C00);
+
+    final icon = isSuccess
+        ? Icons.check_circle_outline
+        : isError
+        ? Icons.error_outline
+        : Icons.warning_amber_rounded;
+
     toastification.show(
       context: context,
+
       type: type,
+
+      style: ToastificationStyle.flatColored,
+
+      alignment: Alignment.topCenter,
+
+      margin: const EdgeInsets.only(top: 70, left: 20, right: 20),
+
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+
+      borderRadius: BorderRadius.circular(14),
+
+      autoCloseDuration: const Duration(seconds: 2),
+
+      animationDuration: const Duration(milliseconds: 400),
+
+      showProgressBar: true,
+
+      dragToClose: true,
+
+      backgroundColor: backgroundColor,
+
+      foregroundColor: textColor,
+
+      icon: Icon(icon, color: textColor, size: 28),
+
       title: Text(
         title,
-        style: const TextStyle(
-          fontSize: 18,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 15,
           fontWeight: FontWeight.bold,
         ),
       ),
+
       description: Text(
         description,
-        style: const TextStyle(
-          fontSize: 16,
-          fontWeight: FontWeight.w400,
+        maxLines: 2,
+        overflow: TextOverflow.ellipsis,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 13,
+          fontWeight: FontWeight.w500,
         ),
       ),
-      primaryColor: Colors.white,
-      autoCloseDuration: const Duration(seconds: 3),
-      progressBarTheme: ProgressIndicatorThemeData(
-        color: type == ToastificationType.success
-            ? Colors.green
-            : type == ToastificationType.info
-            ? Colors.blue
-            : type == ToastificationType.warning
-            ? Colors.orange
-            : Colors.red,
-      ),
-      showProgressBar: true,
-      backgroundColor: type == ToastificationType.success
-          ? Colors.green
-          : type == ToastificationType.info
-          ? Colors.blue
-          : type == ToastificationType.warning
-          ? Colors.orange
-          : Colors.red,
-      foregroundColor: Colors.white,
+
+      progressBarTheme: ProgressIndicatorThemeData(color: textColor),
     );
   }
 }

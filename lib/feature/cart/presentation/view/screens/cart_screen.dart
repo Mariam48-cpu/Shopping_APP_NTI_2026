@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/utils/app_toast.dart';
 import 'package:shopping_app/feature/cart/domain/entities/cart_entity.dart';
 import 'package:shopping_app/feature/cart/presentation/view/widgets/cart_item_widget.dart';
+import 'package:shopping_app/feature/cart/presentation/view/widgets/cart_loading_widget.dart';
 import 'package:shopping_app/feature/cart/presentation/view/widgets/cart_summary_widget.dart';
 import 'package:shopping_app/feature/cart/presentation/view/widgets/empty_cart_widget.dart';
 import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
+import 'package:toastification/toastification.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
 
   @override
-
-
   Widget build(BuildContext context) {
     double calculateTotal(CartEntity cart) {
       return cart.list.fold(0, (sum, item) => sum + item.price);
@@ -22,16 +23,18 @@ class CartScreen extends StatelessWidget {
       body: BlocConsumer<CartCubit, CartState>(
         listener: (context, state) {
           if (state is CartError) {
-            ScaffoldMessenger.of(
-              context,
-            ).showSnackBar(SnackBar(content: Text(state.message ?? '')));
+            AppToast.showToast(
+              context: context,
+              title: "Error",
+              description: state.message ?? "Something went wrong",
+              type: ToastificationType.error,
+            );
           }
         },
         builder: (context, state) {
           switch (state) {
             case CartLoading():
-              return const Center(child: CircularProgressIndicator());
-
+              return const Center(child: CartLoadingWidget());
             case CartError():
               return Center(
                 child: Text(state.message ?? 'Something went wrong'),

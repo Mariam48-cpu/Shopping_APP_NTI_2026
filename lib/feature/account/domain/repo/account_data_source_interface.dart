@@ -1,5 +1,4 @@
-import 'dart:io';
-
+import 'package:image_picker/image_picker.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 
@@ -12,6 +11,6 @@ abstract interface class AccountDataSourceInterface {
     required String email,
     required String address,
     required String currentImage,
-    File? image,
+    XFile? image,
   });
 }

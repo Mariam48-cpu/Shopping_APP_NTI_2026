@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
 import 'package:shopping_app/core/routes/app_routes.dart';
+import 'package:shopping_app/core/utils/app_toast.dart';
 import 'package:shopping_app/core/widgets/product_item_card.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
+import 'package:toastification/toastification.dart';
 
 Widget buildProductsGrid(List<ProductItemEntity> products) {
   if (products.isEmpty) {
@@ -19,7 +21,7 @@ Widget buildProductsGrid(List<ProductItemEntity> products) {
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: 0.62,
+        childAspectRatio: .68,
       ),
       itemBuilder: (context, index) {
         final product = products[index];
@@ -28,14 +30,22 @@ Widget buildProductsGrid(List<ProductItemEntity> products) {
           builder: (context, state) {
             return ProductItemCard(
               product: product,
-
-              // هنا الصورة بس هي اللي تفتح الـ Details
               imageOnlyClickable: true,
-
               isFavorite: context.read<FavoriteCubit>().isFavorite(product.id),
 
               onFavorite: () {
+                final wasFavorite = context.read<FavoriteCubit>().isFavorite(
+                  product.id,
+                );
                 context.read<FavoriteCubit>().toggleFavorite(product.id);
+                AppToast.showToast(
+                  context: context,
+                  title: "Success",
+                  description: wasFavorite
+                      ? "Removed from favourites"
+                      : "Added to favourites",
+                  type: ToastificationType.success,
+                );
               },
 
               onTap: () {

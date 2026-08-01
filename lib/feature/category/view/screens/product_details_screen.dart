@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_app/core/common/widgets/custom_button.dart';
 import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/core/utils/app_toast.dart';
+import 'package:shopping_app/feature/category/view/widgets/product_details_skeleton.dart';
 import 'package:shopping_app/feature/category/view_model/product_cubit.dart';
 import 'package:shopping_app/feature/category/view_model/product_state.dart';
 import 'package:shopping_app/feature/category/view_model/widgets/product_details_card.dart';
@@ -10,6 +12,7 @@ import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../core/di/service_locator.dart';
 import '../../../../core/model/item/product_item_entity.dart';
 
@@ -55,7 +58,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         body: BlocBuilder<ProductCubit, ProductState>(
           builder: (context, state) {
             if (state is ProductLoadingState) {
-              return const Center(child: CircularProgressIndicator());
+              return const ProductDetailsSkeleton();
             } else if (state is ProductErrorState) {
               return Center(
                 child: Text(
@@ -108,8 +111,8 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                 txt: "Add to cart",
                 width: 343,
                 height: 48,
-                color: AppColors.buttonBlack,
-                borderColor: AppColors.buttonBlack,
+                color: AppColors.black,
+                borderColor: AppColors.black,
                 txtColor: AppColors.white,
 
                 fun: () async {
@@ -125,18 +128,21 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                   switch (result) {
                     case Success<String>():
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text("Added to cart")),
+                      AppToast.showToast(
+                        context: context,
+                        title: "Success",
+                        description: "Product added to cart",
+                        type: ToastificationType.success,
                       );
                       break;
 
                     case Error<String>():
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
+                      AppToast.showToast(
+                        context: context,
+                        title: "Error",
+                        description:
                             result.messageError ?? "Something went wrong",
-                          ),
-                        ),
+                        type: ToastificationType.error,
                       );
                       break;
                   }

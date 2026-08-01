@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/utils/app_toast.dart';
 import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
+import 'package:shopping_app/feature/category/view/widgets/product_grid_skeleton.dart';
 import 'package:shopping_app/feature/favorite/presentation/view/widgets/fav_item_widget.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
+import 'package:toastification/toastification.dart';
 
 class FavouriteScreen extends StatelessWidget {
   const FavouriteScreen({super.key});
@@ -16,14 +19,17 @@ class FavouriteScreen extends StatelessWidget {
       body: BlocConsumer<FavoriteCubit, FavoriteStates>(
         listener: (context, state) {
           if (state is FavoriteErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.error ?? "Something went wrong")),
+            AppToast.showToast(
+              context: context,
+              title: "Error",
+              description: state.error ?? "Something went wrong",
+              type: ToastificationType.error,
             );
           }
         },
         builder: (context, state) {
           if (state is FavoriteLoadingState || state is FavoriteIntialState) {
-            return const Center(child: CircularProgressIndicator());
+            return const ProductGridSkeleton();
           }
 
           if (state is FavoriteErrorState) {
@@ -54,13 +60,13 @@ class FavouriteScreen extends StatelessWidget {
             }
 
             return GridView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(12),
               itemCount: products.length,
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 35,
-                mainAxisSpacing: 16.75,
-                childAspectRatio: 0.58,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                childAspectRatio: .68,
               ),
               itemBuilder: (context, index) {
                 final product = products[index];
@@ -69,6 +75,12 @@ class FavouriteScreen extends StatelessWidget {
                   product: product.toEntity(),
                   onAddToCart: () {
                     context.read<CartCubit>().addToCart(productId: product.id!);
+                    AppToast.showToast(
+                      context: context,
+                      title: "Success",
+                      description: "Added to cart",
+                      type: ToastificationType.success,
+                    );
                   },
                   onFavorite: () async {
                     final cubit = context.read<FavoriteCubit>();
@@ -81,20 +93,23 @@ class FavouriteScreen extends StatelessWidget {
 
                     switch (result) {
                       case Success<String>():
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                              wasFavorite
-                                  ? "Removed from favourites"
-                                  : "Added to favourites",
-                            ),
-                          ),
+                        AppToast.showToast(
+                          context: context,
+                          title: "Success",
+                          description: wasFavorite
+                              ? "Removed from favourites"
+                              : "Added to favourites",
+                          type: ToastificationType.success,
                         );
                         break;
 
                       case Error<String>():
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(result.messageError ?? "")),
+                        AppToast.showToast(
+                          context: context,
+                          title: "Error",
+                          description:
+                              result.messageError ?? "Something went wrong",
+                          type: ToastificationType.error,
                         );
                         break;
                     }

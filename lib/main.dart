@@ -37,10 +37,10 @@ class MyApp extends StatelessWidget {
 //   WidgetsFlutterBinding.ensureInitialized();
 //   configureDependencies();
 
-//   String? token = await SecureStorageHelper.instance.getSecure(
+//   String? token = await SecureStorageHelper().getSecure(
 //     key: AppKeys.token,
 //   );
-//   String? isFirstTimeStr = await SecureStorageHelper.instance.getSecure(
+//   String? isFirstTimeStr = await SecureStorageHelper().getSecure(
 //     key: 'is_first_time',
 //   );
 

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shopping_app/core/constants/app_assets.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
+import 'package:shopping_app/feature/category/view/widgets/product_grid_skeleton.dart';
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import '../../../../core/common/widgets/custom_text_field.dart';
 import '../../view_model/products_search_cubit.dart';
@@ -39,6 +40,7 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
       ],
       child: Scaffold(
         appBar: AppBar(
+          centerTitle: true,
           title: Builder(
             builder: (searchContext) {
               return CustomTextFormField(
@@ -87,7 +89,7 @@ class _ProductSearchScreenState extends State<ProductSearchScreen> {
                 );
 
               case SearchLoadingState():
-                return const Center(child: CircularProgressIndicator());
+                return const ProductGridSkeleton();
 
               case SearchSuccessState():
                 return buildProductsGrid(state.data);

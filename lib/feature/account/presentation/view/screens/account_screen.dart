@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/feature/account/presentation/view/screens/edit_account_screen.dart';
-import 'package:shopping_app/feature/account/presentation/view/screens/widget/account_info_title.dart';
+import 'package:shopping_app/feature/account/presentation/view/widget/account_info_title.dart';
+import 'package:shopping_app/feature/account/presentation/view/widget/account_skeleton.dart';
 import 'package:shopping_app/feature/account/presentation/view_model/account_cubit.dart';
 import 'package:shopping_app/feature/account/presentation/view_model/account_state.dart';
 
@@ -30,7 +31,7 @@ class _AccountScreenState extends State<AccountScreen> {
             child: BlocBuilder<AccountCubit, AccountState>(
               builder: (context, state) {
                 if (state is AccountLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const AccountSkeleton();
                 }
 
                 if (state is AccountError) {
