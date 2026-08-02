@@ -18,7 +18,7 @@ class ProductGridSkeleton extends StatelessWidget {
             crossAxisCount: 2,
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
-            childAspectRatio: .68,
+            mainAxisExtent: 320,
           ),
           itemBuilder: (_, __) {
             return SizedBox(

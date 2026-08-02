@@ -80,7 +80,7 @@ class ProductsByCategoryScreen extends StatelessWidget {
                             crossAxisCount: 2,
                             crossAxisSpacing: 10,
                             mainAxisSpacing: 10,
-                            childAspectRatio: .68,
+                            mainAxisExtent: 320,
                           ),
                       itemBuilder: (context, index) {
                         final product = state.products[index];

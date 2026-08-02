@@ -21,7 +21,7 @@ Widget buildProductsGrid(List<ProductItemEntity> products) {
         crossAxisCount: 2,
         crossAxisSpacing: 10,
         mainAxisSpacing: 10,
-        childAspectRatio: .68,
+        mainAxisExtent: 330,
       ),
       itemBuilder: (context, index) {
         final product = products[index];

@@ -51,7 +51,7 @@ class _ProductItemCardState extends State<ProductItemCard> {
           product.images.isNotEmpty ? product.images.first : dummyImage,
           fit: BoxFit.contain,
           errorBuilder: (_, __, ___) =>
-              const Icon(Icons.image_not_supported, size: 50),
+          const Icon(Icons.image_not_supported, size: 50),
         ),
       ),
     );
@@ -70,12 +70,16 @@ class _ProductItemCardState extends State<ProductItemCard> {
         onTap: widget.imageOnlyClickable ? null : widget.onTap,
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Stack(
+           child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 3,
+              child: Stack(
                 children: [
-                  image,
+                  Positioned.fill(child: image),
 
                   Positioned(
                     left: 8,
@@ -129,69 +133,72 @@ class _ProductItemCardState extends State<ProductItemCard> {
                   ),
                 ],
               ),
+            ),
 
-              const SizedBox(height: 8),
+            const SizedBox(height: 8),
 
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                      ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
                     ),
+                  ),
 
-                    const SizedBox(height: 6),
+                  const SizedBox(height: 6),
 
-                    Text(
-                      "EG ${product.price.toStringAsFixed(2)}",
-                      style: TextStyle(
-                        color: Colors.orange.shade800,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  Text(
+                    "EG ${product.price.toStringAsFixed(2)}",
+                    style: TextStyle(
+                      color: Colors.orange.shade800,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
                     ),
+                  ),
 
-                    Text(
-                      "EG ${originalPrice.toStringAsFixed(2)}",
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        color: Colors.grey,
-                        decoration: TextDecoration.lineThrough,
-                        fontSize: 12,
-                      ),
+                  Text(
+                    "EG ${originalPrice.toStringAsFixed(2)}",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                      fontSize: 12,
                     ),
+                  ),
 
-                    const Spacer(),
+                  const Spacer(),
 
-                    Row(
-                      children: [
-                        const Icon(
-                          Icons.star_rounded,
-                          color: Colors.amber,
-                          size: 16,
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.star_rounded,
+                        color: Colors.amber,
+                        size: 16,
+                      ),
+                      const SizedBox(width: 3),
+                      Text(
+                        product.rating.toStringAsFixed(1),
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
                         ),
-                        const SizedBox(width: 3),
-                        Text(
-                          product.rating.toStringAsFixed(1),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 13,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
+        ),
+      ),
         ),
       ),
     );
