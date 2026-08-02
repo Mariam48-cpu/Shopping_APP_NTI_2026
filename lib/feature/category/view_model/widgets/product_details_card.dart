@@ -9,10 +9,7 @@ import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_s
 class ProductDetailsCard extends StatefulWidget {
   final ProductItemEntity product;
 
-  const ProductDetailsCard({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailsCard({super.key, required this.product});
 
   @override
   State<ProductDetailsCard> createState() => _ProductDetailsCardState();
@@ -104,7 +101,7 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
             images.length,
-                (index) => AnimatedContainer(
+            (index) => AnimatedContainer(
               duration: const Duration(milliseconds: 250),
               margin: const EdgeInsets.symmetric(horizontal: 4),
               width: _currentImageIndex == index ? 20 : 8,
@@ -145,20 +142,13 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
 
             const Spacer(),
 
-            const Icon(
-              Icons.star_rounded,
-              color: Colors.amber,
-              size: 22,
-            ),
+            const Icon(Icons.star_rounded, color: Colors.amber, size: 22),
 
             const SizedBox(width: 4),
 
             Text(
               widget.product.rating.toStringAsFixed(1),
-              style: const TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
-              ),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ],
         ),
