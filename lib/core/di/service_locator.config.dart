@@ -41,6 +41,8 @@ import 'package:shopping_app/feature/auth/domain/use_case/register_use_case.dart
     as _i921;
 import 'package:shopping_app/feature/auth/presentation/view_model/login/login_cubit.dart'
     as _i462;
+import 'package:shopping_app/feature/auth/presentation/view_model/register/register_cubit.dart'
+    as _i371;
 import 'package:shopping_app/feature/auth/presentation/view_model/register_cubit.dart'
     as _i320;
 import 'package:shopping_app/feature/cart/data/repo/cart_data_source_impl.dart'
@@ -103,6 +105,8 @@ import 'package:shopping_app/feature/favorite/domain/use_case/get_favorite_use_c
     as _i208;
 import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart'
     as _i417;
+import 'package:shopping_app/feature/home/data/data_sources/home_remote_data_source_impl.dart'
+    as _i525;
 import 'package:shopping_app/feature/home/data/repo/home_data_source_imp.dart'
     as _i196;
 import 'package:shopping_app/feature/home/data/repo/home_repo_imp.dart'
@@ -131,6 +135,9 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    gh.factory<_i525.HomeRemoteDataSourceImpl>(
+      () => _i525.HomeRemoteDataSourceImpl(),
+    );
     gh.lazySingleton<_i1037.SecureStorageHelper>(
       () => _i1037.SecureStorageHelper(),
     );
@@ -184,6 +191,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i949.GetCartUseCase>(
       () => _i949.GetCartUseCase(gh<_i313.CartRepositoryInterface>()),
+    );
+    gh.factory<_i371.RegisterCubit>(
+      () => _i371.RegisterCubit(gh<_i921.RegisterUseCase>()),
     );
     gh.factory<_i320.RegisterCubit>(
       () => _i320.RegisterCubit(gh<_i921.RegisterUseCase>()),

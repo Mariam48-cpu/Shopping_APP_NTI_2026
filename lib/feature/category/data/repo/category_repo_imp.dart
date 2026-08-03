@@ -2,7 +2,6 @@ import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/category/data/data_sources/category_data_source_interface.dart';
 import 'package:shopping_app/feature/category/domain/repo/category_repo_interface.dart';
-
 import '../../../../core/model/item/product_item_dto.dart';
 import '../../../../core/model/item/product_item_entity.dart';
 
@@ -12,8 +11,8 @@ class CategoryRepoImp implements CategoryRepoInterface {
   CategoryRepoImp(this._repo);
   @override
   Future<ResultApi<List<ProductItemEntity>>> getAllProductsByCategory(
-    String slug,
-  ) async {
+      String slug,
+      ) async {
     final result = await _repo.getProductsByCategory(slug: slug);
     try {
       switch (result) {
