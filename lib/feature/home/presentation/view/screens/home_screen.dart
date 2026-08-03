@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/utils/app_toast.dart';
+import 'package:shopping_app/feature/category/view/widgets/product_grid_skeleton.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
+import 'package:shopping_app/feature/home/presentation/view/widget/category_list_skeleton.dart';
+import 'package:shopping_app/feature/home/widgets/categories_list_widget.dart';
+import 'package:toastification/toastification.dart';
 import '../../../../../core/di/service_locator.dart';
-import '../../../../../core/routes/app_routes.dart';
 import '../../../../../core/widgets/product_item_card.dart';
-import '../../../widgets/categories_list_widget.dart';
-import '../../category_cubit/category_cubit.dart';
-import '../../category_cubit/category_state.dart';
-import '../../product_cubit/product_cubit.dart';
-import '../../product_cubit/product_state.dart';
+import '../../view_model/category_cubit/category_cubit.dart';
+import '../../view_model/category_cubit/category_state.dart';
+import '../../view_model/product_cubit/product_cubit.dart';
+import '../../view_model/product_cubit/product_state.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -48,7 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 BlocBuilder<CategoryCubit, CategoryState>(
                   builder: (context, state) {
                     if (state is CategoryLoading) {
-                      return const Center(child: CircularProgressIndicator());
+                      return const CategoryListSkeleton();
                     }
 
                     if (state is CategoryError) {
@@ -72,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: BlocBuilder<ProductCubit, ProductState>(
                     builder: (context, state) {
                       if (state is ProductLoading) {
-                        return const Center(child: CircularProgressIndicator());
+                        return const ProductGridSkeleton();
                       }
 
                       if (state is ProductError) {
@@ -83,21 +88,38 @@ class _HomeScreenState extends State<HomeScreen> {
                         return GridView.builder(
                           itemCount: state.products.products.length,
                           gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            childAspectRatio: 0.62,
-                            mainAxisSpacing: 10,
-                          ),
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 10,
+                                mainAxisSpacing: 10,
+                                mainAxisExtent: 320,
+                              ),
                           itemBuilder: (context, index) {
                             final product = state.products.products[index];
 
-                            return ProductItemCard(
-                              product: product,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  Routes.productDetailsScreen,
-                                  arguments: product.id,
+                            return BlocBuilder<FavoriteCubit, FavoriteStates>(
+                              builder: (context, favoriteState) {
+                                return ProductItemCard(
+                                  product: product,
+                                  isFavorite: context
+                                      .read<FavoriteCubit>()
+                                      .isFavorite(product.id),
+                                  onFavorite: () {
+                                    final wasFavorite = context
+                                        .read<FavoriteCubit>()
+                                        .isFavorite(product.id);
+                                    context
+                                        .read<FavoriteCubit>()
+                                        .toggleFavorite(product.id);
+                                    AppToast.showToast(
+                                      context: context,
+                                      title: "Success",
+                                      description: wasFavorite
+                                          ? "Removed from favourites"
+                                          : "Added to favourites",
+                                      type: ToastificationType.success,
+                                    );
+                                  },
                                 );
                               },
                             );

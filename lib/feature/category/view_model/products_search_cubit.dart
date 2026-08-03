@@ -23,8 +23,6 @@ class ProductSearchCubit extends Cubit<ProductsSearchState> {
 
   Future<void> _searchProducts({
     required String search,
-    int skip = 0,
-    int limit = 5,
   }) async {
     emit(SearchLoadingState());
     var result = await _searchUseCase.call( search: search);

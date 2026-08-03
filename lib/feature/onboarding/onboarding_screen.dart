@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
+import 'package:shopping_app/core/routes/app_routes.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
+import 'package:shopping_app/core/theme/app_colors.dart';
 import 'package:shopping_app/feature/onboarding/widget/custom_animated_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
-import '../../core/routes/app_routes.dart';
-import '../../core/storage_helper/secure_storage_helper.dart';
-import '../../core/theme/app_colors.dart';
+
 import 'onboarding_data.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
+
   static String routeName = 'OnboardingScreen';
 
   @override
@@ -15,9 +18,47 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
-  List<OnboardingData> onboardingList = dataOnboarding();
+  final List<OnboardingData> onboardingList = dataOnboarding();
+
+  final PageController controller = PageController();
+
   int index = 0;
-  PageController controller = PageController();
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  Future<void> finishOnBoarding() async {
+    await serviceLocator<SecureStorageHelper>().saveSecure(
+      key: 'is_first_time',
+      value: 'false',
+    );
+
+    if (!mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      Routes.helloScreen,
+      (_) => false,
+    );
+  }
+
+  Future<void> skipOnBoarding() async {
+    await serviceLocator<SecureStorageHelper>().saveSecure(
+      key: 'is_first_time',
+      value: 'false',
+    );
+
+    if (!mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      Routes.logInScreen,
+      (_) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,165 +66,225 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       backgroundColor: AppColors.scaffoldBg,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
             children: [
-              SizedBox(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (index > 0)
-                      IconButton(
-                        icon: const Icon(
-                          Icons.arrow_back,
-
-                          color: Color(0xff121212),
+              Row(
+                children: [
+                  if (index > 0)
+                    InkWell(
+                      borderRadius: BorderRadius.circular(50),
+                      onTap: () {
+                        controller.previousPage(
+                          duration: const Duration(milliseconds: 350),
+                          curve: Curves.easeInOut,
+                        );
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(.05),
+                              blurRadius: 10,
+                            ),
+                          ],
                         ),
-                        onPressed: () {
-                          controller.previousPage(
-                            duration: Duration(milliseconds: 300),
-                            curve: Curves.easeIn,
-                          );
-                        },
+                        child: const Icon(Icons.arrow_back_ios_new_rounded),
                       ),
-                    Spacer(),
+                    ),
 
-                    if (index < onboardingList.length - 1)
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(context).pushNamed(Routes.logInScreen);
-                          controller.animateToPage(
-                            onboardingList.length - 1,
-                            duration: Duration(milliseconds: 400),
-                            curve: Curves.easeIn,
-                          );
-                        },
-                        child: const Text(
-                          'Skip',
-                          style: TextStyle(
-                            color: Color(0xff121212),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
+                  const Spacer(),
+
+                  if (index < onboardingList.length - 1)
+                    TextButton(
+                      onPressed: skipOnBoarding,
+                      child: const Text(
+                        "Skip",
+                        style: TextStyle(
+                          color: Color(0xff212121),
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                ],
               ),
+
+              const SizedBox(height: 10),
+
               SizedBox(
-                height: 315,
+                height: 320,
                 child: PageView.builder(
                   controller: controller,
+                  itemCount: onboardingList.length,
                   onPageChanged: (value) {
                     setState(() {
                       index = value;
                     });
                   },
-                  itemCount: onboardingList.length,
-                  itemBuilder: (context, index) {
+                  itemBuilder: (context, pageIndex) {
                     return CustomAnimatedWidget(
                       index: index,
-                      delay: index,
-
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          onboardingList[index].image,
-                          fit: BoxFit.cover,
-                          width: 343,
-                          height: 315,
+                      delay: pageIndex * 120,
+                      child: Hero(
+                        tag: onboardingList[pageIndex].image,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(22),
+                          child: Image.asset(
+                            onboardingList[pageIndex].image,
+                            fit: BoxFit.cover,
+                            width: double.infinity,
+                          ),
                         ),
                       ),
                     );
                   },
                 ),
               ),
-              SizedBox(height: 14),
+
+              const SizedBox(height: 24),
+
               SmoothPageIndicator(
                 controller: controller,
                 count: onboardingList.length,
-                effect: SlideEffect(
-                  spacing: 8.0,
-                  radius: 5.0,
-                  dotWidth: 15.0,
-                  dotHeight: 15.0,
-                  paintStyle: PaintingStyle.stroke,
-                  strokeWidth: 1.5,
-                  dotColor: Colors.grey,
-                  activeDotColor: Color(0xff212121),
+                effect: ExpandingDotsEffect(
+                  activeDotColor: const Color(0xffFF9900),
+                  dotColor: Colors.grey.shade300,
+                  dotHeight: 9,
+                  dotWidth: 9,
+                  expansionFactor: 3.5,
+                  spacing: 8,
                 ),
               ),
-              SizedBox(height: 40),
 
-              CustomAnimatedWidget(
-                index: index,
-                delay: (index + 1) * 100,
+              const SizedBox(height: 42),
+
+              AnimatedSwitcher(
+                duration: const Duration(milliseconds: 350),
                 child: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 69),
-                  width: double.infinity,
+                  key: ValueKey(index),
+                  margin: const EdgeInsets.symmetric(horizontal: 24),
                   child: Column(
                     children: [
                       Text(
                         onboardingList[index].title,
-                        style: TextStyle(
-                          color: Color(0xff1f1f1f),
-                          fontWeight: .w700,
-                          fontSize: 22,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 27,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xff1F1F1F),
                         ),
-                        textAlign: .center,
                       ),
-                      SizedBox(height: 8),
+
+                      const SizedBox(height: 14),
+
                       Text(
                         onboardingList[index].description,
-                        style: TextStyle(
-                          color: Color(0xff5c5c5c),
-                          fontWeight: .w400,
-                          fontSize: 18,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          height: 1.6,
+                          color: Color(0xff777777),
                         ),
-                        textAlign: .center,
                       ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(height: 56),
 
-              MaterialButton(
-                minWidth: double.infinity,
-                height: 48,
-                onPressed: () async {
-                  await SecureStorageHelper.instance.saveSecure(
-                    key: 'is_first_time',
-                    value: 'false',
-                  );
-                  if (index < onboardingList.length - 1) {
-                    controller.nextPage(
-                      duration: Duration(milliseconds: 500),
-                      curve: Curves.easeIn,
-                    );
-                  } else {
-                    if (!mounted) return;
-                    Navigator.pushNamedAndRemoveUntil(
-                      context,
-                      Routes.helloScreen,
-                      (route) => false,
-                    );
-                  }
-                },
-                color: Color(0xFFFF9900),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
+              const Spacer(),
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                width: double.infinity,
+                height: 58,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  gradient: const LinearGradient(
+                    begin: Alignment.centerLeft,
+                    end: Alignment.centerRight,
+                    colors: [Color(0xffFFB300), Color(0xffFF9800)],
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color(0xffFF9800).withOpacity(.30),
+                      blurRadius: 18,
+                      offset: const Offset(0, 8),
+                    ),
+                  ],
                 ),
-                child: Text(
-                  index < onboardingList.length - 1 ? 'Next' : 'Get started',
+                child: Material(
+                  color: Colors.transparent,
+                  child: InkWell(
+                    borderRadius: BorderRadius.circular(18),
+                    splashColor: Colors.white24,
+                    highlightColor: Colors.transparent,
+                    onTap: () async {
+                      if (index < onboardingList.length - 1) {
+                        controller.nextPage(
+                          duration: const Duration(milliseconds: 450),
+                          curve: Curves.easeInOut,
+                        );
+                      } else {
+                        await finishOnBoarding();
+                      }
+                    },
+                    child: Center(
+                      child: AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 300),
+                        transitionBuilder: (child, animation) {
+                          return FadeTransition(
+                            opacity: animation,
+                            child: SlideTransition(
+                              position: Tween<Offset>(
+                                begin: const Offset(.20, 0),
+                                end: Offset.zero,
+                              ).animate(animation),
+                              child: child,
+                            ),
+                          );
+                        },
+                        child: Row(
+                          key: ValueKey(index),
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              index == onboardingList.length - 1
+                                  ? "Get Started"
+                                  : "Next",
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: .3,
+                              ),
+                            ),
 
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: .w600,
-                    color: AppColors.white,
+                            const SizedBox(width: 10),
+
+                            AnimatedRotation(
+                              turns: index == onboardingList.length - 1
+                                  ? .12
+                                  : 0,
+                              duration: const Duration(milliseconds: 300),
+                              child: Icon(
+                                index == onboardingList.length - 1
+                                    ? Icons.rocket_launch_rounded
+                                    : Icons.arrow_forward_rounded,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
+
+              const SizedBox(height: 20),
             ],
           ),
         ),

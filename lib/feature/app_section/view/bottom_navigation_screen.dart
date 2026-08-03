@@ -1,10 +1,15 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shopping_app/feature/account/presentation/view/screens/account_screen.dart';
-import 'package:shopping_app/feature/app_section/view/widget/svg_icon.dart';
-import 'package:shopping_app/feature/app_section/view_model/bottom_navigation_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
+import 'package:shopping_app/feature/app_section/view/widget/svg_icon.dart';
+import 'package:shopping_app/feature/app_section/view_model/bottom_navigation_cubit.dart';
+import 'package:shopping_app/feature/app_section/view_model/bottom_navigation_state.dart';
+import 'package:shopping_app/feature/cart/presentation/view/screens/cart_screen.dart';
+import 'package:shopping_app/feature/cart/presentation/view_model/cubit/cart_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view/screens/favorite_screen.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
 import 'package:shopping_app/feature/home/presentation/view/screens/home_screen.dart';
-import '../view_model/bottom_navigation_cubit.dart';
+import 'package:shopping_app/feature/account/presentation/view/screens/account_screen.dart';
 
 class BottomNavigationScreen extends StatefulWidget {
   const BottomNavigationScreen({super.key});
@@ -14,33 +19,40 @@ class BottomNavigationScreen extends StatefulWidget {
 }
 
 class _BottomNavigationScreenState extends State<BottomNavigationScreen> {
-  final List<Widget> _tabs =  [
-   HomeScreen(),
-    Center(child: Text('Cart ')),
-    Center(child: Text('Favorite')),
-     AccountScreen()
+  final List<Widget> _tabs = const [
+    HomeScreen(),
+    CartScreen(),
+    FavouriteScreen(),
+    AccountScreen(),
   ];
-
+  @override
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => BottomNavigationCubit()..intent(ChangeTabIntent(0)),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => BottomNavigationCubit()..intent(ChangeTabIntent(0)),
+        ),
+        BlocProvider(
+          create: (_) => serviceLocator<FavoriteCubit>()..getFavorite(),
+        ),
+        BlocProvider(create: (_) => serviceLocator<CartCubit>()..getCart()),
+      ],
       child: BlocBuilder<BottomNavigationCubit, BottomNavigationState>(
-        builder: (BuildContext context, BottomNavigationState state) {
+        builder: (context, state) {
           final currentIndex = context
-              .read<BottomNavigationCubit>()
+              .watch<BottomNavigationCubit>()
               .currentIndex;
+
           return Scaffold(
             body: _tabs[currentIndex],
-
             bottomNavigationBar: BottomNavigationBar(
-              currentIndex: context.read<BottomNavigationCubit>().currentIndex,
+              currentIndex: currentIndex,
               onTap: (index) {
                 context.read<BottomNavigationCubit>().intent(
                   ChangeTabIntent(index),
                 );
               },
-
               showSelectedLabels: true,
               showUnselectedLabels: true,
               items: [

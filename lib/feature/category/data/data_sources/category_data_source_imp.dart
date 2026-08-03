@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:injectable/injectable.dart';
-import 'package:shopping_app/core/network/result_api.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/constants/app_keys.dart';
-import '../../../../core/model/item/product_item_dto.dart';
-import '../../../../core/storage_helper/secure_storage_helper.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
+import '../../../../core/constants/api_constants.dart';
+import '../../../../core/model/item/product_item_dto.dart';
 import '../model/search_request_dto.dart';
 import 'category_data_source_interface.dart';
 import 'package:http/http.dart' as http;
@@ -20,7 +21,7 @@ class CategoryRemoteDataSourceImpl
     int limit = 5,
   }) async {
     try {
-      String? savedToken = await SecureStorageHelper.instance.getSecure(
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
         key: AppKeys.token,
       );
       Uri url = Uri.parse(
@@ -31,9 +32,7 @@ class CategoryRemoteDataSourceImpl
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          if (savedToken != null && savedToken.isNotEmpty)
-            'Authorization': 'Bearer $savedToken',
-          'Authorization': 'Bearer ${AppKeys.token}',
+           if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
       final Map<String, dynamic> json = jsonDecode(response.body);
@@ -46,6 +45,7 @@ class CategoryRemoteDataSourceImpl
       return Error(messageError: e.toString());
     }
   }
+
   @override
   Future<ResultApi<List<ProductItemEntity>>> productsBySearch({
     required String search,
@@ -54,7 +54,8 @@ class CategoryRemoteDataSourceImpl
   }) async {
     var requestDto = SearchRequestDto(search: search, skip: 0, limit: 5);
     try {
-      String? savedToken = await SecureStorageHelper.instance.getSecure(  key: AppKeys.token,
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
+        key: AppKeys.token,
       );
       Uri url = Uri.parse("${ApiConstant.baseUrl}${ApiConstant.search}");
       var response = await http.post(
@@ -63,9 +64,8 @@ class CategoryRemoteDataSourceImpl
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          if (savedToken != null && savedToken.isNotEmpty)
-            'Authorization': 'Bearer $savedToken',
-          'Authorization': 'Bearer ${AppKeys.token}',         },
+            if (savedToken != null) 'Authorization': 'Bearer $savedToken',
+        },
       );
       var responseBody = response.body;
       var json = jsonDecode(responseBody);

@@ -1,11 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:shopping_app/feature/category/domain/entities/product_details_entity.dart';
-
-import '../../../../core/theme/app_colors.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
+import 'package:shopping_app/core/theme/app_colors.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_cubit.dart';
+import 'package:shopping_app/feature/favorite/presentation/view_model/favorite_state.dart';
 
 class ProductDetailsCard extends StatefulWidget {
-  final ProductDetailsEntity product;
+  final ProductItemEntity product;
 
   const ProductDetailsCard({super.key, required this.product});
 
@@ -18,56 +20,74 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
 
   @override
   Widget build(BuildContext context) {
-    final imagesList = widget.product.images.isNotEmpty
+    final images = widget.product.images.isNotEmpty
         ? widget.product.images
-        : [dummyImage, dummyImage, dummyImage];
+        : [dummyImage];
 
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         AspectRatio(
-          aspectRatio: 343 / 331,
+          aspectRatio: 1,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(24),
             child: Stack(
               children: [
-                CarouselSlider(
-                  items: imagesList.map((imageUrl) {
-                    return Image.network(
-                      imageUrl,
-                      width: double.infinity,
+                Container(
+                  color: Colors.grey.shade100,
+                  child: CarouselSlider(
+                    items: images.map((image) {
+                      return Padding(
+                        padding: const EdgeInsets.all(20),
+                        child: Image.network(
+                          image,
+                          width: double.infinity,
+                          fit: BoxFit.contain,
+                        ),
+                      );
+                    }).toList(),
+                    options: CarouselOptions(
+                      viewportFraction: 1,
+                      enableInfiniteScroll: false,
                       height: double.infinity,
-                      fit: BoxFit.contain,
-                    );
-                  }).toList(),
-                  options: CarouselOptions(
-                    height: double.infinity,
-                    viewportFraction: 1.0,
-                    enableInfiniteScroll: false,
-                    onPageChanged: (index, reason) {
-                      setState(() {
-                        _currentImageIndex = index;
-                      });
-                    },
+                      onPageChanged: (index, reason) {
+                        setState(() {
+                          _currentImageIndex = index;
+                        });
+                      },
+                    ),
                   ),
                 ),
+
                 Positioned(
-                  top: 4,
-                  right: 10,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(color: Colors.black12, blurRadius: 4),
-                      ],
-                    ),
-                    child: const Icon(
-                      Icons.favorite_border,
-                      size: 20,
-                      color: Colors.black,
-                    ),
+                  top: 16,
+                  right: 16,
+                  child: BlocBuilder<FavoriteCubit, FavoriteStates>(
+                    builder: (context, state) {
+                      final cubit = context.read<FavoriteCubit>();
+
+                      return Material(
+                        color: Colors.white,
+                        elevation: 4,
+                        borderRadius: BorderRadius.circular(50),
+                        child: InkWell(
+                          borderRadius: BorderRadius.circular(50),
+                          onTap: () {
+                            cubit.toggleFavorite(widget.product.id);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.all(10),
+                            child: Icon(
+                              cubit.isFavorite(widget.product.id)
+                                  ? Icons.favorite
+                                  : Icons.favorite_border,
+                              color: Colors.red,
+                              size: 22,
+                            ),
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 ),
               ],
@@ -75,68 +95,60 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
           ),
         ),
 
-        const SizedBox(height: 12),
+        const SizedBox(height: 16),
 
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
-            imagesList.length,
-            (index) => Container(
+            images.length,
+            (index) => AnimatedContainer(
+              duration: const Duration(milliseconds: 250),
               margin: const EdgeInsets.symmetric(horizontal: 4),
-              width: 8,
+              width: _currentImageIndex == index ? 20 : 8,
               height: 8,
               decoration: BoxDecoration(
-                shape: BoxShape.circle,
                 color: _currentImageIndex == index
-                    ? const Color(0xFF2B2B2B)
-                    : const Color(0xFFE2DFEC),
+                    ? AppColors.primaryOrange
+                    : Colors.grey.shade300,
+                borderRadius: BorderRadius.circular(20),
               ),
             ),
           ),
         ),
 
-        const SizedBox(height: 16),
+        const SizedBox(height: 20),
+
+        Text(
+          widget.product.title,
+          style: const TextStyle(
+            fontSize: 20,
+            fontWeight: FontWeight.bold,
+            height: 1.3,
+          ),
+        ),
+
+        const SizedBox(height: 12),
 
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Expanded(
-              child: Text(
-                widget.product.title.isNotEmpty
-                    ? widget.product.title
-                    : "T-shirt oversize",
-                style: const TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                  color: Colors.black87,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
+            Text(
+              "EGP ${widget.product.price.toStringAsFixed(0)}",
+              style: const TextStyle(
+                color: AppColors.primaryOrange,
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
               ),
             ),
 
-            const SizedBox(width: 12),
-            Text.rich(
-              TextSpan(
-                children: [
-                  const TextSpan(
-                    text: "EGP ",
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryOrange,
-                    ),
-                  ),
-                  TextSpan(
-                    text: widget.product.price.toStringAsFixed(0),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.primaryOrange,
-                    ),
-                  ),
-                ],
-              ),
+            const Spacer(),
+
+            const Icon(Icons.star_rounded, color: Colors.amber, size: 22),
+
+            const SizedBox(width: 4),
+
+            Text(
+              widget.product.rating.toStringAsFixed(1),
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
             ),
           ],
         ),
@@ -145,4 +157,4 @@ class _ProductDetailsCardState extends State<ProductDetailsCard> {
   }
 }
 
-String dummyImage = 'https://picsum.photos/200';
+const String dummyImage = "https://picsum.photos/200";

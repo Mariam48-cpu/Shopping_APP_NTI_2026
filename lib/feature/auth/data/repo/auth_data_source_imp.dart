@@ -1,12 +1,12 @@
 import 'dart:convert';
-
 import 'package:http/http.dart' as http;
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/api_constants.dart';
 import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/core/storage_helper/secure_storage_helper.dart';
-import 'package:shopping_app/feature/auth/data/model/login_response_dto.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
+import 'package:shopping_app/feature/auth/data/model/login_request_dto.dart';
 import 'package:shopping_app/feature/auth/data/model/register_request_dto.dart';
 import 'package:shopping_app/feature/auth/domain/entities/login_response_entity.dart';
 import 'package:shopping_app/feature/auth/domain/entities/register_request_entity.dart';
@@ -25,7 +25,7 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
         confirmPassword: request.confirmPassword,
       );
 
-      String? savedToken = await SecureStorageHelper.instance.getSecure(
+      String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
         key: AppKeys.token,
       );
 
@@ -46,7 +46,7 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         var dto = LoginResponseDto.fromJson(json);
         if (dto.token != null && dto.token!.isNotEmpty) {
-          await SecureStorageHelper.instance.saveSecure(
+          await serviceLocator<SecureStorageHelper>().saveSecure(
             key: AppKeys.token,
             value: dto.token!,
           );
@@ -78,7 +78,7 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
       if (response.statusCode >= 200 && response.statusCode < 300) {
         var dto = LoginResponseDto.fromJson(json);
         if (dto.token != null && dto.token!.isNotEmpty) {
-          await SecureStorageHelper.instance.saveSecure(
+          await serviceLocator<SecureStorageHelper>().saveSecure(
             key: AppKeys.token,
             value: dto.token!,
           );
@@ -91,5 +91,4 @@ class AuthDataSourceImp implements AuthDataSourceInterface {
       return Error(messageError: e.toString());
     }
   }
-
 }

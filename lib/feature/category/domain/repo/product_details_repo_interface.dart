@@ -1,6 +1,6 @@
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
 import '../../../../core/network/result_api.dart';
-import '../entities/product_details_entity.dart';
 
 abstract interface class ProductDetailsRepoInterface {
-  Future<ResultApi<ProductDetailsEntity>> getProductDetails(int id);
+  Future<ResultApi<ProductItemEntity>> getProductDetails(int id);
 }

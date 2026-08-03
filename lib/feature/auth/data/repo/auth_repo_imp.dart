@@ -1,7 +1,8 @@
 import 'package:injectable/injectable.dart';
 import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
-import 'package:shopping_app/core/storage_helper/secure_storage_helper.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
 import 'package:shopping_app/feature/auth/domain/entities/login_response_entity.dart';
 import 'package:shopping_app/feature/auth/domain/entities/register_request_entity.dart';
 import 'package:shopping_app/feature/auth/domain/repo/auth_data_source_interface.dart';
@@ -24,7 +25,7 @@ class AuthRepoImp implements AuthRepoInterface {
     switch (result) {
       case Success<LoginResponseEntity>():
         var entity = result.data;
-        await SecureStorageHelper.instance.saveSecure(
+        await serviceLocator<SecureStorageHelper>().saveSecure(
           key: AppKeys.token,
           value: entity!.token,
         );

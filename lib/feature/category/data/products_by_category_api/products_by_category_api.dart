@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
 import '../../../../core/constants/api_constants.dart';
-import '../../../../core/constants/app_keys.dart';
 import '../../../../core/model/item/product_item_dto.dart';
-import '../../../../core/storage_helper/secure_storage_helper.dart';
 
 class ProductsByCategoryApi {
   Future<ResultApi<List<ProductDto>>> getAllProductsByCategory(
     String slug,
   ) async {
     try {
-      String? savedToken = await SecureStorageHelper.instance.getSecure(
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
         key: AppKeys.token,
       );
       Uri url = Uri.parse(
@@ -22,22 +23,15 @@ class ProductsByCategoryApi {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          if (savedToken != null && savedToken.isNotEmpty)
-            'Authorization': 'Bearer $savedToken',
+          if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
       var json = jsonDecode(response.body);
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        var productsList = json['list'] ?? json;
-        List<ProductDto> products = (productsList as List)
-            .map((item) => ProductDto.fromJson(item))
-            .toList();
-        return Success(data: products);
-      } else {
-        return Error(
-          messageError: json['message'] ?? 'Failed to fetch products',
-        );
-      }
+      var productsList = json['list'] ?? json;
+      List<ProductDto> products = productsList
+          .map((item) => ProductDto.fromJson(item))
+          .toList();
+      return Success(data: products);
     } catch (e) {
       return Error(messageError: e.toString());
     }

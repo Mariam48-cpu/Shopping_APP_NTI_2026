@@ -1,45 +1,50 @@
 import 'dart:convert';
-import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:injectable/injectable.dart';
+
+import 'package:shopping_app/core/constants/api_constants.dart';
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
+
+import 'package:shopping_app/feature/account/data/model/account_model.dart';
+import 'package:shopping_app/feature/account/data/model/update_account_model.dart';
 import 'package:shopping_app/feature/account/domain/entity/account_entity.dart';
 import 'package:shopping_app/feature/account/domain/repo/account_data_source_interface.dart';
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/storage_helper/secure_storage_helper.dart';
-import '../../../../core/constants/app_keys.dart';
-import '../model/account_model.dart';
-import '../model/update_account_model.dart';
 
 @Injectable(as: AccountDataSourceInterface)
 class AccountDataSourceImp implements AccountDataSourceInterface {
   @override
   Future<ResultApi<AccountEntity>> getAccount() async {
     try {
-      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.account);
-      String? savedToken = await SecureStorageHelper.instance.getSecure(
+      final token = await serviceLocator<SecureStorageHelper>().getSecure(
         key: AppKeys.token,
       );
-      var response = await http.get(
-        url,
+
+      final response = await http.get(
+        Uri.parse(ApiConstant.baseUrl + ApiConstant.account),
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          if (savedToken != null && savedToken.isNotEmpty)
-            'Authorization': 'Bearer $savedToken',
-          'Authorization': 'Bearer ${AppKeys.token}',
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          if (token != null) "Authorization": "Bearer $token",
         },
       );
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        Map<String, dynamic> json = jsonDecode(response.body);
-        var data = UserDataDto.fromJson(json);
 
-        return Success<AccountEntity>(data: data.toEntity());
+      if (response.statusCode >= 200 && response.statusCode < 300) {
+        final json = jsonDecode(response.body);
+        final dto = UserDataDto.fromJson(json);
+
+        return Success<AccountEntity>(data: dto.toEntity());
       } else {
-        Map<String, dynamic> json = jsonDecode(response.body);
+        final json = jsonDecode(response.body);
         return Error<AccountEntity>(
-          messageError: json['message'] ?? 'Failed to load data',
+          messageError: json["message"] ?? "Failed to load account",
         );
       }
     } catch (e) {
@@ -54,26 +59,25 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
     required String email,
     required String address,
     required String currentImage,
-    File? image,
+    XFile? image,
   }) async {
     try {
-      String imagePath = currentImage;
-
-      String? savedToken = await SecureStorageHelper.instance.getSecure(
+      final token = await serviceLocator<SecureStorageHelper>().getSecure(
         key: AppKeys.token,
       );
+
+      String imagePath = currentImage;
+
       if (image != null) {
         imagePath = await uploadImage(image);
       }
-      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount);
-      var response = await http.post(
-        url,
+
+      final response = await http.post(
+        Uri.parse(ApiConstant.baseUrl + ApiConstant.updateAccount),
         headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json',
-          if (savedToken != null && savedToken.isNotEmpty)
-            'Authorization': 'Bearer $savedToken',
-          'Authorization': 'Bearer ${AppKeys.token}',
+          "Accept": "application/json",
+          "Content-Type": "application/json",
+          if (token != null) "Authorization": "Bearer $token",
         },
         body: jsonEncode({
           "name": name,
@@ -85,15 +89,16 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
       );
 
       if (response.statusCode >= 200 && response.statusCode < 300) {
-        Map<String, dynamic> json = jsonDecode(response.body);
-        var data = UpdateAccountDto.fromJson(json);
+        final json = jsonDecode(response.body);
+        final dto = UpdateAccountDto.fromJson(json);
+
         return Success<String>(
-          data: data.message ?? 'Data updated successfuly',
+          data: dto.message ?? "Account updated successfully",
         );
       } else {
-        Map<String, dynamic> json = jsonDecode(response.body);
+        final json = jsonDecode(response.body);
         return Error<String>(
-          messageError: json['message'] ?? 'Failed update data',
+          messageError: json["message"] ?? "Failed to update account",
         );
       }
     } catch (e) {
@@ -101,33 +106,51 @@ class AccountDataSourceImp implements AccountDataSourceInterface {
     }
   }
 
-  Future<String> uploadImage(File image) async {
-    String? savedToken = await SecureStorageHelper.instance.getSecure(
+  Future<String> uploadImage(XFile image) async {
+    final token = await serviceLocator<SecureStorageHelper>().getSecure(
       key: AppKeys.token,
     );
-    var request = http.MultipartRequest(
+
+    final request = http.MultipartRequest(
       "POST",
       Uri.parse(ApiConstant.baseUrl + ApiConstant.uploadImage),
     );
+
     request.headers.addAll({
-      if (savedToken != null && savedToken.isNotEmpty)
-        'Authorization': 'Bearer $savedToken',
-      'Authorization': 'Bearer ${AppKeys.token}',
       "Accept": "application/json",
+      if (token != null) "Authorization": "Bearer $token",
     });
-    request.files.add(
-      await http.MultipartFile.fromPath(
-        "file",
-        image.path,
-        contentType: http.MediaType("image", "jpeg"),
-      ),
-    );
-    var streamedResponse = await request.send();
-    var response = await http.Response.fromStream(streamedResponse);
+
+    if (kIsWeb) {
+      final Uint8List bytes = await image.readAsBytes();
+
+      request.files.add(
+        http.MultipartFile.fromBytes(
+          "file",
+          bytes,
+          filename: image.name,
+          contentType: MediaType("image", "jpeg"),
+        ),
+      );
+    } else {
+      request.files.add(
+        await http.MultipartFile.fromPath(
+          "file",
+          image.path,
+          contentType: MediaType("image", "jpeg"),
+        ),
+      );
+    }
+
+    final streamedResponse = await request.send();
+    final response = await http.Response.fromStream(streamedResponse);
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
-      return '';
+      final json = jsonDecode(response.body);
+
+      return json["image"] ?? json["url"] ?? json["data"]?["image"] ?? "";
     }
-    throw Exception("Upload image failed");
+
+    throw Exception("Upload image failed: ${response.body}");
   }
 }

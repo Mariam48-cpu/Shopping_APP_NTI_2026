@@ -1,42 +1,34 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:shopping_app/core/constants/app_keys.dart';
+import 'package:shopping_app/core/di/service_locator.dart';
 import 'package:shopping_app/core/network/result_api.dart';
+import 'package:shopping_app/core/storage_helper/storage_helper_file.dart';
 
 import '../../../../core/constants/api_constants.dart';
-import '../../../../core/constants/app_keys.dart';
-import '../../../../core/storage_helper/secure_storage_helper.dart';
-import '../models/product_details_dto.dart';
+import '../../../../core/model/item/product_item_dto.dart';
 
 class ProductDetailsApi {
-  Future<ResultApi<ProductDetailsDto>> getProductDetails(int id) async {
+  Future<ResultApi<ProductItemDto>> getProductDetails(int id) async {
     try {
-      String? savedToken = await SecureStorageHelper.instance.getSecure(
+       String? savedToken = await serviceLocator<SecureStorageHelper>().getSecure(
         key: AppKeys.token,
       );
-      Uri url = Uri.parse(
-        ApiConstant.baseUrl + ApiConstant.productsDetails(id),
-      );
+      Uri url = Uri.parse(ApiConstant.baseUrl + ApiConstant.productsDetails(id));
       var response = await http.get(
         url,
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
-          if (savedToken != null && savedToken.isNotEmpty)
-            'Authorization': 'Bearer $savedToken',
+           if (savedToken != null) 'Authorization': 'Bearer $savedToken',
         },
       );
       var json = jsonDecode(response.body);
-      if (response.statusCode >= 200 && response.statusCode < 300) {
-        ProductDetailsDto productDto = ProductDetailsDto.fromJson(json);
-        return Success<ProductDetailsDto>(data: productDto);
-      } else {
-        return Error<ProductDetailsDto>(
-          messageError: json['message'] ?? 'Failed to get product details',
-        );
-      }
+      ProductItemDto productDto = ProductItemDto.fromJson(json);
+      return Success<ProductItemDto>(data: productDto);
     } catch (e) {
-      return Error<ProductDetailsDto>(messageError: e.toString());
+      return Error<ProductItemDto>(messageError: e.toString());
     }
   }
 }

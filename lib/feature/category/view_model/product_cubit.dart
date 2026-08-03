@@ -1,15 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:injectable/injectable.dart';
+import 'package:shopping_app/core/model/item/product_item_entity.dart';
 import 'package:shopping_app/core/network/result_api.dart';
 import 'package:shopping_app/feature/category/domain/use_case/get_product_details_use_case.dart';
 import 'package:shopping_app/feature/category/view_model/product_state.dart';
 
-import '../domain/entities/product_details_entity.dart';
-
 @injectable
-class ProductCubit extends Cubit<ProductState<ProductDetailsEntity>> {
-  ProductCubit(this._useCase)
-    : super(ProductInitialState<ProductDetailsEntity>());
+class ProductCubit extends Cubit<ProductState<ProductItemEntity>> {
+  ProductCubit(this._useCase) : super(ProductInitialState<ProductItemEntity>());
+
   final GetProductDetailsUseCase _useCase;
 
   Future<void> intent(ProductDetailsIntent intent) async {
@@ -19,29 +18,25 @@ class ProductCubit extends Cubit<ProductState<ProductDetailsEntity>> {
   }
 
   Future<void> _getProductDetails(int id) async {
-    emit(ProductLoadingState<ProductDetailsEntity>());
+    emit(ProductLoadingState<ProductItemEntity>());
     try {
       var result = await _useCase.call(id);
       switch (result) {
-        case Success<ProductDetailsEntity>(:final data):
+        case Success<ProductItemEntity>(:final data):
           if (data != null) {
-            emit(ProductSuccessState<ProductDetailsEntity>(products: data));
+            emit(ProductSuccessState<ProductItemEntity>(products: data));
           } else {
-            emit(
-              ProductErrorState<ProductDetailsEntity>(
-                messageError: "No product data found",
-              ),
-            );
+            emit(ProductErrorState<ProductItemEntity>(messageError: "No product data found"));
           }
-        case Error<ProductDetailsEntity>(:final messageError):
+        case Error<ProductItemEntity>(:final messageError):
           emit(
-            ProductErrorState<ProductDetailsEntity>(
+            ProductErrorState<ProductItemEntity>(
               messageError: messageError ?? "Something went wrong",
             ),
           );
       }
     } catch (e) {
-      emit(ProductErrorState<ProductDetailsEntity>(messageError: e.toString()));
+      emit(ProductErrorState<ProductItemEntity>(messageError: e.toString()));
     }
   }
 }
